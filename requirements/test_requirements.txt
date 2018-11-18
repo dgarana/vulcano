@@ -1,0 +1,4 @@
+# Requirements needed for running the tests
+-r requirements.txt
+pytest
+pytest-cov
