@@ -2,3 +2,4 @@
 *.idea
 *.egg-info
 *.tox
+.coverage
