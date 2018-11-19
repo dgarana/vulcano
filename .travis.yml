@@ -12,4 +12,4 @@ matrix:
       dist: xenial
       sudo: true
 script: tox
-install: pip install tox-travis
+install: pip install tox-travis codecov
