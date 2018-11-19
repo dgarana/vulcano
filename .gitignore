@@ -4,3 +4,5 @@
 *.tox
 .coverage
 coverage.xml
+docs/build
+.DS_Store
