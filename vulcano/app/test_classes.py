@@ -23,7 +23,6 @@ class TestVulcanoApp(unittest.TestCase):
         """
         Vulcano app should be able to register commands with normal arguments
         """
-        print "Hello"
         def test_function(what):
             return what
 
