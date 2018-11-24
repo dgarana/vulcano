@@ -2,11 +2,11 @@ Vulcano
 [![Build Status](https://travis-ci.org/dgarana/vulcano.svg?branch=master)](https://travis-ci.org/dgarana/vulcano)
 [![codecov](https://codecov.io/gh/dgarana/vulcano/branch/master/graph/badge.svg)](https://codecov.io/gh/dgarana/vulcano)
 [![readthedocs](https://readthedocs.org/projects/vulcano/badge/?version=latest)](https://vulcano.readthedocs.org)
-[![py27build](http://travimg.herokuapp.com/dgarana/vulcano/master/Python%202.7%20Unit%20Test.svg)](https://travis-ci.org/dgarana/vulcano)
-[![py34build](http://travimg.herokuapp.com/dgarana/vulcano/master/Python%203.4%20Unit%20Test.svg)](https://travis-ci.org/dgarana/vulcano)
-[![py35build](http://travimg.herokuapp.com/dgarana/vulcano/master/Python%203.5%20Unit%20Test.svg)](https://travis-ci.org/dgarana/vulcano)
-[![py36build](http://travimg.herokuapp.com/dgarana/vulcano/master/Pytnon%203.6%20Unit%20Test.svg)](https://travis-ci.org/dgarana/vulcano)
-[![py37build](http://travimg.herokuapp.com/dgarana/vulcano/master/Python%203.7%20Unit%20Test.svg)](https://travis-ci.org/dgarana/vulcano)
+[![py27build](https://travimg.herokuapp.com/v1/dgarana/vulcano/master/Python%202.7%20Unit%20Test.svg)](https://travis-ci.org/dgarana/vulcano)
+[![py34build](https://travimg.herokuapp.com/v1/dgarana/vulcano/master/Python%203.4%20Unit%20Test.svg)](https://travis-ci.org/dgarana/vulcano)
+[![py35build](https://travimg.herokuapp.com/v1/dgarana/vulcano/master/Python%203.5%20Unit%20Test.svg)](https://travis-ci.org/dgarana/vulcano)
+[![py36build](https://travimg.herokuapp.com/v1/dgarana/vulcano/master/Pytnon%203.6%20Unit%20Test.svg)](https://travis-ci.org/dgarana/vulcano)
+[![py37build](https://travimg.herokuapp.com/v1/dgarana/vulcano/master/Python%203.7%20Unit%20Test.svg)](https://travis-ci.org/dgarana/vulcano)
 =======
 
 What is Vulcano?
