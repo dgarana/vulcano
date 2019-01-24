@@ -5,6 +5,8 @@
 Main vulcano classes module
 """
 # System imports
+import functools
+
 # Third-party imports
 # Local imports
 from vulcano.core.classes import Singleton
@@ -22,10 +24,10 @@ class Command(object):
     """
     __slots__ = ('name', 'description', 'func')
 
-    def __init__(self, name, description, func):
-        self.name = name  # type: str
-        self.description = description  # type: str
+    def __init__(self, func, name=None, description=None):
         self.func = func  # type: function
+        self.name = name  or func.__name__  # type: str
+        self.description = description or func.__doc__  # type: str
 
     def run(self, *args, **kwargs):
         """
@@ -50,19 +52,37 @@ class VulcanoApp(Singleton):
         #: List of commands registered under this Vulcano APP
         self._commands = getattr(self, '_commands', {})  # type: dict
 
-    def register(self, name, func, help_=None):
+    def register(self, name=None, description=None):
+        """
+        Register decorator used to register functions directly on vulcano app
+
+        :param str name: Name for the command
+        :param str description: Description for the command
+        :return:
+        """
+        def decorator_register(func):
+            self.register_command(func, name, description)
+
+            def func_wrapper(*args, **kwargs):
+                return func(*args, **kwargs)
+
+            return func_wrapper
+        return decorator_register
+
+    def register_command(self, func, name=None, description=None):
         """
         Register a function under this Vulcano app instance
 
-        :param str name: Name for this function
         :param function func: Executable function to register
-        :param str help_: Help for displaying to the user
+        :param str name: Name for this function
+        :param str description: Help for displaying to the user
         :raises NameError: If there's a command already registered with
                                 this name
         """
+        name = name or func.__name__
         if name in self._commands:
             raise NameError('This command already exists')
-        self._commands[name] = Command(name, help_, func)
+        self._commands[name] = Command(func, name, description)
 
     def get(self, command_name):
         """
