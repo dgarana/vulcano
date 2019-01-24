@@ -12,3 +12,30 @@ Vulcano
 What is Vulcano?
 
 Vulcano is a framework for creating command line utils.
+
+Here's a simple example:
+
+```python
+from vulcano.app.classes import VulcanoApp
+
+
+app = VulcanoApp()
+
+
+@app.register()
+def my_command(arg1=1, arg2=2):
+    """ Just some help """
+    return arg1 + arg2
+
+
+@app.register('another_command', 'Just some help here')
+def my_command_two()
+    pass
+
+if __name__ == '__main__':
+    app.run()
+```
+
+This will create two commands:
+- my_command: Just some help
+- another_command: Just some help here
