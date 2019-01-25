@@ -15,12 +15,11 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 setup(
     name='vulcano',
     version=vulcano.__version__,
-    description='A sample Python project',
+    description='Vulcano',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/dgarana/vulcano',
-    author='The Python Packaging Authority',
-    author_email='pypa-dev@googlegroups.com',
+    author='David Garaña',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
@@ -34,6 +33,6 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    keywords='sample setuptools development',
+    keywords='console development cli repl',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
 )
