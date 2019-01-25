@@ -5,8 +5,6 @@
 Main vulcano classes module
 """
 # System imports
-import functools
-
 # Third-party imports
 # Local imports
 from vulcano.core.classes import Singleton
