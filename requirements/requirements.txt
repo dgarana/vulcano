@@ -1,1 +1,3 @@
 # Requirements needed for running the project
+prompt_toolkit
+pyparsing
