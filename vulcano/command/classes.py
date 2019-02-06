@@ -4,6 +4,8 @@
 ---------------------------------
 Vulcano command classes are active classes that handles with commands.
 """
+import inspect
+
 # System imports
 # Third-party imports
 # Local imports
@@ -29,29 +31,37 @@ class CommandManager(object):
         :param str description: Description for the command
         :return:
         """
+
         def decorator_register(func):
-            self.register_command(func, name, description)
+            args_spect = inspect.getargspec(func)
+            arguments = {}
+            if args_spect.defaults:
+                arguments = dict(map(None, args_spect.args, args_spect.defaults))
+
+            self.register_command(func, name, description, arguments)
 
             def func_wrapper(*args, **kwargs):
                 return func(*args, **kwargs)
 
             return func_wrapper
+
         return decorator_register
 
-    def register_command(self, func, name=None, description=None):
+    def register_command(self, func, name=None, description=None, arguments=None):
         """
         Register a function under this Vulcano app instance
 
         :param function func: Executable function to register
         :param str name: Name for this function
         :param str description: Help for displaying to the user
+        :param dict arguments: Arguments together with their default values
         :raises NameError: If there's a command already registered with
                                 this name
         """
         name = name or func.__name__
         if name in self._commands:
             raise NameError('This command already exists')
-        self._commands[name] = Command(func, name, description)
+        self._commands[name] = Command(func, name, description, arguments)
 
     def get(self, command_name):
         """
