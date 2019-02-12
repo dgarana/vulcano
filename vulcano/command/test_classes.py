@@ -30,7 +30,7 @@ class TestCommandManager(unittest.TestCase):
             test_function, 'test_function', 'This is just a test function'
         )
         result = self.CommandManager.run('test_function', 'Passed!')
-        self.assertEquals(result, 'Passed!')
+        self.assertEqual(result, 'Passed!')
 
     def test_it_should_register_and_execute_commands_with_kwargs(self):
         """
@@ -44,7 +44,7 @@ class TestCommandManager(unittest.TestCase):
         )
         result = self.CommandManager.run('test_function', arg2='No one',
                                          arg1='Passed!')
-        self.assertEquals(result, 'Passed!')
+        self.assertEqual(result, 'Passed!')
 
     def test_it_should_not_register_commands_with_same_name(self):
         """
@@ -69,8 +69,8 @@ class TestCommandManager(unittest.TestCase):
 
         self.CommandManager.register_command(test_function)
         command = self.CommandManager.get('test_function')
-        self.assertEquals(command.name, 'test_function')
-        self.assertEquals(command.description, " Test function documentation ")
+        self.assertEqual(command.name, 'test_function')
+        self.assertEqual(command.description, " Test function documentation ")
 
     def test_register_decorator(self):
         @self.CommandManager.register()
@@ -79,6 +79,6 @@ class TestCommandManager(unittest.TestCase):
             return arg1 + arg2
 
         command = self.CommandManager.get('foo_function')
-        self.assertEquals(command.name, 'foo_function')
-        self.assertEquals(command.description, ' Docstring ')
-        self.assertEquals(foo_function(1, 1), 2)
+        self.assertEqual(command.name, 'foo_function')
+        self.assertEqual(command.description, ' Docstring ')
+        self.assertEqual(foo_function(1, 1), 2)

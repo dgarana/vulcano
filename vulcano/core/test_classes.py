@@ -20,11 +20,11 @@ class TestSingleton(unittest.TestCase):
         It should return the same instance even if we call it
         20 or 300 times.
         """
-        self.assertEquals(self.obj_1, self.obj_2)
+        self.assertEqual(self.obj_1, self.obj_2)
 
     def test_it_should_change_attributes_across_instances(self):
         """
         It should change attributes on all instances of the same class
         """
         self.obj_1.new_attribute = True
-        self.assertEquals(self.obj_1.new_attribute, self.obj_2.new_attribute)
+        self.assertEqual(self.obj_1.new_attribute, self.obj_2.new_attribute)
