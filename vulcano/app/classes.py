@@ -8,7 +8,7 @@ Vulcano APP Classes
 import sys
 
 # Third-party imports
-from prompt_toolkit import prompt
+from prompt_toolkit import PromptSession
 
 # Local imports
 from vulcano.command import builtin
@@ -45,8 +45,9 @@ class VulcanoApp(Singleton):
 
     def _exec_from_repl(self):
         self.do_repl = True
+        session = PromptSession()
         while self.do_repl:
-            user_input = prompt(u'>> ')
+            user_input = session.prompt(u'>> ')
             try:
                 command = user_input.split()[0]
                 arguments = ' '.join(user_input.split()[1:])
