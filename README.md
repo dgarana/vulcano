@@ -21,21 +21,27 @@ from vulcano.app.classes import VulcanoApp
 
 app = VulcanoApp()
 
+@app.register("hi", "Salute people given form parameter")
+def salute_method_here(name, title="Mr."):
+    print("Hi! {} {} :) Glad to see you.".format(title, name))
+
 
 @app.register()
-def my_command(arg1=1, arg2=2):
-    """ Just some help """
-    return arg1 + arg2
+def bye(name="User"):
+    """ Say goodbye to someone """
+    print("Bye {}!".format(name))
 
-
-@app.register('another_command', 'Just some help here')
-def my_command_two()
-    pass
 
 if __name__ == '__main__':
     app.run()
 ```
 
 This will create two commands:
-- my_command: Just some help
-- another_command: Just some help here
+- hi: Registered by wrapping the salute_method_here
+- bye: Just registered directly with the bye function
+
+And this will generate something like this:
+
+![Demo gif video](docs/_static/demo.gif?raw=true "Demo gif video")
+
+Nice, right?
