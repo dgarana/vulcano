@@ -47,7 +47,13 @@ class VulcanoApp(Singleton):
         self.do_repl = True
         session = PromptSession()
         while self.do_repl:
-            user_input = session.prompt(u'>> ')
+            try:
+                user_input = session.prompt(u'>> ')
+            except KeyboardInterrupt:
+                continue  # Control-C pressed. Try again.
+            except EOFError:
+                break  # Control-D Pressed. Finish
+
             try:
                 command = user_input.split()[0]
                 arguments = ' '.join(user_input.split()[1:])
