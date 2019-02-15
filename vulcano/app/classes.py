@@ -24,12 +24,16 @@ class VulcanoApp(Singleton):
                                 '_manager',
                                 CommandManager())  # type: CommandManager
 
+    @property
+    def request_is_for_args(self):
+        return len(sys.argv) >= 2
+
     def register(self, *args, **kwargs):
         return self._manager.register(*args, **kwargs)
 
     def run(self):
         self._prepare_builtins()
-        if len(sys.argv) >= 2:
+        if self.request_is_for_args:
             self._exec_from_args()
         else:
             self._exec_from_repl()
