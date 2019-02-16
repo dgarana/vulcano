@@ -20,9 +20,9 @@ from vulcano.command.parser import inline_parser
 class VulcanoApp(Singleton):
     def __init__(self):
         #: List of commands registered under this Vulcano APP
-        self._manager = getattr(self,
-                                '_manager',
-                                CommandManager())  # type: CommandManager
+        self._manager = getattr(
+            self, "_manager", CommandManager()
+        )  # type: CommandManager
 
     @property
     def request_is_for_args(self):
@@ -52,7 +52,7 @@ class VulcanoApp(Singleton):
         session = PromptSession()
         while self.do_repl:
             try:
-                user_input = session.prompt(u'>> ')
+                user_input = session.prompt(u">> ")
             except KeyboardInterrupt:
                 continue  # Control-C pressed. Try again.
             except EOFError:
@@ -60,8 +60,8 @@ class VulcanoApp(Singleton):
 
             try:
                 command = user_input.split()[0]
-                arguments = ' '.join(user_input.split()[1:])
+                arguments = " ".join(user_input.split()[1:])
                 args, kwargs = inline_parser(arguments)
                 self._manager.run(command, *args, **kwargs)
             except Exception as error:
-                print('Error executing: {}. Error: {}'.format(command, error))
+                print("Error executing: {}. Error: {}".format(command, error))
