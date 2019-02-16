@@ -7,16 +7,16 @@ class TestInlineParser(TestCase):
     def test_should_parse_args(self):
         command = "1 2 3 hello bye=True hello=1"
         args, kwargs = inline_parser(command)
-        self.assertListEqual(args, [1, 2, 3, 'hello'])
+        self.assertListEqual(args, [1, 2, 3, "hello"])
         self.assertDictEqual(kwargs, {"hello": 1, "bye": True})
 
     def test_should_parse_kwargs(self):
         command = "argument_1=1 argument_2=2 argument_3='hello mate'"
         args, kwargs = inline_parser(command)
         self.assertListEqual(args, [])
-        self.assertDictEqual(kwargs, {"argument_1": 1,
-                                      "argument_2": 2,
-                                      "argument_3": "hello mate"})
+        self.assertDictEqual(
+            kwargs, {"argument_1": 1, "argument_2": 2, "argument_3": "hello mate"}
+        )
 
     def test_should_parse_args_and_kwargs(self):
         command = "1 kwarg_1=2"

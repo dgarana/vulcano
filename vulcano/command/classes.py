@@ -29,6 +29,7 @@ class CommandManager(object):
         :param str description: Description for the command
         :return:
         """
+
         def decorator_register(func):
             self.register_command(func, name, description)
 
@@ -36,6 +37,7 @@ class CommandManager(object):
                 return func(*args, **kwargs)
 
             return func_wrapper
+
         return decorator_register
 
     def register_command(self, func, name=None, description=None):
@@ -50,7 +52,7 @@ class CommandManager(object):
         """
         name = name or func.__name__
         if name in self._commands:
-            raise NameError('This command already exists')
+            raise NameError("This command already exists")
         self._commands[name] = Command(func, name, description)
 
     def get(self, command_name):

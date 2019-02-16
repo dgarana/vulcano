@@ -19,7 +19,8 @@ class Command(object):
     :param str description: Description of this command
     :param function func: Function that has been registered to be executed
     """
-    __slots__ = ('name', 'description', 'func')
+
+    __slots__ = ("name", "description", "func")
 
     def __init__(self, func, name=None, description=None):
         self.func = func  # type: function

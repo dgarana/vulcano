@@ -1,12 +1,12 @@
 import sys
 
 
-
 def help(app):
     def real_help():
         """ Print this help """
         for command in app._manager._commands.values():
-            print('{} -- {}'.format(command.name, command.description))
+            print("{} -- {}".format(command.name, command.description))
+
     return real_help
 
 
