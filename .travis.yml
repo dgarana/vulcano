@@ -17,6 +17,7 @@ matrix:
 script: tox
 install: pip install tox-travis codecov
 deploy:
+  skip_existing: true
   provider: pypi
   user: dgarana
   password:
