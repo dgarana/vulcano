@@ -21,6 +21,10 @@ class CommandManager(object):
     def __init__(self):
         self._commands = {}  # type: dict
 
+    @property
+    def command_names(self):
+        return self._commands.keys()
+
     def register(self, name=None, description=None):
         """
         Register decorator used to register functions directly on vulcano app
