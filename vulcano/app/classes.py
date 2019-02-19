@@ -9,6 +9,8 @@ import sys
 
 # Third-party imports
 from prompt_toolkit import PromptSession
+from prompt_toolkit.styles import Style
+from prompt_toolkit.completion import WordCompleter
 
 # Local imports
 from vulcano.command import builtin
@@ -49,7 +51,9 @@ class VulcanoApp(Singleton):
 
     def _exec_from_repl(self):
         self.do_repl = True
-        session = PromptSession()
+        sql_completer = WordCompleter(self._manager.command_names,
+                                      ignore_case=True)
+        session = PromptSession(completer=sql_completer)
         while self.do_repl:
             try:
                 user_input = session.prompt(u">> ")
