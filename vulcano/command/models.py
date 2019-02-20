@@ -23,7 +23,7 @@ class Command(object):
     __slots__ = ("name", "description", "func")
 
     def __init__(self, func, name=None, description=None):
-        self.func = func  # type: function
+        self.func = func  # type: callable
         self.name = name or func.__name__  # type: str
         self.description = description or func.__doc__  # type: str
 

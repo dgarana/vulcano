@@ -44,25 +44,32 @@ identifier = pp.Word(pp.alphas + "_-", pp.alphanums + "_-")
 
 int_value = pp.Regex(r"\-?\d+").setParseAction(_parse_type("int"))
 
-float_value = pp.Regex(r"\-?\d+\.\d*([eE]\d+)?").setParseAction(_parse_type("float"))
+float_value = pp.Regex(r"\-?\d+\.\d*([eE]\d+)?").setParseAction(
+    _parse_type("float")
+)
 
 bool_value = (
-    pp.Literal("True") ^ pp.Literal("true") ^ pp.Literal("False") ^ pp.Literal("false")
+    pp.Literal("True")
+    ^ pp.Literal("true")
+    ^ pp.Literal("False")
+    ^ pp.Literal("false")
 ).setParseAction(_parse_type("bool"))
 
 # may have spaces
 quoted_string = pp.quotedString.setParseAction(_parse_type("str"))
 # cannot have spaces
-unquoted_string = pp.Word(pp.alphanums + allowed_symbols_in_string).setParseAction(
-    _parse_type("str)")
-)
+unquoted_string = pp.Word(
+    pp.alphanums + allowed_symbols_in_string
+).setParseAction(_parse_type("str)"))
 
 string_value = quoted_string | unquoted_string
 
 single_value = bool_value | float_value | int_value | string_value
 
 list_value = pp.Group(
-    pp.Suppress("[") + pp.Optional(pp.delimitedList(single_value)) + pp.Suppress("]")
+    pp.Suppress("[")
+    + pp.Optional(pp.delimitedList(single_value))
+    + pp.Suppress("]")
 ).setParseAction(_parse_type("list"))
 
 # because this is a recursive construct, a dict can contain dicts in values
@@ -107,7 +114,7 @@ def inline_parser(text):
         exception = CommandParseError(str(e))
         remaining = e.markInputline()
         partial_result = expected_pattern.parseString(text, parseAll=False)
-        exception.remaining = remaining[(remaining.find(">!<") + 3) :]
+        exception.remaining = remaining[(remaining.find(">!<") + 3):]
         exception.partial_result = partial_result
         exception.col = e.col
         raise exception
