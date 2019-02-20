@@ -15,7 +15,8 @@ class TestInlineParser(TestCase):
         args, kwargs = inline_parser(command)
         self.assertListEqual(args, [])
         self.assertDictEqual(
-            kwargs, {"argument_1": 1, "argument_2": 2, "argument_3": "hello mate"}
+            kwargs,
+            {"argument_1": 1, "argument_2": 2, "argument_3": "hello mate"},
         )
 
     def test_should_parse_args_and_kwargs(self):

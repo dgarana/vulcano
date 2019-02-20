@@ -21,14 +21,17 @@ class TestCommandManager(unittest.TestCase):
 
     def test_it_should_register_and_execute_commands_with_args(self):
         """
-        Vulcano app should be able to register commands with positional arguments
+        Vulcano app should be able to register commands with positional
+        arguments
         """
 
         def test_function(what, happened, here):
             return what, happened, here
 
         self.CommandManager.register_command(test_function)
-        result = self.CommandManager.run("test_function", "This", "Just", "Happened")
+        result = self.CommandManager.run(
+            "test_function", "This", "Just", "Happened"
+        )
         self.assertEqual(result, ("This", "Just", "Happened"))
 
     def test_it_should_register_and_execute_commands_with_kwargs(self):
@@ -40,26 +43,33 @@ class TestCommandManager(unittest.TestCase):
             return arg1, arg2
 
         self.CommandManager.register_command(test_function)
-        result = self.CommandManager.run("test_function", arg2="No one", arg1="Passed!")
+        result = self.CommandManager.run(
+            "test_function", arg2="No one", arg1="Passed!"
+        )
         self.assertEqual(result, ("Passed!", "No one"))
 
     def test_it_should_register_and_execute_commands_with_both(self):
         """
-        Vulcano app should be able to register commands with positional and known arguments
+        Vulcano app should be able to register commands with positional and
+        known arguments
         """
 
         def test_function(arg1, arg2=None):
             return arg1, arg2
 
         self.CommandManager.register_command(test_function)
-        result = self.CommandManager.run("test_function", "First", arg2="Second")
+        result = self.CommandManager.run(
+            "test_function", "First", arg2="Second"
+        )
         self.assertEqual(result, ("First", "Second"))
 
     def test_it_should_not_register_commands_with_same_name(self):
         """
         Vulcano app cannot register two commands with same name
         """
-        self.CommandManager.register_command(lambda x: None, "foo", "Dummy function")
+        self.CommandManager.register_command(
+            lambda x: None, "foo", "Dummy function"
+        )
         with self.assertRaises(NameError):
             self.CommandManager.register_command(
                 lambda x: None, "foo", "Dummy function"
