@@ -8,7 +8,7 @@ matrix:
     python: '3.4'
   - name: Python 3.5 Unit Test
     python: '3.5'
-  - name: Pytnon 3.6 Unit Test
+  - name: Python 3.6 Unit Test
     python: '3.6'
   - name: Python 3.7 Unit Test
     python: '3.7'
