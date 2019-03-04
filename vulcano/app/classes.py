@@ -27,6 +27,9 @@ class VulcanoApp(Singleton):
         self._manager = getattr(
             self, "_manager", CommandManager()
         )  # type: CommandManager
+        self.context = getattr(
+            self, "context", {}
+        )  # Type: dict
 
     @property
     def request_is_for_args(self):
