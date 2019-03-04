@@ -23,7 +23,9 @@ class CommandManager(object):
 
     @property
     def command_names(self):
-        return self._commands.keys()
+        if not hasattr(self, '_command_names'):
+            self._command_names = [unicode(command, "utf-8") for command in self._commands.keys()]
+        return self._command_names
 
     def command(self, name=None, description=None):
         """
