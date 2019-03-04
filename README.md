@@ -22,12 +22,12 @@ from vulcano.app.classes import VulcanoApp
 
 app = VulcanoApp()
 
-@app.register("hi", "Salute people given form parameter")
+@app.command("hi", "Salute people given from parameter")
 def salute_method_here(name, title="Mr."):
     print("Hi! {} {} :) Glad to see you.".format(title, name))
 
 
-@app.register()
+@app.command()
 def bye(name="User"):
     """ Say goodbye to someone """
     print("Bye {}!".format(name))
