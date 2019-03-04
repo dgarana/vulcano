@@ -19,6 +19,9 @@ from vulcano.command.parser import inline_parser
 
 
 class VulcanoApp(Singleton):
+    """ VulcanoApp is the class choosen for managing the application.
+
+    It has the all the things needed to register/execute/manage commands."""
     def __init__(self):
         #: List of commands registered under this Vulcano APP
         self._manager = getattr(
@@ -27,12 +30,25 @@ class VulcanoApp(Singleton):
 
     @property
     def request_is_for_args(self):
+        """ Returns if the request is for running with args or in REPL mode
+
+        :return: Request is to be run with args or not
+        :rtype: bool
+        """
         return len(sys.argv) >= 2
 
     def register(self, *args, **kwargs):
+        """ Register a command under current Vulcano instance
+
+        For more options take a look at `vulcano.command.classes.CommandManager.register`
+        """
         return self._manager.register(*args, **kwargs)
 
     def run(self):
+        """ Start the application
+
+        It will run the application in Args or REPL mode, depending on the
+        parameters sent"""
         self._prepare_builtins()
         if self.request_is_for_args:
             self._exec_from_args()
