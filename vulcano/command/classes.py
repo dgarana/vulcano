@@ -25,9 +25,9 @@ class CommandManager(object):
     def command_names(self):
         return self._commands.keys()
 
-    def register(self, name=None, description=None):
+    def command(self, name=None, description=None):
         """
-        Register decorator used to register functions directly on vulcano app
+        Register decorator used to command a command functions directly on vulcano app
 
         :param str name: Name for the command
         :param str description: Description for the command
@@ -35,7 +35,7 @@ class CommandManager(object):
         """
 
         def decorator_register(func):
-            self.register_command(func, name, description)
+            self._register_command(func, name, description)
 
             def func_wrapper(*args, **kwargs):
                 return func(*args, **kwargs)
@@ -44,11 +44,11 @@ class CommandManager(object):
 
         return decorator_register
 
-    def register_command(self, func, name=None, description=None):
+    def _register_command(self, func, name=None, description=None):
         """
         Register a function under this Vulcano app instance
 
-        :param function func: Executable function to register
+        :param function func: Executable function to command
         :param str name: Name for this function
         :param str description: Help for displaying to the user
         :raises NameError: If there's a command already registered with

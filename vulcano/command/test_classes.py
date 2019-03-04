@@ -21,14 +21,14 @@ class TestCommandManager(unittest.TestCase):
 
     def test_it_should_register_and_execute_commands_with_args(self):
         """
-        Vulcano app should be able to register commands with positional
+        Vulcano app should be able to command commands with positional
         arguments
         """
 
         def test_function(what, happened, here):
             return what, happened, here
 
-        self.CommandManager.register_command(test_function)
+        self.CommandManager._register_command(test_function)
         result = self.CommandManager.run(
             "test_function", "This", "Just", "Happened"
         )
@@ -36,13 +36,13 @@ class TestCommandManager(unittest.TestCase):
 
     def test_it_should_register_and_execute_commands_with_kwargs(self):
         """
-        Vulcano app should be able to register commands with known arguments
+        Vulcano app should be able to command commands with known arguments
         """
 
         def test_function(arg1=None, arg2=None):
             return arg1, arg2
 
-        self.CommandManager.register_command(test_function)
+        self.CommandManager._register_command(test_function)
         result = self.CommandManager.run(
             "test_function", arg2="No one", arg1="Passed!"
         )
@@ -50,14 +50,14 @@ class TestCommandManager(unittest.TestCase):
 
     def test_it_should_register_and_execute_commands_with_both(self):
         """
-        Vulcano app should be able to register commands with positional and
+        Vulcano app should be able to command commands with positional and
         known arguments
         """
 
         def test_function(arg1, arg2=None):
             return arg1, arg2
 
-        self.CommandManager.register_command(test_function)
+        self.CommandManager._register_command(test_function)
         result = self.CommandManager.run(
             "test_function", "First", arg2="Second"
         )
@@ -65,32 +65,32 @@ class TestCommandManager(unittest.TestCase):
 
     def test_it_should_not_register_commands_with_same_name(self):
         """
-        Vulcano app cannot register two commands with same name
+        Vulcano app cannot command two commands with same name
         """
-        self.CommandManager.register_command(
+        self.CommandManager._register_command(
             lambda x: None, "foo", "Dummy function"
         )
         with self.assertRaises(NameError):
-            self.CommandManager.register_command(
+            self.CommandManager._register_command(
                 lambda x: None, "foo", "Dummy function"
             )
 
     def test_it_should_register_with_default_name(self):
         """
-        Vulcano app should be able to register commands without having to pass
+        Vulcano app should be able to command commands without having to pass
         name.
         """
 
         def test_function():
             pass
 
-        self.CommandManager.register_command(test_function)
+        self.CommandManager._register_command(test_function)
         command = self.CommandManager.get("test_function")
         self.assertEqual(command.name, "test_function")
 
     def test_it_should_register_with_default_description(self):
         """
-        Vulcano app should be able to register commands without having to pass
+        Vulcano app should be able to command commands without having to pass
         name and/or description
         """
 
@@ -98,14 +98,14 @@ class TestCommandManager(unittest.TestCase):
             """ This is just a description form Docstrings """
             pass
 
-        self.CommandManager.register_command(test_function)
+        self.CommandManager._register_command(test_function)
         command = self.CommandManager.get("test_function")
         self.assertEqual(
             command.description, " This is just a description form Docstrings "
         )
 
     def test_register_decorator(self):
-        @self.CommandManager.register()
+        @self.CommandManager.command()
         def foo_function(arg1=0, arg2=0):
             """ Docstring """
             return arg1 + arg2

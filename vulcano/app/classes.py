@@ -21,7 +21,7 @@ from vulcano.command.parser import inline_parser
 class VulcanoApp(Singleton):
     """ VulcanoApp is the class choosen for managing the application.
 
-    It has the all the things needed to register/execute/manage commands."""
+    It has the all the things needed to command/execute/manage commands."""
     def __init__(self):
         #: List of commands registered under this Vulcano APP
         self._manager = getattr(
@@ -37,12 +37,12 @@ class VulcanoApp(Singleton):
         """
         return len(sys.argv) >= 2
 
-    def register(self, *args, **kwargs):
+    def command(self, *args, **kwargs):
         """ Register a command under current Vulcano instance
 
-        For more options take a look at `vulcano.command.classes.CommandManager.register`
+        For more options take a look at `vulcano.command.classes.CommandManager.command`
         """
-        return self._manager.register(*args, **kwargs)
+        return self._manager.command(*args, **kwargs)
 
     def run(self):
         """ Start the application
@@ -56,8 +56,8 @@ class VulcanoApp(Singleton):
             self._exec_from_repl()
 
     def _prepare_builtins(self):
-        self._manager.register_command(builtin.exit, "exit")
-        self._manager.register_command(builtin.help(self), "help")
+        self._manager._register_command(builtin.exit, "exit")
+        self._manager._register_command(builtin.help(self), "help")
 
     def _exec_from_args(self):
         command = sys.argv[1]

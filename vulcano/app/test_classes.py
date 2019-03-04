@@ -24,7 +24,7 @@ class TestVulcanoApp(TestCase):
         app = VulcanoApp()
         mock_execution = MagicMock()
 
-        @app.register()
+        @app.command()
         def test_function():
             mock_execution.test_function_called()
 
@@ -42,7 +42,7 @@ class TestVulcanoApp(TestCase):
         app = VulcanoApp()
         mock_execution = MagicMock()
 
-        @app.register()
+        @app.command()
         def test_function():
             mock_execution.test_function_called()
 
