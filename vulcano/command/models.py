@@ -5,6 +5,8 @@
 Vulcano models
 """
 # System imports
+import inspect
+
 # Third-party imports
 # Local imports
 
@@ -20,12 +22,28 @@ class Command(object):
     :param function func: Function that has been registered to be executed
     """
 
-    __slots__ = ("name", "description", "func")
+    __slots__ = ("name", "description", "func", "args")
 
     def __init__(self, func, name=None, description=None):
         self.func = func  # type: callable
         self.name = name or func.__name__  # type: str
-        self.description = description or func.__doc__  # type: str
+        self.description = description or func.__doc__ or ''  # type: str
+        self.args = self.get_function_args(func)  # type: list
+
+    @staticmethod
+    def get_function_args(func):
+        """ Return all the arguments defined on the function
+
+        :param func func: Function to inspect
+        :return: List of arguments
+        :rtype: list
+        """
+        arg_spec = inspect.getargspec(func)
+        return arg_spec.args
+
+    @property
+    def help(self):
+        return '{} -- {} // {}'.format(self.name, self.description, ', '.join(self.args) or '')
 
     def run(self, *args, **kwargs):
         """
