@@ -22,14 +22,13 @@ class VulcanoApp(Singleton):
     """ VulcanoApp is the class choosen for managing the application.
 
     It has the all the things needed to command/execute/manage commands."""
+
     def __init__(self):
         #: List of commands registered under this Vulcano APP
         self._manager = getattr(
             self, "_manager", CommandManager()
         )  # type: CommandManager
-        self.context = getattr(
-            self, "context", {}
-        )  # Type: dict
+        self.context = getattr(self, "context", {})  # Type: dict
 
     @property
     def request_is_for_args(self):
@@ -69,9 +68,7 @@ class VulcanoApp(Singleton):
 
     def _exec_from_repl(self):
         self.do_repl = True
-        sql_completer = WordCompleter(
-            self._manager.command_names, ignore_case=True
-        )
+        sql_completer = WordCompleter(self._manager.command_names, ignore_case=True)
         session = PromptSession(completer=sql_completer)
         while self.do_repl:
             try:

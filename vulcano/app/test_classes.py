@@ -17,9 +17,7 @@ class TestVulcanoApp(TestCase):
         self.assertIn("help", app._manager._commands)
 
     @patch("vulcano.app.classes.sys")
-    def test_should_be_able_to_register_functions_with_decorator(
-        self, sys_mock
-    ):
+    def test_should_be_able_to_register_functions_with_decorator(self, sys_mock):
         sys_mock.argv = ["ensure_no_repl", "test_function"]
         app = VulcanoApp()
         mock_execution = MagicMock()
@@ -33,9 +31,7 @@ class TestVulcanoApp(TestCase):
 
     @patch("vulcano.app.classes.PromptSession")
     @patch("vulcano.app.classes.sys")
-    def test_should_be_able_to_execute_in_repl(
-        self, sys_mock, prompt_session_mock
-    ):
+    def test_should_be_able_to_execute_in_repl(self, sys_mock, prompt_session_mock):
         session_instance = prompt_session_mock.return_value
         session_instance.prompt.side_effect = ("test_function", EOFError)
         sys_mock.argv = ["ensure_repl"]
