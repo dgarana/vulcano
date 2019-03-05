@@ -1,3 +1,4 @@
+from __future__ import print_function
 from vulcano.app.classes import VulcanoApp
 from vulcano.app.lexer import dark_theme
 
@@ -14,7 +15,7 @@ def i_am(name):
 
 @app.command()
 def whoami():
-    print app.context['name']
+    print(app.context['name'])
 
 @app.command()
 def bye(name="User"):

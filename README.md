@@ -17,12 +17,13 @@ Vulcano is a framework for creating command line utils.
 Here's a simple example:
 
 ```python
+from __future__ import print_function
 from vulcano.app.classes import VulcanoApp
 
 
 app = VulcanoApp()
 
-@app.command("hi", "Salute people given from parameter")
+@app.command("hi", "Salute people given form parameter")
 def salute_method_here(name, title="Mr."):
     print("Hi! {} {} :) Glad to see you.".format(title, name))
 
@@ -32,7 +33,7 @@ def i_am(name):
 
 @app.command()
 def whoami():
-    print app.context['name']
+    print(app.context['name'])
 
 @app.command()
 def bye(name="User"):
