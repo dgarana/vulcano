@@ -29,9 +29,7 @@ class TestCommandManager(unittest.TestCase):
             return what, happened, here
 
         self.CommandManager._register_command(test_function)
-        result = self.CommandManager.run(
-            "test_function", "This", "Just", "Happened"
-        )
+        result = self.CommandManager.run("test_function", "This", "Just", "Happened")
         self.assertEqual(result, ("This", "Just", "Happened"))
 
     def test_it_should_register_and_execute_commands_with_kwargs(self):
@@ -43,9 +41,7 @@ class TestCommandManager(unittest.TestCase):
             return arg1, arg2
 
         self.CommandManager._register_command(test_function)
-        result = self.CommandManager.run(
-            "test_function", arg2="No one", arg1="Passed!"
-        )
+        result = self.CommandManager.run("test_function", arg2="No one", arg1="Passed!")
         self.assertEqual(result, ("Passed!", "No one"))
 
     def test_it_should_register_and_execute_commands_with_both(self):
@@ -58,18 +54,14 @@ class TestCommandManager(unittest.TestCase):
             return arg1, arg2
 
         self.CommandManager._register_command(test_function)
-        result = self.CommandManager.run(
-            "test_function", "First", arg2="Second"
-        )
+        result = self.CommandManager.run("test_function", "First", arg2="Second")
         self.assertEqual(result, ("First", "Second"))
 
     def test_it_should_not_register_commands_with_same_name(self):
         """
         Vulcano app cannot command two commands with same name
         """
-        self.CommandManager._register_command(
-            lambda x: None, "foo", "Dummy function"
-        )
+        self.CommandManager._register_command(lambda x: None, "foo", "Dummy function")
         with self.assertRaises(NameError):
             self.CommandManager._register_command(
                 lambda x: None, "foo", "Dummy function"

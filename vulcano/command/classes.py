@@ -9,6 +9,7 @@ Vulcano command classes are active classes that handles with commands.
 # Local imports
 from .models import Command
 
+
 def convert_to_unicode(_string):
     """ Python3 & Python2.7 support for encoding on Completer
 
@@ -20,6 +21,7 @@ def convert_to_unicode(_string):
         return unicode(_string, "utf-8")
     except NameError:
         return _string
+
 
 class CommandManager(object):
     """
@@ -34,8 +36,10 @@ class CommandManager(object):
 
     @property
     def command_names(self):
-        if not hasattr(self, '_command_names'):
-            self._command_names = [convert_to_unicode(command) for command in self._commands.keys()]
+        if not hasattr(self, "_command_names"):
+            self._command_names = [
+                convert_to_unicode(command) for command in self._commands.keys()
+            ]
         return self._command_names
 
     def command(self, name=None, description=None):
