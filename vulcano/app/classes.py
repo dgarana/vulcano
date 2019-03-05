@@ -68,8 +68,8 @@ class VulcanoApp(Singleton):
 
     def _exec_from_repl(self):
         self.do_repl = True
-        sql_completer = WordCompleter(self._manager.command_names, ignore_case=True)
-        session = PromptSession(completer=sql_completer)
+        manager_completer = WordCompleter(self._manager.command_names, ignore_case=True)
+        session = PromptSession(completer=manager_completer)
         while self.do_repl:
             try:
                 user_input = session.prompt(u">> ")
