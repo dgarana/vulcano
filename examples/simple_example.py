@@ -1,4 +1,5 @@
 from vulcano.app.classes import VulcanoApp
+from vulcano.app.lexer import dark_theme
 
 
 app = VulcanoApp()
@@ -22,4 +23,4 @@ def bye(name="User"):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(theme=dark_theme)
