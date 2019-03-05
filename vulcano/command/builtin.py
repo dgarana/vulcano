@@ -5,7 +5,7 @@ def help(app):
     def real_help():
         """ Print this help """
         for command in app._manager._commands.values():
-            print("{} -- {}".format(command.name, command.description))
+            print(command.help)
 
     return real_help
 
