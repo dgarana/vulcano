@@ -63,8 +63,8 @@ class VulcanoApp(Singleton):
             self._exec_from_repl(theme=theme)
 
     def _prepare_builtins(self):
-        self._manager._register_command(builtin.exit, "exit")
-        self._manager._register_command(builtin.help(self), "help")
+        self._manager.register_command(builtin.exit, "exit")
+        self._manager.register_command(builtin.help(self), "help")
 
     def _exec_from_args(self):
         command = sys.argv[1]
