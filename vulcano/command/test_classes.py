@@ -28,7 +28,7 @@ class TestCommandManager(unittest.TestCase):
         def test_function(what, happened, here):
             return what, happened, here
 
-        self.CommandManager._register_command(test_function)
+        self.CommandManager.register_command(test_function)
         result = self.CommandManager.run("test_function", "This", "Just", "Happened")
         self.assertEqual(result, ("This", "Just", "Happened"))
 
@@ -40,7 +40,7 @@ class TestCommandManager(unittest.TestCase):
         def test_function(arg1=None, arg2=None):
             return arg1, arg2
 
-        self.CommandManager._register_command(test_function)
+        self.CommandManager.register_command(test_function)
         result = self.CommandManager.run("test_function", arg2="No one", arg1="Passed!")
         self.assertEqual(result, ("Passed!", "No one"))
 
@@ -53,7 +53,7 @@ class TestCommandManager(unittest.TestCase):
         def test_function(arg1, arg2=None):
             return arg1, arg2
 
-        self.CommandManager._register_command(test_function)
+        self.CommandManager.register_command(test_function)
         result = self.CommandManager.run("test_function", "First", arg2="Second")
         self.assertEqual(result, ("First", "Second"))
 
@@ -61,9 +61,9 @@ class TestCommandManager(unittest.TestCase):
         """
         Vulcano app cannot command two commands with same name
         """
-        self.CommandManager._register_command(lambda x: None, "foo", "Dummy function")
+        self.CommandManager.register_command(lambda x: None, "foo", "Dummy function")
         with self.assertRaises(NameError):
-            self.CommandManager._register_command(
+            self.CommandManager.register_command(
                 lambda x: None, "foo", "Dummy function"
             )
 
@@ -76,7 +76,7 @@ class TestCommandManager(unittest.TestCase):
         def test_function():
             pass
 
-        self.CommandManager._register_command(test_function)
+        self.CommandManager.register_command(test_function)
         command = self.CommandManager.get("test_function")
         self.assertEqual(command.name, "test_function")
 
@@ -90,7 +90,7 @@ class TestCommandManager(unittest.TestCase):
             """ This is just a description form Docstrings """
             pass
 
-        self.CommandManager._register_command(test_function)
+        self.CommandManager.register_command(test_function)
         command = self.CommandManager.get("test_function")
         self.assertEqual(
             command.description, " This is just a description form Docstrings "

@@ -52,7 +52,7 @@ class CommandManager(object):
         """
 
         def decorator_register(func):
-            self._register_command(func, name, description)
+            self.register_command(func, name, description)
 
             def func_wrapper(*args, **kwargs):
                 return func(*args, **kwargs)
@@ -61,7 +61,7 @@ class CommandManager(object):
 
         return decorator_register
 
-    def _register_command(self, func, name=None, description=None):
+    def register_command(self, func, name=None, description=None):
         """
         Register a function under this Vulcano app instance
 
