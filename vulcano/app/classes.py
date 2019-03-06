@@ -75,7 +75,9 @@ class VulcanoApp(Singleton):
         self.do_repl = True
         manager_completer = WordCompleter(self._manager.command_names, ignore_case=True)
         lexer = create_lexer(commands=self._manager.command_names)
-        session = PromptSession(completer=manager_completer, lexer=PygmentsLexer(lexer), style=theme)
+        session = PromptSession(
+            completer=manager_completer, lexer=PygmentsLexer(lexer), style=theme
+        )
         while self.do_repl:
             try:
                 user_input = session.prompt(u">> ")

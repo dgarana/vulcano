@@ -16,24 +16,28 @@ from pygments.token import Punctuation, Text, Operator, Keyword, Name, String, N
 # Local imports
 
 
-dark_theme = style_from_pygments_dict({
-    Operator:        '#89DDFF',
-    Keyword:         '#C792EA italic',
-    Number.Integer:  '#F78C6C',
-    String.Single:   '#C3E88D',
-    Name:            '#EEFFFF',
-    Punctuation:     '#89DDFF',
-})
+dark_theme = style_from_pygments_dict(
+    {
+        Operator: "#89DDFF",
+        Keyword: "#C792EA italic",
+        Number.Integer: "#F78C6C",
+        String.Single: "#C3E88D",
+        Name: "#EEFFFF",
+        Punctuation: "#89DDFF",
+    }
+)
 
 
-light_theme = style_from_pygments_dict({
-    Operator:        '#39ADB5',
-    Keyword:         '#7C4DFF italic',
-    Number.Integer:  '#F76D47',
-    String.Single:   '#91B859',
-    Name:            '#90A4AE',
-    Punctuation:     '#39ADB5',
-})
+light_theme = style_from_pygments_dict(
+    {
+        Operator: "#39ADB5",
+        Keyword: "#7C4DFF italic",
+        Number.Integer: "#F76D47",
+        String.Single: "#91B859",
+        Name: "#90A4AE",
+        Punctuation: "#39ADB5",
+    }
+)
 
 
 class VulcanoLexer(RegexLexer):
