@@ -23,6 +23,28 @@ from .lexer import create_lexer, dark_theme
 __all__ = ["VulcanoApp"]
 
 
+def split_list_by_arg(lst, separator):
+    """ Separate a list by a given value into different lists
+
+    :param list lst: List to separate
+    :param str separator: String to use as separator
+    :return:
+    """
+    result = []
+    cur_command = None
+    for index, item in enumerate(lst):
+        if item == separator:
+            result.append(cur_command)
+            cur_command = None
+        else:
+            if not cur_command:
+                cur_command = []
+            cur_command.append(item)
+    if cur_command:
+        result.append(cur_command)
+    return result
+
+
 class VulcanoApp(Singleton):
     """ VulcanoApp is the class choosen for managing the application.
 
@@ -70,10 +92,12 @@ class VulcanoApp(Singleton):
         self._manager.register_command(builtin.help(self), "help")
 
     def _exec_from_args(self):
-        command = sys.argv[1]
-        arguments = " ".join(sys.argv[2:])
-        args, kwargs = inline_parser(arguments)
-        self._manager.run(command, *args, **kwargs)
+        commands = split_list_by_arg(lst=sys.argv[1:], separator='and')
+        for command in commands:
+            command_name = command[0]
+            arguments = " ".join(command[1:])
+            args, kwargs = inline_parser(arguments)
+            self._manager.run(command_name, *args, **kwargs)
 
     def _exec_from_repl(self, theme=dark_theme):
         self.do_repl = True
