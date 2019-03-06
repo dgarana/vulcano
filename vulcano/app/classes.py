@@ -71,8 +71,9 @@ class VulcanoApp(Singleton):
 
     def _exec_from_args(self):
         command = sys.argv[1]
-        arguments = sys.argv[2:]
-        self._manager.run(command, *arguments)
+        arguments = " ".join(sys.argv[2:])
+        args, kwargs = inline_parser(arguments)
+        self._manager.run(command, *args, **kwargs)
 
     def _exec_from_repl(self, theme=dark_theme):
         self.do_repl = True
