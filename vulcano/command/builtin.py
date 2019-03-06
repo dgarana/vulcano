@@ -1,6 +1,9 @@
 import sys
 
 
+__all__ = ["help", "exit"]
+
+
 def help(app):
     def real_help():
         """ Print this help """
