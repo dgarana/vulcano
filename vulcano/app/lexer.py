@@ -16,6 +16,9 @@ from pygments.token import Punctuation, Text, Operator, Keyword, Name, String, N
 # Local imports
 
 
+__all__ = ["dark_theme", "light_theme", "create_lexer"]
+
+
 dark_theme = style_from_pygments_dict(
     {
         Operator: "#89DDFF",

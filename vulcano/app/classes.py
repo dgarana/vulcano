@@ -20,6 +20,9 @@ from vulcano.command.parser import inline_parser
 from .lexer import create_lexer, dark_theme
 
 
+__all__ = ["VulcanoApp"]
+
+
 class VulcanoApp(Singleton):
     """ VulcanoApp is the class choosen for managing the application.
 

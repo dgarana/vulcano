@@ -3,6 +3,9 @@
 import pyparsing as pp
 
 
+__all__ = ["inline_parser"]
+
+
 class CommandParseError(Exception):
     pass
 

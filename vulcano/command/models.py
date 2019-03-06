@@ -11,6 +11,9 @@ import inspect
 # Local imports
 
 
+__all__ = ["Command"]
+
+
 class Command(object):
     """
     Vulcano Command

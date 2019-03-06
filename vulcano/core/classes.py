@@ -5,6 +5,9 @@
 """
 
 
+__all__ = ["Singleton"]
+
+
 class Singleton(object):
     """
     Singleton Pattern class.
