@@ -27,7 +27,9 @@ class Command(object):
     def __init__(self, func, name=None, description=None):
         self.func = func  # type: callable
         self.name = name or func.__name__  # type: str
-        self.description = description or func.__doc__ or 'No description provided'  # type: str
+        self.description = (
+            description or func.__doc__ or "No description provided"
+        )  # type: str
         self.args = self.get_function_args(func)  # type: list
 
     @staticmethod
@@ -50,9 +52,9 @@ class Command(object):
         :return: Help to print
         :rtype: str
         """
-        title = '{}: {}'.format(self.name, self.description)
-        arguments_help = ['\t- {}'.format(arg) for arg in self.args]
-        return '{}\n{}\n'.format(title, '\n'.join(arguments_help))
+        title = "{}: {}".format(self.name, self.description)
+        arguments_help = ["\t- {}".format(arg) for arg in self.args]
+        return "{}\n{}\n".format(title, "\n".join(arguments_help))
 
     def run(self, *args, **kwargs):
         """
