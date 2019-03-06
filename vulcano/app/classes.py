@@ -76,7 +76,9 @@ class VulcanoApp(Singleton):
 
     def _exec_from_repl(self, theme=dark_theme):
         self.do_repl = True
-        manager_completer = FuzzyCompleter(WordCompleter(self._manager.command_names, ignore_case=True))
+        manager_completer = FuzzyCompleter(
+            WordCompleter(self._manager.command_names, ignore_case=True)
+        )
         lexer = create_lexer(commands=self._manager.command_names)
         session = PromptSession(
             completer=manager_completer, lexer=PygmentsLexer(lexer), style=theme
