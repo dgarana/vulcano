@@ -13,19 +13,6 @@ from .models import Command
 __all__ = ["CommandManager"]
 
 
-def convert_to_unicode(_string):
-    """ Python3 & Python2.7 support for encoding on Completer
-
-    Since prompt_toolkit Completer seems to look for unicode strings when comparing
-    and python3 just dropped the unicode function, we need to ensure all strings
-    are in unicode format, that's the easiest way I've found to achieve this.
-    """
-    try:
-        return unicode(_string, "utf-8")
-    except NameError:
-        return _string
-
-
 class CommandManager(object):
     """
     Command Manager
@@ -41,7 +28,7 @@ class CommandManager(object):
     def command_names(self):
         if not hasattr(self, "_command_names"):
             self._command_names = [
-                convert_to_unicode(command) for command in self._commands.keys()
+                u"{}".format(command) for command in self._commands.keys()
             ]
         return self._command_names
 
