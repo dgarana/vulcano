@@ -9,13 +9,14 @@ import sys
 
 # Third-party imports
 from prompt_toolkit import PromptSession
-from prompt_toolkit.completion import WordCompleter, FuzzyCompleter
+from prompt_toolkit.completion import FuzzyCompleter
 from prompt_toolkit.lexers import PygmentsLexer
 
 # Local imports
 from vulcano.command import builtin
 from vulcano.core.classes import Singleton
 from vulcano.command.classes import CommandManager
+from vulcano.command.completer import CommandCompleter
 from vulcano.command.parser import inline_parser
 from .lexer import create_lexer, dark_theme
 
@@ -102,7 +103,7 @@ class VulcanoApp(Singleton):
     def _exec_from_repl(self, theme=dark_theme):
         self.do_repl = True
         manager_completer = FuzzyCompleter(
-            WordCompleter(self._manager.command_names, ignore_case=True)
+            CommandCompleter(self._manager, ignore_case=True)
         )
         lexer = create_lexer(commands=self._manager.command_names)
         session = PromptSession(
