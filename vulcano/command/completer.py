@@ -28,12 +28,12 @@ class CommandCompleter(Completer):
         text_before_cursor = str(document.text_before_cursor)
         if self.ignore_case:
             text_before_cursor = text_before_cursor.lower()
-        text_arr = text_before_cursor.split(' ')
+        text_arr = text_before_cursor.split(" ")
         last_words = text_arr[-1]
         words = self.__get_current_words(text_arr[:-1])
 
         for a in words:
-            if a not in document.text_before_cursor and '=' not in last_words:
+            if a not in document.text_before_cursor and "=" not in last_words:
                 yield Completion(a, -len(last_words))
 
     def __get_current_words(self, text_arr):
