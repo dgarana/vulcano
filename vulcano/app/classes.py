@@ -93,7 +93,7 @@ class VulcanoApp(Singleton):
         self._manager.register_command(builtin.help(self), "help")
 
     def _exec_from_args(self):
-        commands = split_list_by_arg(lst=sys.argv[1:], separator='and')
+        commands = split_list_by_arg(lst=sys.argv[1:], separator="and")
         for command in commands:
             command_name = command[0]
             arguments = " ".join(command[1:])
