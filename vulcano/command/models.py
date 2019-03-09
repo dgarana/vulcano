@@ -33,7 +33,9 @@ class Command(object):
         self.description = (
             description or func.__doc__ or "No description provided"
         )  # type: str
-        self.args = self.get_function_args(func)  # type: list
+        self.args = [
+            u"{}".format(arg) for arg in self.get_function_args(func)
+        ]  # type: list
 
     @staticmethod
     def get_function_args(func):
