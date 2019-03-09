@@ -5,13 +5,9 @@ from vulcano.app.classes import VulcanoApp, split_list_by_arg
 
 class TestMultiCommand(TestCase):
     def test_split_list_by_args(self):
-        args = ["test", "name=\"David\"", "and", "test2", "\"hi\""]
-        expected_commands = [
-            ["test", "name=\"David\""],
-            ["test2", "\"hi\""]
-        ]
+        args = ["test", 'name="David"', "and", "test2", '"hi"']
+        expected_commands = [["test", 'name="David"'], ["test2", '"hi"']]
         self.assertListEqual(expected_commands, split_list_by_arg(args, "and"))
-
 
 
 class TestVulcanoApp(TestCase):
