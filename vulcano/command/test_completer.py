@@ -52,7 +52,6 @@ class TestCommandCompleter(unittest.TestCase):
         expected_args = ["what", "happened", "here"]
         self.assertListSameItems(expected_args, [result.text for result in results])
 
-
     def test_it_should_not_return_already_typed_arguments(self):
         document_mock = MagicMock()
         document_mock.text_before_cursor = "test_function what"
@@ -60,4 +59,3 @@ class TestCommandCompleter(unittest.TestCase):
         results = list(self.completer.get_completions(document_mock, complete_event))
         expected_args = ["happened", "here"]
         self.assertListSameItems(expected_args, [result.text for result in results])
-
