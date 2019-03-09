@@ -57,9 +57,11 @@ class Command(object):
         :return: Help to print
         :rtype: str
         """
-        title = "{}: {}".format(self.name, self.description)
-        arguments_help = ["\t- {}".format(arg) for arg in self.args]
-        return "{}\n{}\n".format(title, "\n".join(arguments_help))
+        title = "{}\t\t{}".format(self.name, self.description)
+        arguments_help = ", ".join(["{}".format(arg) for arg in self.args])
+        if arguments_help:
+            arguments_help = "\n\tArgs: {}".format(arguments_help)
+        return "{}{}".format(title, arguments_help)
 
     def run(self, *args, **kwargs):
         """
