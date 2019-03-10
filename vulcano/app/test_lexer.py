@@ -1,5 +1,10 @@
+# -* coding: utf-8 *-
+# System imports
 from unittest import TestCase
-from vulcano.app.lexer import create_lexer
+
+# Third-party imports
+# Local imports
+from .lexer import create_lexer
 
 
 class TestCreateLexer(TestCase):

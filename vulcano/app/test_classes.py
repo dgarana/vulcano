@@ -1,6 +1,12 @@
+# -* coding: utf-8 *-
+# System imports
 from unittest import TestCase
+
+# Third-party imports
 from mock import patch, MagicMock
-from vulcano.app.classes import VulcanoApp, split_list_by_arg
+
+# Local imports
+from .classes import VulcanoApp, split_list_by_arg
 
 
 class TestMultiCommand(TestCase):
