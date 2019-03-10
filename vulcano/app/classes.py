@@ -74,6 +74,13 @@ class VulcanoApp(Singleton):
         """
         return self._manager.command(*args, **kwargs)
 
+    def module(self, module):
+        """ Register a module under current Vulcano instance
+
+        :param module: Module could be a string or a module object
+        """
+        return self._manager.module(module)
+
     def run(self, theme=dark_theme):
         """ Start the application
 

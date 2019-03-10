@@ -7,6 +7,16 @@ import unittest
 from .classes import CommandManager
 
 
+# FIXME: Dummy function to test registration this should go into another module
+def test_function():
+    pass
+
+
+# FIXME: Same with this function
+def _no_register_func():
+    pass
+
+
 class TestCommandManager(unittest.TestCase):
     """
     Test the Vulcano APP
@@ -106,3 +116,13 @@ class TestCommandManager(unittest.TestCase):
         self.assertEqual(command.name, "foo_function")
         self.assertEqual(command.description, " Docstring ")
         self.assertEqual(foo_function(1, 1), 2)
+
+    def test_register_module_from_string(self):
+        self.CommandManager.module('vulcano.command.test_classes')
+        self.assertListEqual(self.CommandManager.command_names, ["test_function"])
+
+    def test_register_module_from_import(self):
+        # TODO: Same as dummy_function, should be into another module
+        from vulcano.command import test_classes as t_classes
+        self.CommandManager.module(t_classes)
+        self.assertListEqual(self.CommandManager.command_names, ["test_function"])
