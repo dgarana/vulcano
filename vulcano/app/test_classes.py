@@ -51,3 +51,30 @@ class TestVulcanoApp(TestCase):
 
         app.run()
         mock_execution.test_function_called.assert_called_once()
+
+    @patch("vulcano.app.classes.PromptSession")
+    @patch("vulcano.app.classes.sys")
+    def test_should_be_store_last_result_in_context_in_repl(self, sys_mock, prompt_session_mock):
+        session_instance = prompt_session_mock.return_value
+        session_instance.prompt.side_effect = ("test_function", EOFError)
+        sys_mock.argv = ["ensure_repl"]
+        app = VulcanoApp()
+
+        @app.command()
+        def test_function():
+            return "This is the last result"
+
+        app.run()
+        self.assertEqual(app.context["last_result"], "This is the last result")
+
+    @patch("vulcano.app.classes.sys")
+    def test_should_be_store_last_result_in_context_in_args(self, sys_mock):
+        sys_mock.argv = ["ensure_no_repl", "test_function"]
+        app = VulcanoApp()
+
+        @app.command()
+        def test_function():
+            return "This is the last result"
+
+        app.run()
+        self.assertEqual(app.context["last_result"], "This is the last result")
