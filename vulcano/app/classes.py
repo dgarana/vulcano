@@ -98,7 +98,7 @@ class VulcanoApp(Singleton):
             command_name = command[0]
             arguments = " ".join(command[1:])
             args, kwargs = inline_parser(arguments)
-            self._manager.run(command_name, *args, **kwargs)
+            self._execute_command(command_name, *args, **kwargs)
 
     def _exec_from_repl(self, theme=dark_theme):
         self.do_repl = True
@@ -121,6 +121,10 @@ class VulcanoApp(Singleton):
                 command = user_input.split()[0]
                 arguments = " ".join(user_input.split()[1:])
                 args, kwargs = inline_parser(arguments)
-                self._manager.run(command, *args, **kwargs)
+                self._execute_command(command, *args, **kwargs)
             except Exception as error:
                 print("Error executing: {}. Error: {}".format(command, error))
+
+    def _execute_command(self, command_name, *args, **kwargs):
+        self.context['last_result'] = self._manager.run(command_name, *args, **kwargs)
+        return self.context['last_result']
