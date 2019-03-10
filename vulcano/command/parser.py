@@ -3,7 +3,7 @@
 import pyparsing as pp
 
 
-__all__ = ["inline_parser"]
+__all__ = ["inline_parser", "CommandParseError"]
 
 
 class CommandParseError(Exception):

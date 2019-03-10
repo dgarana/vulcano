@@ -1,6 +1,10 @@
 # -* coding: utf-8 *-
+# System imports
 from unittest import TestCase
-from vulcano.command.parser import inline_parser, CommandParseError
+
+# Third-party imports
+# Local imports
+from .parser import inline_parser, CommandParseError
 
 
 class TestInlineParser(TestCase):
