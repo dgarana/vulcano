@@ -8,6 +8,7 @@ Vulcano
 [![py35build](http://travimg.dgarana.com/v1/dgarana/vulcano/master/Python%203.5%20Unit%20Test.svg)](https://travis-ci.org/dgarana/vulcano)
 [![py36build](http://travimg.dgarana.com/v1/dgarana/vulcano/master/Python%203.6%20Unit%20Test.svg)](https://travis-ci.org/dgarana/vulcano)
 [![py37build](http://travimg.dgarana.com/v1/dgarana/vulcano/master/Python%203.7%20Unit%20Test.svg)](https://travis-ci.org/dgarana/vulcano)
+[![Downloads](https://pepy.tech/badge/vulcano)](https://pepy.tech/project/vulcano)
 =======
 
 What is Vulcano?
