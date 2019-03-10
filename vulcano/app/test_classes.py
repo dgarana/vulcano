@@ -9,14 +9,13 @@ from mock import patch, MagicMock
 from .classes import VulcanoApp, split_list_by_arg
 
 
-class TestMultiCommand(TestCase):
+class TestVulcanoApp(TestCase):
+
     def test_split_list_by_args(self):
         args = ["test", 'name="David"', "and", "test2", '"hi"']
         expected_commands = [["test", 'name="David"'], ["test2", '"hi"']]
         self.assertListEqual(expected_commands, split_list_by_arg(args, "and"))
 
-
-class TestVulcanoApp(TestCase):
     def tearDown(self):
         # Remove the singleton instances before continue next test
         VulcanoApp._instance = None
@@ -62,7 +61,7 @@ class TestVulcanoApp(TestCase):
     @patch("vulcano.app.classes.sys")
     def test_should_be_store_last_result_in_context_in_repl(self, sys_mock, prompt_session_mock):
         session_instance = prompt_session_mock.return_value
-        session_instance.prompt.side_effect = ("test_function", EOFError)
+        session_instance.prompt.side_effect = ("test_function", KeyboardInterrupt, EOFError)
         sys_mock.argv = ["ensure_repl"]
         app = VulcanoApp()
 
@@ -84,3 +83,10 @@ class TestVulcanoApp(TestCase):
 
         app.run()
         self.assertEqual(app.context["last_result"], "This is the last result")
+
+    @patch("vulcano.app.classes.CommandManager")
+    def test_should_be_able_to_register_modules(self, manager_mock):
+        app = VulcanoApp()
+        app._manager = manager_mock
+        app.module('test.module')
+        app._manager.module.assert_called_once()

@@ -5,12 +5,23 @@
 Vulcano command classes are active classes that handles with commands.
 """
 # System imports
+from __future__ import print_function
+import importlib
+from inspect import getmembers, isfunction
+
 # Third-party imports
+import six
+
 # Local imports
 from .models import Command
 
 
 __all__ = ["CommandManager"]
+
+
+def get_module_functions(module):
+    return [func_obj for func_name, func_obj in getmembers(module)
+            if not func_name.startswith('_') and isfunction(func_obj)]
 
 
 class CommandManager(object):
@@ -50,6 +61,15 @@ class CommandManager(object):
             return func_wrapper
 
         return decorator_register
+
+    def module(self, module):
+        """
+        Register a module under this vulcano app instance
+        """
+        if isinstance(module, six.string_types):
+            module = importlib.import_module(module)
+        for func in get_module_functions(module):
+            self.register_command(func)
 
     def register_command(self, func, name=None, description=None):
         """
