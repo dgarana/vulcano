@@ -9,4 +9,4 @@ class TestCreateLexer(TestCase):
         lexer = create_lexer(commands)
         root_tokens = lexer.tokens["root"]
         command_tokens, _ = root_tokens[0]
-        self.assertEquals(expected_regex, command_tokens)
+        self.assertEqual(expected_regex, command_tokens)
