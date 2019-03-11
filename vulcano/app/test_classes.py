@@ -4,9 +4,16 @@ from unittest import TestCase
 
 # Third-party imports
 from mock import patch, MagicMock
+import six
 
 # Local imports
 from .classes import VulcanoApp, split_list_by_arg
+
+
+# Builtins have different names depending on the python version
+print_builtin = 'builtins.print'
+if six.PY2:
+    print_builtin = '__builtin__.print'
 
 
 class TestVulcanoApp(TestCase):
@@ -90,3 +97,29 @@ class TestVulcanoApp(TestCase):
         app._manager = manager_mock
         app.module('test.module')
         app._manager.module.assert_called_once()
+
+    @patch(print_builtin)
+    @patch("vulcano.app.classes.sys")
+    def test_should_be_able_to_print_last_result(self, sys_mock, print_mock):
+        sys_mock.argv = ["ensure_no_repl", "test_function"]
+        app = VulcanoApp()
+
+        @app.command()
+        def test_function():
+            return "Return from the function"
+
+        app.run(print_result=True)
+        print_mock.assert_called_with("Return from the function")
+
+    @patch(print_builtin)
+    @patch("vulcano.app.classes.sys")
+    def test_only_print_if_print_last_result(self, sys_mock, print_mock):
+        sys_mock.argv = ["ensure_no_repl", "test_function"]
+        app = VulcanoApp()
+
+        @app.command()
+        def test_function():
+            return "Return from the function"
+
+        app.run(print_result=False)
+        print_mock.assert_not_called()
