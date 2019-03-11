@@ -4,7 +4,7 @@ import unittest
 
 # Third-party imports
 # Local imports
-from .classes import CommandManager
+from .classes import Magma
 
 
 # FIXME: Dummy function to test registration this should go into another module
@@ -17,17 +17,17 @@ def _no_register_func():
     pass
 
 
-class TestCommandManager(unittest.TestCase):
+class TestMagma(unittest.TestCase):
     """
-    Test the Vulcano APP
+    Test the Magic Manager
     """
 
     def setUp(self):
-        self.CommandManager = CommandManager()
+        self.magma = Magma()
 
     def tearDown(self):
         # Remove the singleton instances before continue next test
-        CommandManager._instance = None
+        Magma._instance = None
 
     def test_it_should_register_and_execute_commands_with_args(self):
         """
@@ -38,8 +38,8 @@ class TestCommandManager(unittest.TestCase):
         def test_function(what, happened, here):
             return what, happened, here
 
-        self.CommandManager.register_command(test_function)
-        result = self.CommandManager.run("test_function", "This", "Just", "Happened")
+        self.magma.register_command(test_function)
+        result = self.magma.run("test_function", "This", "Just", "Happened")
         self.assertEqual(result, ("This", "Just", "Happened"))
 
     def test_it_should_register_and_execute_commands_with_kwargs(self):
@@ -50,8 +50,8 @@ class TestCommandManager(unittest.TestCase):
         def test_function(arg1=None, arg2=None):
             return arg1, arg2
 
-        self.CommandManager.register_command(test_function)
-        result = self.CommandManager.run("test_function", arg2="No one", arg1="Passed!")
+        self.magma.register_command(test_function)
+        result = self.magma.run("test_function", arg2="No one", arg1="Passed!")
         self.assertEqual(result, ("Passed!", "No one"))
 
     def test_it_should_register_and_execute_commands_with_both(self):
@@ -63,17 +63,17 @@ class TestCommandManager(unittest.TestCase):
         def test_function(arg1, arg2=None):
             return arg1, arg2
 
-        self.CommandManager.register_command(test_function)
-        result = self.CommandManager.run("test_function", "First", arg2="Second")
+        self.magma.register_command(test_function)
+        result = self.magma.run("test_function", "First", arg2="Second")
         self.assertEqual(result, ("First", "Second"))
 
     def test_it_should_not_register_commands_with_same_name(self):
         """
         Vulcano app cannot command two commands with same name
         """
-        self.CommandManager.register_command(lambda x: None, "foo", "Dummy function")
+        self.magma.register_command(lambda x: None, "foo", "Dummy function")
         with self.assertRaises(NameError):
-            self.CommandManager.register_command(
+            self.magma.register_command(
                 lambda x: None, "foo", "Dummy function"
             )
 
@@ -86,8 +86,8 @@ class TestCommandManager(unittest.TestCase):
         def test_function():
             pass
 
-        self.CommandManager.register_command(test_function)
-        command = self.CommandManager.get("test_function")
+        self.magma.register_command(test_function)
+        command = self.magma.get("test_function")
         self.assertEqual(command.name, "test_function")
 
     def test_it_should_register_with_default_description(self):
@@ -100,29 +100,29 @@ class TestCommandManager(unittest.TestCase):
             """ This is just a description form Docstrings """
             pass
 
-        self.CommandManager.register_command(test_function)
-        command = self.CommandManager.get("test_function")
+        self.magma.register_command(test_function)
+        command = self.magma.get("test_function")
         self.assertEqual(
             command.description, " This is just a description form Docstrings "
         )
 
     def test_register_decorator(self):
-        @self.CommandManager.command()
+        @self.magma.command()
         def foo_function(arg1=0, arg2=0):
             """ Docstring """
             return arg1 + arg2
 
-        command = self.CommandManager.get("foo_function")
+        command = self.magma.get("foo_function")
         self.assertEqual(command.name, "foo_function")
         self.assertEqual(command.description, " Docstring ")
         self.assertEqual(foo_function(1, 1), 2)
 
     def test_register_module_from_string(self):
-        self.CommandManager.module('vulcano.command.test_classes')
-        self.assertListEqual(self.CommandManager.command_names, ["test_function"])
+        self.magma.module('vulcano.command.test_classes')
+        self.assertListEqual(self.magma.command_names, ["test_function"])
 
     def test_register_module_from_import(self):
         # TODO: Same as dummy_function, should be into another module
         from vulcano.command import test_classes as t_classes
-        self.CommandManager.module(t_classes)
-        self.assertListEqual(self.CommandManager.command_names, ["test_function"])
+        self.magma.module(t_classes)
+        self.assertListEqual(self.magma.command_names, ["test_function"])

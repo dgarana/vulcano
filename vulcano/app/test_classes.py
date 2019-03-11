@@ -84,7 +84,7 @@ class TestVulcanoApp(TestCase):
         app.run()
         self.assertEqual(app.context["last_result"], "This is the last result")
 
-    @patch("vulcano.app.classes.CommandManager")
+    @patch("vulcano.app.classes.Magma")
     def test_should_be_able_to_register_modules(self, manager_mock):
         app = VulcanoApp()
         app._manager = manager_mock

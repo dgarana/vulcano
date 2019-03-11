@@ -15,7 +15,7 @@ from prompt_toolkit.lexers import PygmentsLexer
 # Local imports
 from vulcano.command import builtin
 from vulcano.core.classes import Singleton
-from vulcano.command.classes import CommandManager
+from vulcano.command.classes import Magma
 from vulcano.command.completer import CommandCompleter
 from vulcano.command.parser import inline_parser
 from .lexer import create_lexer, dark_theme
@@ -54,8 +54,8 @@ class VulcanoApp(Singleton):
     def __init__(self):
         #: List of commands registered under this Vulcano APP
         self._manager = getattr(
-            self, "_manager", CommandManager()
-        )  # type: CommandManager
+            self, "_manager", Magma()
+        )  # type: Magma
         self.context = getattr(self, "context", {})  # Type: dict
 
     @property

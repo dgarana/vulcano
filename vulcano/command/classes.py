@@ -16,7 +16,7 @@ import six
 from .models import Command
 
 
-__all__ = ["CommandManager"]
+__all__ = ["Magma"]
 
 
 def get_module_functions(module):
@@ -24,11 +24,11 @@ def get_module_functions(module):
             if not func_name.startswith('_') and isfunction(func_obj)]
 
 
-class CommandManager(object):
+class Magma(object):
     """
-    Command Manager
+    Magic Manager (A.K.A Magma)
 
-    The command manager is the choosen one to handle with registration of each
+    Magma is the choosen one to handle with registration of each
     command you want to use on your command line application.
     """
 
