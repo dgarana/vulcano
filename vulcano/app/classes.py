@@ -5,6 +5,7 @@
 Vulcano APP Classes
 """
 # System imports
+from __future__ import print_function
 import sys
 
 # Third-party imports
@@ -57,6 +58,7 @@ class VulcanoApp(Singleton):
             self, "_manager", Magma()
         )  # type: Magma
         self.context = getattr(self, "context", {})  # Type: dict
+        self.print_result = True
 
     @property
     def request_is_for_args(self):
@@ -81,14 +83,16 @@ class VulcanoApp(Singleton):
         """
         return self._manager.module(module)
 
-    def run(self, theme=dark_theme):
+    def run(self, theme=dark_theme, print_result=True):
         """ Start the application
 
         It will run the application in Args or REPL mode, depending on the
         parameters sent.
 
         :param theme: Theme to use for this application, NOTE: only used for the REPL.
+        :param bool print_result: If True, results from functions will be printed.
         """
+        self.print_result=print_result
         self._prepare_builtins()
         if self.request_is_for_args:
             self._exec_from_args()
@@ -134,4 +138,6 @@ class VulcanoApp(Singleton):
 
     def _execute_command(self, command_name, *args, **kwargs):
         self.context['last_result'] = self._manager.run(command_name, *args, **kwargs)
+        if self.print_result and self.context["last_result"]:
+            print(self.context["last_result"])
         return self.context['last_result']

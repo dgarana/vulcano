@@ -15,12 +15,12 @@ def i_am(name):
 
 @app.command()
 def whoami():
-    print(app.context['name'])
+    return app.context['name']
 
 @app.command()
 def bye(name="User"):
     """ Say goodbye to someone """
-    print("Bye {}!".format(name))
+    return "Bye {}!".format(name)
 
 
 if __name__ == '__main__':
