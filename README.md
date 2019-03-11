@@ -55,3 +55,13 @@ And this will generate something like this:
 ![Demo gif video](docs/_static/demo.gif?raw=true "Demo gif video")
 
 Nice, right?
+
+Key features
+------------
+- Autocomplete: Vulcano will inspect all the functions you register, and will create a list of autocomplete with your command name and it's arguments.
+- Help: It will create help based on your functions docstrings or the help provided during the registration process.
+- History: Use up & down arrows to select a command from your history.
+- Register modules: It can register all the functions inside a module just by calling the register module function. It will help you to prevent modifying the source module.
+- Lexer: Of course, we use lexer with pygments to colorize your command line ;)
+- Nested commands: You want to execute more than one command at once from the command line arguments? Just use the "and". `python your_script.py my_func arg=\"something\˝ and my_func_2 arg=\"another thing here\"` , such hacker!
+- Context: If you want to communicate different functions between them, you can use the VulcanoApp.context (it's just a dictionary where you store and read data).
