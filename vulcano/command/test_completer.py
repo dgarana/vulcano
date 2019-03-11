@@ -7,7 +7,7 @@ import unittest
 from mock import MagicMock
 
 # Local imports
-from vulcano.app.classes import CommandManager
+from vulcano.app.classes import Magma
 from .completer import CommandCompleter
 
 
@@ -17,7 +17,7 @@ class TestCommandCompleter(unittest.TestCase):
     """
 
     def setUp(self):
-        self.manager = CommandManager()
+        self.manager = Magma()
         self.completer = CommandCompleter(self.manager)
 
         def test_function(what, happened, here):
