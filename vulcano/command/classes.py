@@ -8,6 +8,7 @@ Vulcano command classes are active classes that handles with commands.
 from __future__ import print_function
 import importlib
 from inspect import getmembers, isfunction
+from functools import partial
 
 # Third-party imports
 import six
@@ -43,7 +44,7 @@ class Magma(object):
             ]
         return self._command_names
 
-    def command(self, name=None, description=None):
+    def command(self, name_or_function=None, description=None):
         """
         Register decorator used to command a command functions directly on vulcano app
 
@@ -52,7 +53,11 @@ class Magma(object):
         :return:
         """
 
-        def decorator_register(func):
+        def decorator_register(func, name=None):
+            """ Function wrapper used as decorator
+
+            As we need access to self, we cannot use wrap from functools.
+            """
             self.register_command(func, name, description)
 
             def func_wrapper(*args, **kwargs):
@@ -60,7 +65,11 @@ class Magma(object):
 
             return func_wrapper
 
-        return decorator_register
+        if callable(name_or_function):
+            function = name_or_function
+            return decorator_register(function)
+        name = name_or_function
+        return partial(decorator_register, name=name)
 
     def module(self, module):
         """
