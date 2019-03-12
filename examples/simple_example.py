@@ -17,7 +17,7 @@ def i_am(name):
 def whoami():
     return app.context['name']
 
-@app.command()
+@app.command
 def bye(name="User"):
     """ Say goodbye to someone """
     return "Bye {}!".format(name)
