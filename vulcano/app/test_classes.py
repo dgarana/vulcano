@@ -123,3 +123,41 @@ class TestVulcanoApp(TestCase):
 
         app.run(print_result=False)
         print_mock.assert_not_called()
+
+    @patch("vulcano.app.classes.sys")
+    def test_it_raises_exceptions_from_args(self, sys_mock):
+        sys_mock.argv = ["ensure_no_repl", "exception_function", "and", "not_executed"]
+        app = VulcanoApp()
+        never_arrived_here = MagicMock()
+
+        @app.command
+        def exception_function():
+            raise Exception("This should stop iterations")
+
+        @app.command
+        def not_executed():
+            never_arrived_here.executed()
+
+        with self.assertRaises(Exception):
+            app.run(print_result=False)
+        never_arrived_here.executed.assert_not_called()
+
+    @patch("vulcano.app.classes.PromptSession")
+    @patch("vulcano.app.classes.sys")
+    def test_it_prints_exceptions_from_repl(self, sys_mock, prompt_session_mock):
+        session_instance = prompt_session_mock.return_value
+        session_instance.prompt.side_effect = ("exception_function", "executed", EOFError)
+        sys_mock.argv = ["ensure_repl"]
+        app = VulcanoApp()
+        arrived_here = MagicMock()
+
+        @app.command
+        def exception_function():
+            raise Exception("This should never stop the execution")
+
+        @app.command
+        def executed():
+            arrived_here.executed()
+
+        app.run(print_result=False)
+        arrived_here.executed.assert_called_once()
