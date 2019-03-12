@@ -48,7 +48,7 @@ class Magma(object):
         """
         Register decorator used to command a command functions directly on vulcano app
 
-        :param str name: Name for the command
+        :param name_or_function: Name of the function or the function itself
         :param str description: Description for the command
         :return:
         """
