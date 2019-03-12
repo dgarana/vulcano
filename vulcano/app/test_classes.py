@@ -32,8 +32,8 @@ class TestVulcanoApp(TestCase):
         sys_mock.argv = ["ensure_no_repl", "help"]
         app = VulcanoApp()
         app.run()
-        self.assertIn("exit", app._manager._commands)
-        self.assertIn("help", app._manager._commands)
+        self.assertIn("exit", app.manager._commands)
+        self.assertIn("help", app.manager._commands)
 
     @patch("vulcano.app.classes.sys")
     def test_should_be_able_to_register_functions_with_decorator(self, sys_mock):
@@ -94,9 +94,9 @@ class TestVulcanoApp(TestCase):
     @patch("vulcano.app.classes.Magma")
     def test_should_be_able_to_register_modules(self, manager_mock):
         app = VulcanoApp()
-        app._manager = manager_mock
+        app.manager = manager_mock
         app.module('test.module')
-        app._manager.module.assert_called_once()
+        app.manager.module.assert_called_once()
 
     @patch(print_builtin)
     @patch("vulcano.app.classes.sys")

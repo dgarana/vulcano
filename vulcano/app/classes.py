@@ -54,7 +54,7 @@ class VulcanoApp(Singleton):
 
     def __init__(self):
         #: List of commands registered under this Vulcano APP
-        self._manager = getattr(
+        self.manager = getattr(
             self, "_manager", Magma()
         )  # type: Magma
         self.context = getattr(self, "context", {})  # Type: dict
@@ -74,14 +74,14 @@ class VulcanoApp(Singleton):
 
         For more options take a look at `vulcano.command.classes.CommandManager.command`
         """
-        return self._manager.command(*args, **kwargs)
+        return self.manager.command(*args, **kwargs)
 
     def module(self, module):
         """ Register a module under current Vulcano instance
 
         :param module: Module could be a string or a module object
         """
-        return self._manager.module(module)
+        return self.manager.module(module)
 
     def run(self, theme=dark_theme, print_result=True):
         """ Start the application
@@ -100,8 +100,8 @@ class VulcanoApp(Singleton):
             self._exec_from_repl(theme=theme)
 
     def _prepare_builtins(self):
-        self._manager.register_command(builtin.exit, "exit")
-        self._manager.register_command(builtin.help(self), "help")
+        self.manager.register_command(builtin.exit, "exit")
+        self.manager.register_command(builtin.help(self), "help")
 
     def _exec_from_args(self):
         commands = split_list_by_arg(lst=sys.argv[1:], separator="and")
@@ -114,9 +114,9 @@ class VulcanoApp(Singleton):
     def _exec_from_repl(self, theme=dark_theme):
         self.do_repl = True
         manager_completer = FuzzyCompleter(
-            CommandCompleter(self._manager, ignore_case=True)
+            CommandCompleter(self.manager, ignore_case=True)
         )
-        lexer = create_lexer(commands=self._manager.command_names)
+        lexer = create_lexer(commands=self.manager.command_names)
         session = PromptSession(
             completer=manager_completer, lexer=PygmentsLexer(lexer), style=theme
         )
@@ -137,7 +137,7 @@ class VulcanoApp(Singleton):
                 print("Error executing: {}. Error: {}".format(command, error))
 
     def _execute_command(self, command_name, *args, **kwargs):
-        self.context['last_result'] = self._manager.run(command_name, *args, **kwargs)
+        self.context['last_result'] = self.manager.run(command_name, *args, **kwargs)
         if self.print_result and self.context["last_result"]:
             print(self.context["last_result"])
         return self.context['last_result']
