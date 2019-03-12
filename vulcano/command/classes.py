@@ -65,7 +65,7 @@ class Magma(object):
 
             return func_wrapper
 
-        if callable(name_or_function):
+        if isfunction(name_or_function):
             function = name_or_function
             return decorator_register(function)
         name = name_or_function
