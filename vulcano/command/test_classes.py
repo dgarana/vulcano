@@ -117,6 +117,17 @@ class TestMagma(unittest.TestCase):
         self.assertEqual(command.description, " Docstring ")
         self.assertEqual(foo_function(1, 1), 2)
 
+    def test_register_decorator_without_parentheses(self):
+        @self.magma.command
+        def foo_function(arg1=0, arg2=0):
+            """ Docstring """
+            return arg1 + arg2
+
+        command = self.magma.get("foo_function")
+        self.assertEqual(command.name, "foo_function")
+        self.assertEqual(command.description, " Docstring ")
+        self.assertEqual(foo_function(1, 1), 2)
+
     def test_register_module_from_string(self):
         self.magma.module('vulcano.command.test_classes')
         self.assertListEqual(self.magma.command_names, ["test_function"])
