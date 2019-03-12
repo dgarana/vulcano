@@ -28,15 +28,15 @@ app = VulcanoApp()
 def salute_method_here(name, title="Mr."):
     print("Hi! {} {} :) Glad to see you.".format(title, name))
 
-@app.command()
+@app.command
 def i_am(name):
     app.context['name'] = name
 
-@app.command()
+@app.command
 def whoami():
     print(app.context['name'])
 
-@app.command()
+@app.command
 def bye(name="User"):
     """ Say goodbye to someone """
     print("Bye {}!".format(name))
