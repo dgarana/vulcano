@@ -106,6 +106,10 @@ class VulcanoApp(Singleton):
         for command in commands:
             command_name = command[0]
             arguments = " ".join(command[1:])
+            try:
+                arguments = arguments.format(**self.context)
+            except KeyError:
+                pass
             args, kwargs = inline_parser(arguments)
             self._execute_command(command_name, *args, **kwargs)
 
@@ -129,6 +133,10 @@ class VulcanoApp(Singleton):
             try:
                 command = user_input.split()[0]
                 arguments = " ".join(user_input.split()[1:])
+                try:
+                    arguments = arguments.format(**self.context)
+                except KeyError:
+                    pass
                 args, kwargs = inline_parser(arguments)
                 self._execute_command(command, *args, **kwargs)
             except Exception as error:
