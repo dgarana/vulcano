@@ -73,9 +73,7 @@ class TestMagma(unittest.TestCase):
         """
         self.magma.register_command(lambda x: None, "foo", "Dummy function")
         with self.assertRaises(NameError):
-            self.magma.register_command(
-                lambda x: None, "foo", "Dummy function"
-            )
+            self.magma.register_command(lambda x: None, "foo", "Dummy function")
 
     def test_it_should_register_with_default_name(self):
         """
@@ -129,11 +127,12 @@ class TestMagma(unittest.TestCase):
         self.assertEqual(foo_function(1, 1), 2)
 
     def test_register_module_from_string(self):
-        self.magma.module('vulcano.command.test_classes')
+        self.magma.module("vulcano.command.test_classes")
         self.assertListEqual(self.magma.command_names, ["test_function"])
 
     def test_register_module_from_import(self):
         # TODO: Same as dummy_function, should be into another module
         from vulcano.command import test_classes as t_classes
+
         self.magma.module(t_classes)
         self.assertListEqual(self.magma.command_names, ["test_function"])
