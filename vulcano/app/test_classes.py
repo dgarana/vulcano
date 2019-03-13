@@ -170,3 +170,76 @@ class TestVulcanoApp(TestCase):
 
         app.run(print_result=False)
         arrived_here.executed.assert_called_once()
+
+    @patch("vulcano.app.classes.sys")
+    def test_it_should_format_command_from_args(self, sys_mock):
+        sys_mock.argv = ["ensure_no_repl", "first_function", "and", "executed", "{last_result}"]
+        app = VulcanoApp()
+        rendered_with_context = MagicMock()
+
+        @app.command
+        def first_function():
+            return 10
+
+        @app.command
+        def executed(param):
+            rendered_with_context.parameter_is(param)
+
+        app.run(print_result=False)
+        rendered_with_context.parameter_is.assert_called_with(10)
+
+    @patch("vulcano.app.classes.PromptSession")
+    @patch("vulcano.app.classes.sys")
+    def test_it_should_format_command_from_repl(self, sys_mock, prompt_session_mock):
+        session_instance = prompt_session_mock.return_value
+        sys_mock.argv = ["ensure_repl"]
+        session_instance.prompt.side_effect = (
+            "first_function",
+            "executed {last_result} ",
+            EOFError,
+        )
+        app = VulcanoApp()
+        rendered_with_context = MagicMock()
+
+        @app.command
+        def first_function():
+            return 10
+
+        @app.command
+        def executed(param):
+            rendered_with_context.parameter_is(param)
+
+        app.run(print_result=False)
+        rendered_with_context.parameter_is.assert_called_with(10)
+
+    @patch("vulcano.app.classes.PromptSession")
+    @patch("vulcano.app.classes.sys")
+    def test_it_should_return_not_if_fails_format_command_from_repl(self, sys_mock, prompt_session_mock):
+        session_instance = prompt_session_mock.return_value
+        sys_mock.argv = ["ensure_repl"]
+        session_instance.prompt.side_effect = (
+            "executed '{non_existent}'",
+            EOFError,
+        )
+        app = VulcanoApp()
+        rendered_with_context = MagicMock()
+
+        @app.command
+        def executed(param):
+            rendered_with_context.parameter_is(param)
+
+        app.run(print_result=False)
+        rendered_with_context.parameter_is.assert_called_with("{non_existent}")
+
+    @patch("vulcano.app.classes.sys")
+    def test_it_should_format_command_from_args(self, sys_mock):
+        sys_mock.argv = ["ensure_no_repl", "executed", "'{non_existent}'"]
+        app = VulcanoApp()
+        rendered_with_context = MagicMock()
+
+        @app.command
+        def executed(param):
+            rendered_with_context.parameter_is(param)
+
+        app.run(print_result=False)
+        rendered_with_context.parameter_is.assert_called_with("{non_existent}")
