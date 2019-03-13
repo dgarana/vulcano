@@ -11,13 +11,12 @@ from .classes import VulcanoApp, split_list_by_arg
 
 
 # Builtins have different names depending on the python version
-print_builtin = 'builtins.print'
+print_builtin = "builtins.print"
 if six.PY2:
-    print_builtin = '__builtin__.print'
+    print_builtin = "__builtin__.print"
 
 
 class TestVulcanoApp(TestCase):
-
     def test_split_list_by_args(self):
         args = ["test", 'name="David"', "and", "test2", '"hi"']
         expected_commands = [["test", 'name="David"'], ["test2", '"hi"']]
@@ -66,9 +65,15 @@ class TestVulcanoApp(TestCase):
 
     @patch("vulcano.app.classes.PromptSession")
     @patch("vulcano.app.classes.sys")
-    def test_should_be_store_last_result_in_context_in_repl(self, sys_mock, prompt_session_mock):
+    def test_should_be_store_last_result_in_context_in_repl(
+        self, sys_mock, prompt_session_mock
+    ):
         session_instance = prompt_session_mock.return_value
-        session_instance.prompt.side_effect = ("test_function", KeyboardInterrupt, EOFError)
+        session_instance.prompt.side_effect = (
+            "test_function",
+            KeyboardInterrupt,
+            EOFError,
+        )
         sys_mock.argv = ["ensure_repl"]
         app = VulcanoApp()
 
@@ -95,7 +100,7 @@ class TestVulcanoApp(TestCase):
     def test_should_be_able_to_register_modules(self, manager_mock):
         app = VulcanoApp()
         app.manager = manager_mock
-        app.module('test.module')
+        app.module("test.module")
         app.manager.module.assert_called_once()
 
     @patch(print_builtin)
@@ -146,7 +151,11 @@ class TestVulcanoApp(TestCase):
     @patch("vulcano.app.classes.sys")
     def test_it_prints_exceptions_from_repl(self, sys_mock, prompt_session_mock):
         session_instance = prompt_session_mock.return_value
-        session_instance.prompt.side_effect = ("exception_function", "executed", EOFError)
+        session_instance.prompt.side_effect = (
+            "exception_function",
+            "executed",
+            EOFError,
+        )
         sys_mock.argv = ["ensure_repl"]
         app = VulcanoApp()
         arrived_here = MagicMock()

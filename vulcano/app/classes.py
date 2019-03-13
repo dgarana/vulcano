@@ -54,9 +54,7 @@ class VulcanoApp(Singleton):
 
     def __init__(self):
         #: List of commands registered under this Vulcano APP
-        self.manager = getattr(
-            self, "_manager", Magma()
-        )  # type: Magma
+        self.manager = getattr(self, "_manager", Magma())  # type: Magma
         self.context = getattr(self, "context", {})  # Type: dict
         self.print_result = True
 
@@ -92,7 +90,7 @@ class VulcanoApp(Singleton):
         :param theme: Theme to use for this application, NOTE: only used for the REPL.
         :param bool print_result: If True, results from functions will be printed.
         """
-        self.print_result=print_result
+        self.print_result = print_result
         self._prepare_builtins()
         if self.request_is_for_args:
             self._exec_from_args()
@@ -137,7 +135,7 @@ class VulcanoApp(Singleton):
                 print("Error executing: {}. Error: {}".format(command, error))
 
     def _execute_command(self, command_name, *args, **kwargs):
-        self.context['last_result'] = self.manager.run(command_name, *args, **kwargs)
+        self.context["last_result"] = self.manager.run(command_name, *args, **kwargs)
         if self.print_result and self.context["last_result"]:
             print(self.context["last_result"])
-        return self.context['last_result']
+        return self.context["last_result"]

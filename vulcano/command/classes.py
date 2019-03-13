@@ -21,8 +21,11 @@ __all__ = ["Magma"]
 
 
 def get_module_functions(module):
-    return (func_obj for func_name, func_obj in getmembers(module)
-            if not func_name.startswith('_') and isfunction(func_obj))
+    return (
+        func_obj
+        for func_name, func_obj in getmembers(module)
+        if not func_name.startswith("_") and isfunction(func_obj)
+    )
 
 
 class Magma(object):
