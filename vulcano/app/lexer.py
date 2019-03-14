@@ -9,6 +9,8 @@ application.
 import re
 
 # Third-party imports
+from pygments.styles.monokai import MonokaiStyle
+from pygments.style import Style
 from prompt_toolkit.styles import style_from_pygments_dict
 from pygments.lexer import RegexLexer
 from pygments.token import Punctuation, Text, Operator, Keyword, Name, String, Number
@@ -16,31 +18,20 @@ from pygments.token import Punctuation, Text, Operator, Keyword, Name, String, N
 # Local imports
 
 
-__all__ = ["dark_theme", "light_theme", "create_lexer"]
+__all__ = ["MonokaiTheme", "create_lexer"]
 
 
-dark_theme = style_from_pygments_dict(
-    {
-        Operator: "#89DDFF",
-        Keyword: "#C792EA italic",
-        Number.Integer: "#F78C6C",
-        String.Single: "#C3E88D",
-        Name: "#EEFFFF",
-        Punctuation: "#89DDFF",
-    }
-)
+class VulcanoStyle(Style):
+    """ All styles used on Vulcano must inherit from this class """
+    styles = {}
+    @classmethod
+    def pygments_style(cls):
+        return style_from_pygments_dict(cls.styles)
 
 
-light_theme = style_from_pygments_dict(
-    {
-        Operator: "#39ADB5",
-        Keyword: "#7C4DFF italic",
-        Number.Integer: "#F76D47",
-        String.Single: "#91B859",
-        Name: "#90A4AE",
-        Punctuation: "#39ADB5",
-    }
-)
+class MonokaiTheme(MonokaiStyle, VulcanoStyle):
+    """ Implementation of the Monokai theme for Vulcano """
+    pass
 
 
 class VulcanoLexer(RegexLexer):

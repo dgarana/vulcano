@@ -21,7 +21,7 @@ Here's a simple example:
 from __future__ import print_function
 import random
 from vulcano.app.classes import VulcanoApp
-from vulcano.app.lexer import dark_theme
+from vulcano.app.lexer import MonokaiTheme
 
 
 app = VulcanoApp()
@@ -68,11 +68,11 @@ def reverse_word(word):
 @app.command
 def random_upper_word(word):
     """ Returns the word with random upper letters """
-    return "".join(random.choice([letter.upper(), letter ]) for letter in word)
+    return "".join(random.choice([letter.upper(), letter]) for letter in word)
 
 
 if __name__ == '__main__':
-    app.run(theme=dark_theme)
+    app.run(theme=MonokaiTheme)
 ```
 
 This will create two commands:
@@ -97,6 +97,7 @@ emosewa si sihT !ybaB olleH
 EMOSEWa Si siHT !YbAB olLeH
 ```
 
+
 More or less, something like this:
 
 ![Demo gif video](docs/_static/demo.gif?raw=true "Demo gif video")
@@ -113,3 +114,12 @@ Key features
 - Nested commands: You want to execute more than one command at once from the command line arguments? Just use the "and". `python your_script.py my_func arg=\"something\˝ and my_func_2 arg=\"another thing here\"` , such hacker!
 - Context: If you want to communicate different functions between them, you can use the VulcanoApp.context (it's just a dictionary where you store and read data).
 - Command templating: You can use whatever is on the context to format your command and generate it with data from the context.
+- Inspect commands source code: With vulcano, you can inspect a command sourcecode by just typing `?` at the end of the command. For example: `>> bye?` it will print this function source with syntax highlight.
+```python
+>> bye?
+@app.command
+def bye(name="User"):
+    """ Say goodbye to someone """
+    return "Bye {}!".format(name)
+>> 
+```
