@@ -120,7 +120,9 @@ class VulcanoApp(Singleton):
         )
         lexer = create_lexer(commands=self.manager.command_names)
         session = PromptSession(
-            completer=manager_completer, lexer=PygmentsLexer(lexer), style=theme.pygments_style()
+            completer=manager_completer,
+            lexer=PygmentsLexer(lexer),
+            style=theme.pygments_style(),
         )
         while self.do_repl:
             try:

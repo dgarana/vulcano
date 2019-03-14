@@ -173,7 +173,13 @@ class TestVulcanoApp(TestCase):
 
     @patch("vulcano.app.classes.sys")
     def test_it_should_format_command_from_args(self, sys_mock):
-        sys_mock.argv = ["ensure_no_repl", "first_function", "and", "executed", "{last_result}"]
+        sys_mock.argv = [
+            "ensure_no_repl",
+            "first_function",
+            "and",
+            "executed",
+            "{last_result}",
+        ]
         app = VulcanoApp()
         rendered_with_context = MagicMock()
 
@@ -214,13 +220,12 @@ class TestVulcanoApp(TestCase):
 
     @patch("vulcano.app.classes.PromptSession")
     @patch("vulcano.app.classes.sys")
-    def test_it_should_return_not_if_fails_format_command_from_repl(self, sys_mock, prompt_session_mock):
+    def test_it_should_return_not_if_fails_format_command_from_repl(
+        self, sys_mock, prompt_session_mock
+    ):
         session_instance = prompt_session_mock.return_value
         sys_mock.argv = ["ensure_repl"]
-        session_instance.prompt.side_effect = (
-            "executed '{non_existent}'",
-            EOFError,
-        )
+        session_instance.prompt.side_effect = ("executed '{non_existent}'", EOFError)
         app = VulcanoApp()
         rendered_with_context = MagicMock()
 
