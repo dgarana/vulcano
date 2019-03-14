@@ -7,14 +7,18 @@ Vulcano command classes are active classes that handles with commands.
 # System imports
 from __future__ import print_function
 import importlib
-from inspect import getmembers, isfunction
+from inspect import getmembers, isfunction, getsource
 from functools import partial
 
 # Third-party imports
 import six
+from pygments import highlight
+from pygments.lexers import PythonLexer
+from pygments.formatters import Terminal256Formatter
 
 # Local imports
 from .models import Command
+from vulcano.app.lexer import MonokaiTheme
 
 
 __all__ = ["Magma"]
@@ -117,5 +121,12 @@ class Magma(object):
         :param dict kwargs: Known arguments to pass to command
         :return: Function execution result
         """
+        if command_name.endswith("?"):
+            command = self.get(command_name[:-1])
+            print(highlight(command.source_code,
+                            PythonLexer(),
+                            Terminal256Formatter(style=MonokaiTheme)))
+            return
         command = self.get(command_name)
         return command.run(*args, **kwargs)
+

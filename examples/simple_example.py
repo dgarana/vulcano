@@ -1,7 +1,7 @@
 from __future__ import print_function
 import random
 from vulcano.app.classes import VulcanoApp
-from vulcano.app.lexer import dark_theme
+from vulcano.app.lexer import MonokaiTheme
 
 
 app = VulcanoApp()
@@ -52,4 +52,4 @@ def random_upper_word(word):
 
 
 if __name__ == '__main__':
-    app.run(theme=dark_theme)
+    app.run(theme=MonokaiTheme)
