@@ -23,7 +23,9 @@ __all__ = ["MonokaiTheme", "create_lexer"]
 
 class VulcanoStyle(Style):
     """ All styles used on Vulcano must inherit from this class """
+
     styles = {}
+
     @classmethod
     def pygments_style(cls):
         return style_from_pygments_dict(cls.styles)
@@ -31,6 +33,7 @@ class VulcanoStyle(Style):
 
 class MonokaiTheme(MonokaiStyle, VulcanoStyle):
     """ Implementation of the Monokai theme for Vulcano """
+
     pass
 
 
