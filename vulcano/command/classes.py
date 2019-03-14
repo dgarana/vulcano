@@ -123,10 +123,13 @@ class Magma(object):
         """
         if command_name.endswith("?"):
             command = self.get(command_name[:-1])
-            print(highlight(command.source_code,
-                            PythonLexer(),
-                            Terminal256Formatter(style=MonokaiTheme)))
+            print(
+                highlight(
+                    command.source_code,
+                    PythonLexer(),
+                    Terminal256Formatter(style=MonokaiTheme),
+                )
+            )
             return
         command = self.get(command_name)
         return command.run(*args, **kwargs)
-
