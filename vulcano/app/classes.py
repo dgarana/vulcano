@@ -19,7 +19,7 @@ from vulcano.core.classes import Singleton
 from vulcano.command.classes import Magma
 from vulcano.command.completer import CommandCompleter
 from vulcano.command.parser import inline_parser
-from .lexer import create_lexer, dark_theme
+from .lexer import create_lexer, MonokaiTheme
 
 
 __all__ = ["VulcanoApp"]
@@ -81,7 +81,7 @@ class VulcanoApp(Singleton):
         """
         return self.manager.module(module)
 
-    def run(self, theme=dark_theme, print_result=True):
+    def run(self, theme=MonokaiTheme, print_result=True):
         """ Start the application
 
         It will run the application in Args or REPL mode, depending on the
@@ -113,14 +113,14 @@ class VulcanoApp(Singleton):
             args, kwargs = inline_parser(arguments)
             self._execute_command(command_name, *args, **kwargs)
 
-    def _exec_from_repl(self, theme=dark_theme):
+    def _exec_from_repl(self, theme=MonokaiTheme):
         self.do_repl = True
         manager_completer = FuzzyCompleter(
             CommandCompleter(self.manager, ignore_case=True)
         )
         lexer = create_lexer(commands=self.manager.command_names)
         session = PromptSession(
-            completer=manager_completer, lexer=PygmentsLexer(lexer), style=theme
+            completer=manager_completer, lexer=PygmentsLexer(lexer), style=theme.pygments_style()
         )
         while self.do_repl:
             try:
