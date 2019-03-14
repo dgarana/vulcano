@@ -12,10 +12,55 @@ Vulcano
 =======
 
 What is Vulcano?
+----------------
 
 Vulcano is a framework for creating command line utils.
 
-Here's a simple example:
+Built on top of [prompt_toolkit](https://github.com/prompt-toolkit/python-prompt-toolkit), it helps you to create human-friendly modern command line utils.
+
+It's simplicity makes it suitable in a lot of scenarios where you just want to run already-created functions in a REPL/ARGS mode.
+
+*_Notes_*:
+> Due some design changes we are making, we recommend to avoid using this framework on a production environment.
+> We're still looking forward to having a more idiomatic module name convention.
+> If you're happy with the current state, just use it ;)
+
+Key features
+------------
+- *Autocomplete*: Vulcano will inspect all the functions you register, and will create a list of autocomplete with your command name and it's arguments.
+- *Help*: It will create help based on your functions docstrings or the help provided during the registration process.
+- *History*: Use up & down arrows to select a command from your history.
+- *Register modules*: It can register all the functions inside a module just by calling the register module function. It will help you to prevent modifying the source module.
+- *Lexer*: Of course, we use lexer with pygments to colorize your command line ;)
+- *Concatenated commands*: You want to execute more than one command at once from the command line arguments? Just use the "and". `python your_script.py my_func arg=\"something\˝ and my_func_2 arg=\"another thing here\"` , such hacker!
+- *Context*: If you want to communicate different functions between them, you can use the VulcanoApp.context (it's just a dictionary where you store and read data).
+- *Command templating*: You can use whatever is on the context to format your command and generate it with data from the context.
+- *Inspect commands source code*: With vulcano, you can inspect a command sourcecode by just typing `?` at the end of the command. For example: `>> bye?` it will print this function source with syntax highlight.
+```python
+>> bye?
+@app.command
+def bye(name="User"):
+    """ Say goodbye to someone """
+    return "Bye {}!".format(name)
+>> 
+```
+
+Installation
+------------
+Vulcano is automatically delivered through TravisCI, which means that we usually keep the pip package up to date, this will help you to install the vulcano latest version by just executing the:
+`pip install vulcano`
+
+But in case you're looking for installing a non-delivered version or just a custom branch, you can install it by cloning the repository and executing the:
+`python setup.py install`
+
+Lets keep things simple.
+
+
+Learn by example
+----------------
+The repository usually holds a simple sample ready to execute which brings an example of almost all the features.
+
+In case you don't want to clone it, you can copy paste it:
 
 ```python
 from __future__ import print_function
@@ -75,9 +120,17 @@ if __name__ == '__main__':
     app.run(theme=MonokaiTheme)
 ```
 
-This will create two commands:
-- hi: Registered by wrapping the salute_method_here
-- bye: Just registered directly with the bye function
+This will create next commands:
+- hi
+- bye
+- i_am
+- whoami
+- sum_numbers
+- multiply
+- reverse_word
+- random_upper_word
+
+Those commands can `return` data that will be printed (if there's something) and the result will be stored inside the context under the `last_result` node. This helps you to be able to use it on the command line templating.
 
 You can execute from `repl` mode:
 
@@ -104,22 +157,9 @@ More or less, something like this:
 
 Nice, right?
 
-Key features
-------------
-- Autocomplete: Vulcano will inspect all the functions you register, and will create a list of autocomplete with your command name and it's arguments.
-- Help: It will create help based on your functions docstrings or the help provided during the registration process.
-- History: Use up & down arrows to select a command from your history.
-- Register modules: It can register all the functions inside a module just by calling the register module function. It will help you to prevent modifying the source module.
-- Lexer: Of course, we use lexer with pygments to colorize your command line ;)
-- Nested commands: You want to execute more than one command at once from the command line arguments? Just use the "and". `python your_script.py my_func arg=\"something\˝ and my_func_2 arg=\"another thing here\"` , such hacker!
-- Context: If you want to communicate different functions between them, you can use the VulcanoApp.context (it's just a dictionary where you store and read data).
-- Command templating: You can use whatever is on the context to format your command and generate it with data from the context.
-- Inspect commands source code: With vulcano, you can inspect a command sourcecode by just typing `?` at the end of the command. For example: `>> bye?` it will print this function source with syntax highlight.
-```python
->> bye?
-@app.command
-def bye(name="User"):
-    """ Say goodbye to someone """
-    return "Bye {}!".format(name)
->> 
-```
+
+Contribute
+----------
+If you have an idea, you want to help improving something ... or whatever you think you can help, you're welcome.
+
+All the pull requests will be checked (and also the bugs you report).
