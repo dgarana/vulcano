@@ -49,6 +49,10 @@ class Command(object):
         return arg_spec.args
 
     @property
+    def source_code(self):
+        return inspect.getsource(self.func)
+
+    @property
     def help(self):
         """ Returns the help for this command
 

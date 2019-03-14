@@ -21,7 +21,7 @@ Here's a simple example:
 from __future__ import print_function
 import random
 from vulcano.app.classes import VulcanoApp
-from vulcano.app.lexer import dark_theme
+from vulcano.app.lexer import MonokaiTheme
 
 
 app = VulcanoApp()
@@ -68,11 +68,11 @@ def reverse_word(word):
 @app.command
 def random_upper_word(word):
     """ Returns the word with random upper letters """
-    return "".join(random.choice([letter.upper(), letter ]) for letter in word)
+    return "".join(random.choice([letter.upper(), letter]) for letter in word)
 
 
 if __name__ == '__main__':
-    app.run(theme=dark_theme)
+    app.run(theme=MonokaiTheme)
 ```
 
 This will create two commands:
@@ -95,6 +95,16 @@ And also can be executed from `args` mode:
 $ python simple_example.py reverse_word \"Hello Baby! This is awesome\" and random_upper_word \"{last_result}\"
 emosewa si sihT !ybaB olleH
 EMOSEWa Si siHT !YbAB olLeH
+```
+
+You can even inspect some functions, just in case you forgot what your function does ;) :
+```python
+>> bye?
+@app.command
+def bye(name="User"):
+    """ Say goodbye to someone """
+    return "Bye {}!".format(name)
+>> 
 ```
 
 More or less, something like this:
