@@ -152,9 +152,9 @@ EMOSEWa Si siHT !YbAB olLeH
 ```
 
 
-More or less, something like this:
+Here is how the REPL mode looks like (with default theme):
 
-![Demo gif video](docs/_static/demo.gif?raw=true "Demo gif video")
+![REPL Demo gif video](https://github.com/dgarana/vulcano/raw/master/docs/_static/repl_demo.gif?raw=true "REPL Demo gif video")
 
 Nice, right?
 
