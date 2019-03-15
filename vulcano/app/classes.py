@@ -7,6 +7,7 @@ Vulcano APP Classes
 # System imports
 from __future__ import print_function
 import sys
+import re
 
 # Third-party imports
 from prompt_toolkit import PromptSession
@@ -25,6 +26,7 @@ from .lexer import create_lexer, MonokaiTheme
 __all__ = ["VulcanoApp"]
 
 
+
 def split_list_by_arg(lst, separator):
     """ Separate a list by a given value into different lists
 
@@ -32,19 +34,17 @@ def split_list_by_arg(lst, separator):
     :param str separator: String to use as separator
     :return:
     """
-    result = []
-    cur_command = None
-    for index, item in enumerate(lst):
-        if item == separator:
-            result.append(cur_command)
-            cur_command = None
-        else:
-            if not cur_command:
-                cur_command = []
-            cur_command.append(item)
-    if cur_command:
-        result.append(cur_command)
-    return result
+    __SPLIT__TOKEN__ = '___SPLITTOKEN___'
+    def _what_to_return(match):
+        if match.group(1):
+            return match.group(1)
+        if match.group(2):
+            return match.group(2)
+        return __SPLIT__TOKEN__
+    commands = ' '.join(lst)
+    rx = r"(\"[^\"\\]*(?:\\.[^'\\]*)*\")|('[^'\\]*(?:\\.[^'\\]*)*')|\b{0}\b"
+    res = re.sub(rx.format(separator), _what_to_return, commands)
+    return [command.strip() for command in res.split(__SPLIT__TOKEN__)]
 
 
 class VulcanoApp(Singleton):
@@ -104,8 +104,9 @@ class VulcanoApp(Singleton):
     def _exec_from_args(self):
         commands = split_list_by_arg(lst=sys.argv[1:], separator="and")
         for command in commands:
-            command_name = command[0]
-            arguments = " ".join(command[1:])
+            command_list = command.split()
+            command_name = command_list[0]
+            arguments = " ".join(command_list[1:])
             try:
                 arguments = arguments.format(**self.context)
             except KeyError:
@@ -126,7 +127,7 @@ class VulcanoApp(Singleton):
         )
         while self.do_repl:
             try:
-                user_input = session.prompt(u">> ")
+                user_input = u"{}".format(session.prompt(u">> "))
             except KeyboardInterrupt:
                 continue  # Control-C pressed. Try again.
             except EOFError:
