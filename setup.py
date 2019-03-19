@@ -35,6 +35,9 @@ setup(
         'Programming Language :: Python :: 3.7',
     ],
     keywords='console development cli repl',
+    entry_points = {
+        'console_scripts': ['vulcano=vulcano.vulcano_cli:main'],
+    },
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     install_requires=[
         "pyparsing",
