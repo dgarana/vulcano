@@ -54,7 +54,7 @@ class VulcanoApp(Singleton):
 
     def __init__(self):
         #: List of commands registered under this Vulcano APP
-        self.manager = getattr(self, "_manager", Magma())  # type: Magma
+        self.manager = getattr(self, "manager", Magma())  # type: Magma
         self.context = getattr(self, "context", {})  # Type: dict
         self.print_result = True
 
