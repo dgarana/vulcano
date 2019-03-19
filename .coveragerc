@@ -1,2 +1,4 @@
 [run]
-omit = *test_*
+omit = 
+       *test_*
+       vulcano/vulcano_cli.py
