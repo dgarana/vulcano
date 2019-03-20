@@ -7,6 +7,7 @@ Vulcano uses itself for creating vulcano application from command line
 # Third-party imports
 try:
     from cookiecutter.main import cookiecutter
+
     CK_SUPPORT = True
 except ImportError:
     CK_SUPPORT = False
@@ -33,7 +34,8 @@ In case you want to create an app, execute the command:
 `pip install cookiecutter`
 And restart the command line.
         """
-    return cookiecutter('https://github.com/dgarana/cookiecutter-vulcano')
+    return cookiecutter("https://github.com/dgarana/cookiecutter-vulcano")
+
 
 @APP.command
 def version():
@@ -44,7 +46,8 @@ def version():
 def main():
     """ Main vulcano application excution """
     if not APP.request_is_for_args:
-        print("""
+        print(
+            """
              _
             | |
 __   ___   _| | ___ __ _ _ __   ___
@@ -53,9 +56,10 @@ __   ___   _| | ___ __ _ _ __   ___
   \_/  \__,_|_|\___\__,_|_| |_|\___/
 =====================================
 Version: {}
-        """).format(vulcano_version)
+        """
+        ).format(vulcano_version)
     APP.run()
 
 
-if __name__ == '__name__':
+if __name__ == "__name__":
     main()
