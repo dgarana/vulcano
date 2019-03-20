@@ -1,4 +1,14 @@
+# -* coding: utf-8 *-
+"""
+:py:mod:`vulcano.command.builtin`
+---------------------------------
+Builtin commands that comes by default with vulcano.
+"""
+# System imports
 import sys
+
+# Third-party imports
+# Local imports
 
 
 __all__ = ["help", "exit"]
