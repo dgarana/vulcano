@@ -48,7 +48,7 @@ class VulcanoLexer(RegexLexer):
             (r"[+*/<>=~!@#%^&|`?^-]", Operator),
             (r"((T|t)rue|(F|f)alse)", Operator),
             (r"[0-9]+", Number.Integer),
-            (r'\"(\\.|[^\"])*\"', String.Single),
+            (r"\"(\\.|[^\"])*\"", String.Single),
             (r"\'(\\.|[^\'])*\'", String.Single),
             (r"[a-zA-Z_][a-zA-Z0-9_]*", Name),
             (r"[;:()\[\],\.{}]", Punctuation),
