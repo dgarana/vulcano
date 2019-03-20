@@ -26,7 +26,6 @@ from .lexer import create_lexer, MonokaiTheme
 __all__ = ["VulcanoApp"]
 
 
-
 def split_list_by_arg(lst, separator):
     """ Separate a list by a given value into different lists
 
@@ -34,14 +33,16 @@ def split_list_by_arg(lst, separator):
     :param str separator: String to use as separator
     :return:
     """
-    __SPLIT__TOKEN__ = '___SPLITTOKEN___'
+    __SPLIT__TOKEN__ = "___SPLITTOKEN___"
+
     def _what_to_return(match):
         if match.group(1):
             return match.group(1)
         if match.group(2):
             return match.group(2)
         return __SPLIT__TOKEN__
-    commands = ' '.join(lst)
+
+    commands = " ".join(lst)
     rx = r"(\"[^\"\\]*(?:\\.[^'\\]*)*\")|('[^'\\]*(?:\\.[^'\\]*)*')|\b{0}\b"
     res = re.sub(rx.format(separator), _what_to_return, commands)
     return [command.strip() for command in res.split(__SPLIT__TOKEN__)]
