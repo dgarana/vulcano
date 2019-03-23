@@ -40,7 +40,7 @@ setup(
     },
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     install_requires=[
-        "pyparsing",
+        "pyparsing>=2.3.1",
         "pygments",
         "prompt_toolkit"
     ]
