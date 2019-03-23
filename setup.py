@@ -42,6 +42,6 @@ setup(
     install_requires=[
         "pyparsing>=2.3.1",
         "pygments",
-        "prompt_toolkit"
+        "prompt_toolkit>=2.0.1"
     ]
 )
