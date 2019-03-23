@@ -252,3 +252,12 @@ class TestVulcanoApp(TestCase):
 
         app.run(print_result=False)
         rendered_with_context.parameter_is.assert_called_with("{non_existent}")
+
+    @patch("vulcano.app.classes.PromptSession")
+    @patch("vulcano.app.classes.sys")
+    def test_continue_if_there_is_no_command_input(self, sys_mock, prompt_session_mock):
+        session_instance = prompt_session_mock.return_value
+        sys_mock.argv = ["ensure_repl"]
+        session_instance.prompt.side_effect = ("", EOFError)
+        app = VulcanoApp()
+        app.run(print_result=False)
