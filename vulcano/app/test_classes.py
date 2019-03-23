@@ -69,6 +69,21 @@ class TestVulcanoApp(TestCase):
 
     @patch("vulcano.app.classes.PromptSession")
     @patch("vulcano.app.classes.sys")
+    def test_does_not_throw_while_handling_empty_repl_input(
+        self, sys_mock, prompt_session_mock
+    ):
+        session_instance = prompt_session_mock.return_value
+        session_instance.prompt.side_effect = ("", EOFError)
+        sys_mock.argv = ["ensure_repl"]
+        app = VulcanoApp()
+
+        try:
+            app.run()
+        except:
+            self.fail("Exception was raised unexpectedly")
+
+    @patch("vulcano.app.classes.PromptSession")
+    @patch("vulcano.app.classes.sys")
     def test_should_be_store_last_result_in_context_in_repl(
         self, sys_mock, prompt_session_mock
     ):
