@@ -135,8 +135,11 @@ class VulcanoApp(Singleton):
                 break  # Control-D Pressed. Finish
 
             try:
-                command = user_input.split()[0]
-                arguments = " ".join(user_input.split()[1:])
+                command_list = user_input.split()
+                if not command_list:
+                    continue
+                command = command_list[0]
+                arguments = " ".join(command_list[1:])
                 try:
                     arguments = arguments.format(**self.context)
                 except KeyError:
