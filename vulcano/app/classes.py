@@ -24,6 +24,7 @@ from .lexer import create_lexer, MonokaiTheme
 
 
 __all__ = ["VulcanoApp"]
+_SPLIT_TOKEN_ = "___SPLIT_TOKEN___"
 
 
 def split_list_by_arg(lst, separator):
@@ -33,19 +34,18 @@ def split_list_by_arg(lst, separator):
     :param str separator: String to use as separator
     :return:
     """
-    __SPLIT__TOKEN__ = "___SPLITTOKEN___"
 
     def _what_to_return(match):
         if match.group(1):
             return match.group(1)
         if match.group(2):
             return match.group(2)
-        return __SPLIT__TOKEN__
+        return _SPLIT_TOKEN_
 
     commands = " ".join(lst)
     rx = r"(\"[^\"\\]*(?:\\.[^'\\]*)*\")|('[^'\\]*(?:\\.[^'\\]*)*')|\b{0}\b"
     res = re.sub(rx.format(separator), _what_to_return, commands)
-    return [command.strip() for command in res.split(__SPLIT__TOKEN__)]
+    return [command.strip() for command in res.split(_SPLIT_TOKEN_)]
 
 
 class VulcanoApp(Singleton):
