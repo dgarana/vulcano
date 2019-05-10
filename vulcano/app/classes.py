@@ -15,6 +15,7 @@ from prompt_toolkit.completion import FuzzyCompleter
 from prompt_toolkit.lexers import PygmentsLexer
 
 # Local imports
+from vulcano.exceptions import CommandNotFound
 from vulcano.command import builtin
 from vulcano.core.classes import Singleton
 from vulcano.command.classes import Magma
@@ -146,6 +147,8 @@ class VulcanoApp(Singleton):
                     pass
                 args, kwargs = inline_parser(arguments)
                 self._execute_command(command, *args, **kwargs)
+            except CommandNotFound as error:
+                print(error)
             except Exception as error:
                 print("Error executing: {}. Error: {}".format(command, error))
 
