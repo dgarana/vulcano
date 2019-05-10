@@ -19,6 +19,7 @@ from pygments.formatters import Terminal256Formatter
 # Local imports
 from .models import Command
 from vulcano.app.lexer import MonokaiTheme
+from vulcano.exceptions import CommandNotFound
 
 
 __all__ = ["Magma"]
@@ -110,6 +111,8 @@ class Magma(object):
         :return: Command registered under this name
         :rtype: Command
         """
+        if command_name not in self._commands:
+            raise CommandNotFound('Command {} not found'.format(command_name))
         return self._commands[command_name]
 
     def run(self, command_name, *args, **kwargs):
