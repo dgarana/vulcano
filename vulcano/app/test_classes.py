@@ -4,6 +4,7 @@ from unittest import TestCase
 
 # Third-party imports
 from mock import patch, MagicMock
+from prompt_toolkit.history import FileHistory
 import six
 
 # Local imports
@@ -276,3 +277,16 @@ class TestVulcanoApp(TestCase):
         session_instance.prompt.side_effect = ("", EOFError)
         app = VulcanoApp()
         app.run(print_result=False)
+
+    @patch("vulcano.app.classes.PromptSession")
+    @patch("vulcano.app.classes.sys")
+    def test_history_file_in_options_if_needed(self, sys_mock, prompt_session_mock):
+        session_instance = prompt_session_mock.return_value
+        sys_mock.argv = ["ensure_repl"]
+        session_instance.prompt.side_effect = ("", EOFError)
+        app = VulcanoApp()
+        app.run(print_result=False, history_file='somefile.txt')
+        prompt_session_mock.assert_called_once()
+        _call_args = prompt_session_mock.call_args_list[0][1]
+        _history = _call_args.get('history')
+        self.assertIsInstance(_history, FileHistory)
