@@ -11,6 +11,7 @@ import re
 
 # Third-party imports
 from prompt_toolkit import PromptSession
+from prompt_toolkit.history import FileHistory
 from prompt_toolkit.completion import FuzzyCompleter
 from prompt_toolkit.lexers import PygmentsLexer
 
@@ -83,7 +84,7 @@ class VulcanoApp(Singleton):
         """
         return self.manager.module(module)
 
-    def run(self, theme=MonokaiTheme, print_result=True):
+    def run(self, theme=MonokaiTheme, print_result=True, history_file=None):
         """ Start the application
 
         It will run the application in Args or REPL mode, depending on the
@@ -97,7 +98,7 @@ class VulcanoApp(Singleton):
         if self.request_is_for_args:
             self._exec_from_args()
         else:
-            self._exec_from_repl(theme=theme)
+            self._exec_from_repl(theme=theme, history_file=history_file)
 
     def _prepare_builtins(self):
         self.manager.register_command(builtin.exit, "exit")
@@ -116,7 +117,10 @@ class VulcanoApp(Singleton):
             args, kwargs = inline_parser(arguments)
             self._execute_command(command_name, *args, **kwargs)
 
-    def _exec_from_repl(self, theme=MonokaiTheme):
+    def _exec_from_repl(self, theme=MonokaiTheme, history_file=None):
+        session_extra_options = {}
+        if history_file:
+            session_extra_options['history'] = FileHistory(history_file)
         self.do_repl = True
         manager_completer = FuzzyCompleter(
             CommandCompleter(self.manager, ignore_case=True)
@@ -126,6 +130,7 @@ class VulcanoApp(Singleton):
             completer=manager_completer,
             lexer=PygmentsLexer(lexer),
             style=theme.pygments_style(),
+            **session_extra_options
         )
         while self.do_repl:
             try:
