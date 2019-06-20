@@ -1,5 +1,5 @@
 # Requirements needed for running the project
-prompt_toolkit>=2.0.0,<3.0.0
+prompt_toolkit>=2.0.3,<3.0.0
 pygments
 pyparsing
 # Note that six is also a requirements for prompt_toolkit
