@@ -17,7 +17,10 @@ __all__ = ["help", "exit"]
 
 def help(app):
     def real_help(command=None):
-        """ Print this help """
+        """ Print help about the application or for a given command
+
+        :param str command: Command to retrieve it's help
+        """
         if command:
             command = app.manager._commands.get(command)
             if command:
