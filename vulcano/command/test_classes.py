@@ -95,14 +95,47 @@ class TestMagma(unittest.TestCase):
         """
 
         def test_function():
-            """ This is just a description form Docstrings """
+            """ This is just a description form Docstrings
+
+            And this is just the extended text.
+            """
             pass
 
         self.magma.register_command(test_function)
         command = self.magma.get("test_function")
         self.assertEqual(
-            command.description, " This is just a description form Docstrings "
+            command.short_description, "This is just a description form Docstrings"
         )
+        self.assertEqual(
+            command.long_description, "And this is just the extended text."
+        )
+
+    def test_it_should_register_with_arguments_description(self):
+        """
+        Vulcano app should be able to register a command and extract it's variable configurations
+        """
+        def test_function():
+            """ This is just a description form Docstrings
+
+            And this is just the extended text.
+
+            :param int a: This is parameter a
+            :param b: This is parameter b
+            """
+            pass
+
+        self.magma.register_command(test_function)
+        command = self.magma.get("test_function")
+        self.assertEqual(
+            command.short_description, "This is just a description form Docstrings"
+        )
+        self.assertEqual(
+            command.long_description, "And this is just the extended text."
+        )
+        self.assertEqual(
+            len(command.args), 2
+        )
+
 
     def test_register_decorator(self):
         @self.magma.command()
@@ -112,7 +145,7 @@ class TestMagma(unittest.TestCase):
 
         command = self.magma.get("foo_function")
         self.assertEqual(command.name, "foo_function")
-        self.assertEqual(command.description, " Docstring ")
+        self.assertEqual(command.short_description, "Docstring")
         self.assertEqual(foo_function(1, 1), 2)
 
     def test_register_decorator_without_parentheses(self):
@@ -123,7 +156,7 @@ class TestMagma(unittest.TestCase):
 
         command = self.magma.get("foo_function")
         self.assertEqual(command.name, "foo_function")
-        self.assertEqual(command.description, " Docstring ")
+        self.assertEqual(command.short_description, "Docstring")
         self.assertEqual(foo_function(1, 1), 2)
 
     def test_register_module_from_string(self):

@@ -61,6 +61,7 @@ class VulcanoApp(Singleton):
         self.manager = getattr(self, "manager", Magma())  # type: Magma
         self.context = getattr(self, "context", {})  # Type: dict
         self.print_result = True
+        self.theme = None
 
     @property
     def request_is_for_args(self):
@@ -94,6 +95,7 @@ class VulcanoApp(Singleton):
         :param theme: Theme to use for this application, NOTE: only used for the REPL.
         :param bool print_result: If True, results from functions will be printed.
         """
+        self.theme = theme
         self.print_result = print_result
         self._prepare_builtins()
         if self.request_is_for_args:
