@@ -85,7 +85,7 @@ class VulcanoApp(Singleton):
         """
         return self.manager.module(module)
 
-    def run(self, theme=MonokaiTheme, print_result=True, history_file=None):
+    def run(self,prompt=u'>> ', theme=MonokaiTheme, print_result=True, history_file=None):
         """ Start the application
 
         It will run the application in Args or REPL mode, depending on the
@@ -99,7 +99,7 @@ class VulcanoApp(Singleton):
         if self.request_is_for_args:
             self._exec_from_args()
         else:
-            self._exec_from_repl(theme=theme, history_file=history_file)
+            self._exec_from_repl(prompt=prompt, theme=theme, history_file=history_file)
 
     def _prepare_builtins(self):
         self.manager.register_command(builtin.exit, "exit")
@@ -118,7 +118,7 @@ class VulcanoApp(Singleton):
             args, kwargs = inline_parser(arguments)
             self._execute_command(command_name, *args, **kwargs)
 
-    def _exec_from_repl(self, theme=MonokaiTheme, history_file=None):
+    def _exec_from_repl(self, prompt=u'>> ', theme=MonokaiTheme, history_file=None):
         session_extra_options = {}
         if history_file:
             session_extra_options['history'] = FileHistory(os.path.expanduser(str(history_file)))
@@ -135,7 +135,7 @@ class VulcanoApp(Singleton):
         )
         while self.do_repl:
             try:
-                user_input = u"{}".format(session.prompt(u">> "))
+                user_input = u"{}".format(session.prompt(prompt))
             except KeyboardInterrupt:
                 continue  # Control-C pressed. Try again.
             except EOFError:
