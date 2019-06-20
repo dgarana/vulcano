@@ -8,6 +8,7 @@ Vulcano APP Classes
 from __future__ import print_function
 import sys
 import re
+import os
 
 # Third-party imports
 from prompt_toolkit import PromptSession
@@ -120,7 +121,7 @@ class VulcanoApp(Singleton):
     def _exec_from_repl(self, theme=MonokaiTheme, history_file=None):
         session_extra_options = {}
         if history_file:
-            session_extra_options['history'] = FileHistory(history_file)
+            session_extra_options['history'] = FileHistory(os.path.expanduser(str(history_file)))
         self.do_repl = True
         manager_completer = FuzzyCompleter(
             CommandCompleter(self.manager, ignore_case=True)
