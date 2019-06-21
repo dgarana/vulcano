@@ -52,6 +52,12 @@ class Magma(object):
             ]
         return self._command_names
 
+    @property
+    def command_completions(self):
+        if not hasattr(self, "_command_completions"):
+            self._command_completions = [command.command_completer for command in self._commands.values()]
+        return self._command_completions
+
     def command(self, name_or_function=None, description=None):
         """
         Register decorator used to command a command functions directly on vulcano app
