@@ -117,13 +117,18 @@ class Argument(object):
     :param str type_: Type of this value in string format
     """
 
-    __slots__ = ("name", "description", "type_")
+    __slots__ = ("name", "description", "type_", "_args_completion")
 
     def __init__(self, name, description=None, type_=None):
         self.name = name
         self.description = description
         self.type_ = type_
 
+    @property
+    def args_completion(self):
+        if not hasattr(self, "_args_completion"):
+            self._args_completion = (u"{}".format(self.name), u"{}".format(self.description))
+        return self._args_completion
 
 class Command(object):
     """
@@ -136,7 +141,8 @@ class Command(object):
     :param function func: Function that has been registered to be executed
     """
 
-    __slots__ = ("name", "description", "func", "args", "long_description", "short_description")
+    __slots__ = ("name", "description", "func", "args", "long_description", "short_description", "_command_completer",
+                 "_args_completion")
 
     def __init__(self, func, name=None, description=None):
         self.func = func  # type: callable
@@ -192,6 +198,18 @@ class Command(object):
                 arg_description += ": {arg.description}"
                 description_item += arg_description.format(arg=arg)
         return description_item + "\n"
+
+    @property
+    def command_completer(self):
+        if not hasattr(self, "_command_completer"):
+            self._command_completer = (u"{}".format(self.name), u"{}".format(self.short_description or ""))
+        return self._command_completer
+
+    @property
+    def args_completion(self):
+        if not hasattr(self, "_args_completion"):
+            self._args_completion = [arg.args_completion for arg in self.args.values()]
+        return self._args_completion
 
     def run(self, *args, **kwargs):
         """
