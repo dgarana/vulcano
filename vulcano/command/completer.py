@@ -30,17 +30,17 @@ class CommandCompleter(Completer):
             text_before_cursor = text_before_cursor.lower()
         text_arr = text_before_cursor.split(" ")
         last_words = text_arr[-1]
-        words = self.__get_current_words(text_arr[:-1])
+        completions = self.__get_current_completions(text_arr[:-1])
 
-        for a in words:
-            if a not in document.text_before_cursor and "=" not in last_words:
-                yield Completion(a, -len(last_words))
+        for completion, meta in completions:
+            if completion not in document.text_before_cursor and "=" not in last_words:
+                yield Completion(completion, -len(last_words), display_meta=meta or u"")
 
-    def __get_current_words(self, text_arr):
+    def __get_current_completions(self, text_arr):
         if len(text_arr) >= 1:
             command = text_arr[0]
             command_obj = self.manager.get(command)
             if command_obj:
-                return command_obj.args
+                return command_obj.args_completion
         else:
-            return self.manager.command_names
+            return self.manager.command_completions
