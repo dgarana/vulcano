@@ -29,7 +29,8 @@ def help(app):
                 print("Command `{}` not found".format(command))
         else:
             for command in app.manager._commands.values():
-                print(command.help)
+                if command.visible:
+                    print(command.help)
 
     return real_help
 

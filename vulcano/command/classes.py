@@ -46,24 +46,19 @@ class Magma(object):
 
     @property
     def command_names(self):
-        if not hasattr(self, "_command_names"):
-            self._command_names = [
-                u"{}".format(command) for command in self._commands.keys()
-            ]
-        return self._command_names
+        return [u"{}".format(command) for command in self._commands.keys()]
 
     @property
     def command_completions(self):
-        if not hasattr(self, "_command_completions"):
-            self._command_completions = [command.command_completer for command in self._commands.values()]
-        return self._command_completions
+        return [command.command_completer for command in self._commands.values() if command.visible]
 
-    def command(self, name_or_function=None, description=None):
+    def command(self, name_or_function=None, description=None, show_if=None):
         """
         Register decorator used to command a command functions directly on vulcano app
 
         :param name_or_function: Name of the function or the function itself
         :param str description: Description for the command
+        :param function show_if: Function that will determine when we should show this command or not
         :return:
         """
 
@@ -72,7 +67,7 @@ class Magma(object):
 
             As we need access to self, we cannot use wrap from functools.
             """
-            self.register_command(func, name, description)
+            self.register_command(func, name, description, show_if)
 
             def func_wrapper(*args, **kwargs):
                 return func(*args, **kwargs)
@@ -94,20 +89,21 @@ class Magma(object):
         for func in get_module_functions(module):
             self.register_command(func)
 
-    def register_command(self, func, name=None, description=None):
+    def register_command(self, func, name=None, description=None, show_if=None):
         """
         Register a function under this Vulcano app instance
 
         :param function func: Executable function to command
         :param str name: Name for this function
         :param str description: Help for displaying to the user
+        :param function show_if: Function that will determine when we should show this command or not
         :raises NameError: If there's a command already registered with
                                 this name
         """
         name = name or func.__name__
         if name in self._commands:
             raise NameError("This command already exists")
-        self._commands[name] = Command(func, name, description)
+        self._commands[name] = Command(func, name, description, show_if)
 
     def get(self, command_name):
         """
