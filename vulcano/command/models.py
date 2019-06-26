@@ -117,12 +117,14 @@ class Argument(object):
     :param str type_: Type of this value in string format
     """
 
-    __slots__ = ("name", "description", "type_", "_args_completion")
+    __slots__ = ("name", "description", "type_", "_args_completion", "default_value", "is_kwarg")
 
-    def __init__(self, name, description=None, type_=None):
+    def __init__(self, name, is_kwarg, description=None, type_=None, default_value=None):
         self.name = name
         self.description = description
         self.type_ = type_
+        self.default_value = default_value
+        self.is_kwarg = is_kwarg
 
     @property
     def args_completion(self):
@@ -133,6 +135,16 @@ class Argument(object):
 
 def show_by_default():
     return True
+
+
+def get_default_args(func):
+    """
+    returns a dictionary of arg_name:default_values for the input function
+    """
+    args, varargs, keywords, defaults = inspect.getargspec(func)
+    if not defaults:
+        return {}
+    return dict(zip(args[-len(defaults):], defaults))
 
 
 class Command(object):
@@ -158,16 +170,23 @@ class Command(object):
         self.short_description = description or func_specs['short_description']
         self.long_description = func_specs['long_description']
         self.args = {}
+        arg_defaults = get_default_args(func)
         if func_specs['params']:
             for param_name, param_opts in func_specs['params'].items():
                 self.args[u'{}'.format(param_name)] = Argument(
                     name=param_name,
                     type_=param_opts['type'],
-                    description=param_opts['doc']
+                    description=param_opts['doc'],
+                    is_kwarg=param_name in arg_defaults,
+                    default_value=arg_defaults.get(param_name)
                 )
         else:
             for arg in self.get_function_args(func):
-                self.args[u'{}'.format(arg)] = Argument(name=arg)
+                self.args[u'{}'.format(arg)] = Argument(
+                    name=arg,
+                    is_kwarg=arg in arg_defaults,
+                    default_value=arg_defaults.get(arg)
+                )
 
     @property
     def visible(self):
@@ -203,9 +222,14 @@ class Command(object):
         if self.args:
             description_item += "\n\t Args:"
             for arg in self.args.values():
-                arg_description = "\n\t\t{arg.name}"
+                arg_description = "\n\t\t"
+                if not arg.is_kwarg:
+                    arg_description += "*"
+                arg_description += "{arg.name}"
                 if arg.type_:
                     arg_description += "({arg.type_})"
+                if arg.is_kwarg and arg.default_value is not None:
+                    arg_description += "(default: {arg.default_value})"
                 arg_description += ": {arg.description}"
                 description_item += arg_description.format(arg=arg)
         return description_item + "\n"
