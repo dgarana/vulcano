@@ -8,16 +8,38 @@ app = VulcanoApp()
 
 @app.command("hi", "Salute people given form parameter")
 def salute_method_here(name, title="Mr."):
+    """Salute to someone
+
+    :param str name: Name of who you want to say hi!
+    :param str title: Title of this person
+    """
     print("Hi! {} {} :) Glad to see you.".format(title, name))
+
+
+def has_context_name():
+    """Function to hide a command from command line
+
+    This function is to prevent showing help and autocomplete for commands that need the name
+    to be set up on the context.
+    """
+    return 'name' in app.context
 
 
 @app.command
 def i_am(name):
+    """Set your name
+
+    :param str name: Your name goes here!
+    """
     app.context['name'] = name
 
 
-@app.command
+@app.command(show_if=has_context_name)
 def whoami():
+    """Returns your name from the context
+
+    This is only shown where you've set your name
+    """
     return app.context['name']
 
 
