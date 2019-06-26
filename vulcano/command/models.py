@@ -130,6 +130,11 @@ class Argument(object):
             self._args_completion = (u"{}".format(self.name), u"{}".format(self.description))
         return self._args_completion
 
+
+def show_by_default():
+    return True
+
+
 class Command(object):
     """
     Vulcano Command
@@ -139,12 +144,14 @@ class Command(object):
     :param str name: Name for this command
     :param str description: Description of this command
     :param function func: Function that has been registered to be executed
+    :param function show_if: Determines when you should display a function or not
     """
 
     __slots__ = ("name", "description", "func", "args", "long_description", "short_description", "_command_completer",
-                 "_args_completion")
+                 "_args_completion", "show_if")
 
-    def __init__(self, func, name=None, description=None):
+    def __init__(self, func, name=None, description=None, show_if=None):
+        self.show_if = show_if or show_by_default
         self.func = func  # type: callable
         self.name = name or func.__name__  # type: str
         func_specs = parse_docstring(func)
@@ -161,6 +168,10 @@ class Command(object):
         else:
             for arg in self.get_function_args(func):
                 self.args[u'{}'.format(arg)] = Argument(name=arg)
+
+    @property
+    def visible(self):
+        return self.show_if()
 
     @staticmethod
     def get_function_args(func):

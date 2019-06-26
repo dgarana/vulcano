@@ -51,6 +51,12 @@ def split_list_by_arg(lst, separator):
     return [command.strip() for command in res.split(_SPLIT_TOKEN_)]
 
 
+def rq_is_for_repl(app):
+    def _func():
+        return not app.request_is_for_args
+    return _func
+
+
 class VulcanoApp(Singleton):
     """ VulcanoApp is the class choosen for managing the application.
 
@@ -104,7 +110,7 @@ class VulcanoApp(Singleton):
             self._exec_from_repl(prompt=prompt, theme=theme, history_file=history_file)
 
     def _prepare_builtins(self):
-        self.manager.register_command(builtin.exit, "exit")
+        self.manager.register_command(builtin.exit, "exit", show_if=rq_is_for_repl(self))
         self.manager.register_command(builtin.help(self), "help")
 
     def _exec_from_args(self):
