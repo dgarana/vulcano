@@ -9,6 +9,7 @@ from __future__ import print_function
 import sys
 import re
 import os
+from difflib import SequenceMatcher
 
 # Third-party imports
 from prompt_toolkit import PromptSession
@@ -55,6 +56,17 @@ def rq_is_for_repl(app):
     def _func():
         return not app.request_is_for_args
     return _func
+
+
+def did_you_mean(command, possible_commands):
+    suggested_command = None
+    ratio = 0
+    for possible_command in possible_commands:
+        possible_ratio = SequenceMatcher(None, command, possible_command).ratio()
+        if possible_ratio > ratio:
+            ratio = possible_ratio
+            suggested_command = possible_command
+    return suggested_command
 
 
 class VulcanoApp(Singleton):
@@ -124,7 +136,13 @@ class VulcanoApp(Singleton):
             except KeyError:
                 pass
             args, kwargs = inline_parser(arguments)
-            self._execute_command(command_name, *args, **kwargs)
+            try:
+                self._execute_command(command_name, *args, **kwargs)
+            except CommandNotFound:
+                print('Command {} not found'.format(command_name))
+                possible_command = did_you_mean(command_name, self.manager.command_names)
+                if possible_command:
+                    print('Did you mean: "{}"?'.format(possible_command))
 
     def _exec_from_repl(self, prompt=u'>> ', theme=MonokaiTheme, history_file=None):
         session_extra_options = {}
@@ -161,8 +179,11 @@ class VulcanoApp(Singleton):
                     pass
                 args, kwargs = inline_parser(arguments)
                 self._execute_command(command, *args, **kwargs)
-            except CommandNotFound as error:
-                print(error)
+            except CommandNotFound:
+                print('Command {} not found'.format(command))
+                possible_command = did_you_mean(command, self.manager.command_names)
+                if possible_command:
+                    print('Did you mean: "{}"?'.format(possible_command))
             except Exception as error:
                 print("Error executing: {}. Error: {}".format(command, error))
 
