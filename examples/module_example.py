@@ -3,7 +3,7 @@ from vulcano.app.classes import VulcanoApp
 from vulcano.app.lexer import MonokaiTheme
 
 
-app = VulcanoApp()
+app = VulcanoApp('modules_example')
 app.module('my_module.my_funcs')
 
 

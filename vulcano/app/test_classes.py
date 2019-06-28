@@ -29,7 +29,7 @@ class TestVulcanoApp(TestCase):
 
     def tearDown(self):
         # Remove the singleton instances before continue next test
-        VulcanoApp._instance = None
+        VulcanoApp.__instances__ = {}
 
     @patch("vulcano.app.classes.sys")
     def test_should_register_builtin_functions_before_run_args(self, sys_mock):

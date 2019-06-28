@@ -20,7 +20,6 @@ from prompt_toolkit.lexers import PygmentsLexer
 # Local imports
 from vulcano.exceptions import CommandNotFound
 from vulcano.command import builtin
-from vulcano.core.classes import Singleton
 from vulcano.command.classes import Magma
 from vulcano.command.completer import CommandCompleter
 from vulcano.command.parser import inline_parser
@@ -69,15 +68,27 @@ def did_you_mean(command, possible_commands):
     return suggested_command
 
 
-class VulcanoApp(Singleton):
-    """ VulcanoApp is the class choosen for managing the application.
+class VulcanoApp(object):
+    """VulcanoApp"""
+    __instances__ = {}
+
+    def __new__(cls, app_name='vulcano_default'):
+        if app_name in cls.__instances__:
+            return cls.__instances__.get(app_name)
+        new_app = _VulcanoApp(app_name)
+        cls.__instances__[app_name] = new_app
+        return new_app
+
+
+class _VulcanoApp(object):
+    """ App is the class choosen for managing the application.
 
     It has the all the things needed to command/execute/manage commands."""
 
-    def __init__(self):
-        #: List of commands registered under this Vulcano APP
-        self.manager = getattr(self, "manager", Magma())  # type: Magma
-        self.context = getattr(self, "context", {})  # Type: dict
+    def __init__(self, app_name):
+        self.app_name = app_name
+        self.manager = Magma()  # type: Magma
+        self.context = {}  # Type: dict
         self.print_result = True
         self.theme = None
 
