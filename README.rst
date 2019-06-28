@@ -174,6 +174,9 @@ line templating.
 
 You can execute from ``repl`` mode:
 
+.. figure:: https://github.com/dgarana/vulcano/raw/master/docs/_static/repl_demo.gif?raw=true
+   :alt: REPL Demo gif video
+
 .. code:: bash
 
     $ python simple_example.py
@@ -185,18 +188,15 @@ You can execute from ``repl`` mode:
 
 And also can be executed from ``args`` mode:
 
+.. figure:: https://github.com/dgarana/vulcano/raw/master/docs/_static/args_demo.gif?raw=true
+   :alt: REPL Demo gif video
+
 .. code:: bash
 
     $ python simple_example.py reverse_word \"Hello Baby! This is awesome\" and random_upper_word \"{last_result}\"
     emosewa si sihT !ybaB olleH
     EMOSEWa Si siHT !YbAB olLeH
 
-Here is how the REPL mode looks like (with default theme):
-
-.. figure:: https://github.com/dgarana/vulcano/raw/master/docs/_static/repl_demo.gif?raw=true
-   :alt: REPL Demo gif video
-
-   REPL Demo gif video
 Nice, right?
 
 Contribute
