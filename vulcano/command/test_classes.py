@@ -114,7 +114,7 @@ class TestMagma(unittest.TestCase):
         """
         Vulcano app should be able to register a command and extract it's variable configurations
         """
-        def test_function():
+        def test_function(a, b):
             """ This is just a description form Docstrings
 
             And this is just the extended text.
