@@ -9,6 +9,7 @@ import inspect
 
 # Third-party imports
 from pynspector.func_inspections import get_func_inspect_result
+from cached_property import cached_property
 
 # Local imports
 
@@ -31,9 +32,6 @@ class Command(object):
     :param function func: Function that has been registered to be executed
     :param function show_if: Determines when you should display a function or not
     """
-
-    __slots__ = ("name", "description", "func", "args", "long_description", "short_description", "_command_completer",
-                 "_args_completion", "show_if")
 
     def __init__(self, func, name=None, description=None, show_if=None):
         self.show_if = show_if or show_by_default
@@ -79,17 +77,13 @@ class Command(object):
                 description_item += arg_description.format(arg=arg)
         return description_item + "\n"
 
-    @property
+    @cached_property
     def command_completer(self):
-        if not hasattr(self, "_command_completer"):
-            self._command_completer = (u"{}".format(self.name), u"{}".format(self.short_description or ""))
-        return self._command_completer
+        return (u"{}".format(self.name), u"{}".format(self.short_description or ""))
 
-    @property
+    @cached_property
     def args_completion(self):
-        if not hasattr(self, "_args_completion"):
-            self._args_completion = [(u"{}".format(arg.name), u"{}".format(arg.description)) for arg in self.args]
-        return self._args_completion
+        return [(u"{}".format(arg.name), u"{}".format(arg.description)) for arg in self.args]
 
     def run(self, *args, **kwargs):
         """
