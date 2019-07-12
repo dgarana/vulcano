@@ -43,6 +43,7 @@ setup(
         "pyparsing>=2.3.1",
         "pygments",
         "pynspector>=0.0.4",
-        "prompt_toolkit>=2.0.1"
+        "prompt_toolkit>=2.0.1",
+        "cached-property",
     ]
 )
