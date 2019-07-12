@@ -1,8 +1,7 @@
 Vulcano
 =======
 |PyPI version| |Code style: black| |Build Status| |codecov|
-|readthedocs| |py27build| |py34build| |py35build| |py36build|
-|py37build| |Downloads|
+|readthedocs| |Downloads|
 
 What is Vulcano?
 ----------------
@@ -217,15 +216,5 @@ All the pull requests will be checked (and also the bugs you report).
    :target: https://codecov.io/gh/dgarana/vulcano
 .. |readthedocs| image:: https://readthedocs.org/projects/vulcano/badge/?version=latest
    :target: https://vulcano.readthedocs.org
-.. |py27build| image:: http://travimg.dgarana.com/v1/dgarana/vulcano/master/Python%202.7%20Unit%20Test.svg
-   :target: https://travis-ci.org/dgarana/vulcano
-.. |py34build| image:: http://travimg.dgarana.com/v1/dgarana/vulcano/master/Python%203.4%20Unit%20Test.svg
-   :target: https://travis-ci.org/dgarana/vulcano
-.. |py35build| image:: http://travimg.dgarana.com/v1/dgarana/vulcano/master/Python%203.5%20Unit%20Test.svg
-   :target: https://travis-ci.org/dgarana/vulcano
-.. |py36build| image:: http://travimg.dgarana.com/v1/dgarana/vulcano/master/Python%203.6%20Unit%20Test.svg
-   :target: https://travis-ci.org/dgarana/vulcano
-.. |py37build| image:: http://travimg.dgarana.com/v1/dgarana/vulcano/master/Python%203.7%20Unit%20Test.svg
-   :target: https://travis-ci.org/dgarana/vulcano
 .. |Downloads| image:: https://pepy.tech/badge/vulcano
    :target: https://pepy.tech/project/vulcano
