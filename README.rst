@@ -3,6 +3,10 @@ Vulcano
 |PyPI version| |Code style: black| |Build Status| |codecov|
 |readthedocs| |Downloads|
 
+
+Please, help us to continue improving, become a `patreon <https://www.patreon.com/dgarana>`__
+
+
 What is Vulcano?
 ----------------
 
@@ -205,6 +209,7 @@ If you have an idea, you want to help improving something ... or
 whatever you think you can help, you're welcome.
 
 All the pull requests will be checked (and also the bugs you report).
+
 
 .. |PyPI version| image:: https://badge.fury.io/py/vulcano.svg
    :target: https://badge.fury.io/py/vulcano
