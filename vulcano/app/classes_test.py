@@ -158,7 +158,7 @@ class TestVulcanoApp(TestCase):
 
         @app.command
         def not_executed():
-            never_arrived_here.executed()
+            never_arrived_here.executed()  # pragma: no cover (exclude this from testing)
 
         with self.assertRaises(Exception):
             app.run(print_result=False)
@@ -329,3 +329,10 @@ class TestVulcanoApp(TestCase):
             'mispeled_comand',
             [u'another_command', u'miespieled_comand', u'misspelled_command', u'exit', u'help']
         )
+
+    def test_ensure_multi_application(self):
+        app_one = VulcanoApp('app_one')
+        app_two = VulcanoApp('app_two')
+        app_one_copy = VulcanoApp('app_one')
+        self.assertNotEqual(app_one, app_two)
+        self.assertEqual(app_one, app_one_copy)
