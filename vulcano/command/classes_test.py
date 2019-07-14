@@ -9,12 +9,12 @@ from .classes import Magma
 
 # FIXME: Dummy function to test registration this should go into another module
 def test_function():
-    pass
+    pass  # pragma: no cover (exclude frorm testing coverage)
 
 
 # FIXME: Same with this function
 def _no_register_func():
-    pass
+    pass  # pragma: no cover (exclude frorm testing coverage)
 
 
 class TestMagma(unittest.TestCase):
@@ -82,7 +82,7 @@ class TestMagma(unittest.TestCase):
         """
 
         def test_function():
-            pass
+            pass  # pragma: no cover (exclude frorm testing coverage)
 
         self.magma.register_command(test_function)
         command = self.magma.get("test_function")
@@ -99,7 +99,7 @@ class TestMagma(unittest.TestCase):
 
             And this is just the extended text.
             """
-            pass
+            pass  # pragma: no cover (exclude frorm testing coverage)
 
         self.magma.register_command(test_function)
         command = self.magma.get("test_function")
@@ -122,7 +122,7 @@ class TestMagma(unittest.TestCase):
             :param int a: This is parameter a
             :param b: This is parameter b
             """
-            pass
+            pass  # pragma: no cover (exclude frorm testing coverage)
 
         self.magma.register_command(test_function)
         command = self.magma.get("test_function")
