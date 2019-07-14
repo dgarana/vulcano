@@ -1,5 +1,5 @@
 from __future__ import print_function
-from vulcano.app.classes import VulcanoApp
+from vulcano.app import VulcanoApp
 from vulcano.app.lexer import MonokaiTheme
 
 

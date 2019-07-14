@@ -1,6 +1,6 @@
 from __future__ import print_function
 import random
-from vulcano.app.classes import VulcanoApp
+from vulcano.app import VulcanoApp
 from vulcano.app.lexer import MonokaiTheme
 
 
