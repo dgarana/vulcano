@@ -20,14 +20,8 @@ class TestCommandCompleter(unittest.TestCase):
         self.manager = Magma()
         self.completer = CommandCompleter(self.manager)
 
-        def test_function(what, happened, here):
-            return what, happened, here
-
-        def no_args_func():
-            return None
-
-        self.manager.register_command(test_function)
-        self.manager.register_command(no_args_func)
+        self.manager.register_command(lambda what, happened, here: None, 'test_function')
+        self.manager.register_command(lambda: None, 'no_args')
 
     @staticmethod
     def assertListSameItems(L1, L2):
