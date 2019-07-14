@@ -34,7 +34,7 @@ class TestBuiltin(unittest.TestCase):
     @patch(print_builtin)
     def test_help_unknown_command(self, print_mock):
         app = MagicMock()
-        app.manager._command.get.return_value = None
+        app.manager._commands.get.return_value = None
         help_func = builtin.help(app)
         help_func("Unknown command")
         print_mock.assert_called_once()
@@ -43,3 +43,16 @@ class TestBuiltin(unittest.TestCase):
     def test_exit(self, sys_mock):
         builtin.exit()
         sys_mock.exit.assert_called_with(1)
+
+    @patch(print_builtin)
+    def test_help_without_command(self, print_mock):
+        app = MagicMock()
+        fake_command = MagicMock()
+        fake_command.visible = True
+        fake2_command = MagicMock()
+        fake2_command.visible = True
+        app.manager._commands = {'fake': fake_command,
+                                 'fake2': fake2_command}
+        help_func = builtin.help(app)
+        help_func()
+        print_mock.assert_called()
