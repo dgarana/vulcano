@@ -7,7 +7,7 @@ Vulcano command classes are active classes that handles with commands.
 # System imports
 from __future__ import print_function
 import importlib
-from inspect import getmembers, isfunction, getsource
+from inspect import getmembers, isfunction
 from functools import partial
 from collections import OrderedDict
 
