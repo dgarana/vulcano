@@ -9,6 +9,7 @@ from __future__ import print_function
 import importlib
 from inspect import getmembers, isfunction, getsource
 from functools import partial
+from collections import OrderedDict
 
 # Third-party imports
 import six
@@ -42,7 +43,7 @@ class Magma(object):
     """
 
     def __init__(self):
-        self._commands = {}  # type: dict
+        self._commands = OrderedDict()  # type: OrderedDict
 
     @property
     def command_names(self):
