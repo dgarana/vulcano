@@ -78,11 +78,7 @@ class TestVulcanoApp(TestCase):
         session_instance.prompt.side_effect = ("", EOFError)
         sys_mock.argv = ["ensure_repl"]
         app = VulcanoApp()
-
-        try:
-            app.run()
-        except:
-            self.fail("Exception was raised unexpectedly")
+        app.run()
 
     @patch("vulcano.app.classes.PromptSession")
     @patch("vulcano.app.classes.sys")
@@ -193,7 +189,7 @@ class TestVulcanoApp(TestCase):
         arrived_here.executed.assert_called_once()
 
     @patch("vulcano.app.classes.sys")
-    def test_it_should_format_command_from_args(self, sys_mock):
+    def test_it_should_format_command_from_nested_args(self, sys_mock):
         sys_mock.argv = [
             "ensure_no_repl",
             "first_function",
@@ -258,7 +254,7 @@ class TestVulcanoApp(TestCase):
         rendered_with_context.parameter_is.assert_called_with("{non_existent}")
 
     @patch("vulcano.app.classes.sys")
-    def test_it_should_format_command_from_args(self, sys_mock):
+    def test_it_should_not_format_command_from_args_when_not_exists(self, sys_mock):
         sys_mock.argv = ["ensure_no_repl", "executed", "'{non_existent}'"]
         app = VulcanoApp()
         rendered_with_context = MagicMock()
@@ -300,21 +296,12 @@ class TestVulcanoApp(TestCase):
     @patch("vulcano.app.classes.did_you_mean")
     @patch("vulcano.app.classes.sys")
     def test_it_should_did_you_mean_on_args_command_not_found(self, sys_mock, did_you_mean_mock):
-        def misspelled_command():
-            return
-
-        def miespieled_comand():
-            return
-
-        def another_command():
-            return
-
         sys_mock.argv = ["ensure_norepl", "mispeled_comand"]
         did_you_mean_mock.return_value = 'mispelled_command'
         app = VulcanoApp()
-        app.command(another_command)
-        app.command(miespieled_comand)
-        app.command(misspelled_command)
+        app.command('another_command')(lambda x: x)
+        app.command('miespieled_comand')(lambda x: x)
+        app.command('misspelled_command')(lambda x: x)
 
         app.run()
         did_you_mean_mock.assert_called_with(
@@ -327,23 +314,15 @@ class TestVulcanoApp(TestCase):
     @patch("vulcano.app.classes.sys")
     def test_it_should_did_you_mean_on_repl_command_not_found(self, sys_mock, did_you_mean_mock,
                                                               prompt_session_mock):
-        def misspelled_command():
-            return
-
-        def miespieled_comand():
-            return
-
-        def another_command():
-            return
 
         session_instance = prompt_session_mock.return_value
         sys_mock.argv = ["ensure_repl"]
         session_instance.prompt.side_effect = ("mispeled_comand", EOFError)
         did_you_mean_mock.return_value = 'mispelled_command'
         app = VulcanoApp()
-        app.command(another_command)
-        app.command(miespieled_comand)
-        app.command(misspelled_command)
+        app.command('another_command')(lambda x: x)
+        app.command('miespieled_comand')(lambda x: x)
+        app.command('misspelled_command')(lambda x: x)
 
         app.run()
         did_you_mean_mock.assert_called_with(
