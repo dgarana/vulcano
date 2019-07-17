@@ -90,7 +90,7 @@ class Magma(object):
         for func in get_module_functions(module):
             self.register_command(func)
 
-    def register_command(self, func, name=None, description=None, show_if=None):
+    def register_command(self, func, name=None, description=None, show_if=True):
         """
         Register a function under this Vulcano app instance
 

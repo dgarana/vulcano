@@ -17,10 +17,6 @@ from cached_property import cached_property
 __all__ = ["Command"]
 
 
-def show_by_default():
-    return True
-
-
 class Command(object):
     """
     Vulcano Command
@@ -33,8 +29,8 @@ class Command(object):
     :param function show_if: Determines when you should display a function or not
     """
 
-    def __init__(self, func, name=None, description=None, show_if=None):
-        self.show_if = show_if or show_by_default
+    def __init__(self, func, name=None, description=None, show_if=True):
+        self.show_if = show_if
         self.func = func  # type: callable
         func_inspect = get_func_inspect_result(func)
         self.name = name or func_inspect.name  # type: str
@@ -44,6 +40,8 @@ class Command(object):
 
     @property
     def visible(self):
+        if isinstance(self.show_if, bool):
+            return self.show_if
         return self.show_if()
 
     @property
