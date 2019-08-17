@@ -1,13 +1,13 @@
 # -* coding: utf-8 *-
-
+# System imports
+# Third-party imports
 import pyparsing as pp
 
+# Local imports
+from vulcano.exceptions import CommandParseError
 
-__all__ = ["inline_parser", "CommandParseError"]
 
-
-class CommandParseError(Exception):
-    pass
+__all__ = ["inline_parser"]
 
 
 allowed_symbols_in_string = r"-_/#@£$€%*+~|<>?."

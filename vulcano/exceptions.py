@@ -17,3 +17,8 @@ class VulcanoException(Exception):
 class CommandNotFound(VulcanoException):
     """Raised when there's no command"""
     pass
+
+
+class CommandParseError(VulcanoException):
+    """Raised when there's an error parsing a command"""
+    pass
