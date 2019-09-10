@@ -7,7 +7,6 @@ Vulcano APP Classes
 # System imports
 from __future__ import print_function
 import sys
-import re
 import os
 from difflib import SequenceMatcher
 
@@ -22,33 +21,11 @@ from vulcano.exceptions import CommandNotFound
 from vulcano.command import builtin
 from vulcano.command.classes import Magma
 from vulcano.command.completer import CommandCompleter
-from vulcano.command.parser import inline_parser
+from vulcano.command.parser import inline_parser, split_list_by_arg
 from .lexer import create_lexer, MonokaiTheme
 
 
 __all__ = ["VulcanoApp"]
-_SPLIT_TOKEN_ = "___SPLIT_TOKEN___"
-
-
-def split_list_by_arg(lst, separator):
-    """ Separate a list by a given value into different lists
-
-    :param list lst: List to separate
-    :param str separator: String to use as separator
-    :return:
-    """
-
-    def _what_to_return(match):
-        if match.group(1):
-            return match.group(1)
-        if match.group(2):
-            return match.group(2)
-        return _SPLIT_TOKEN_
-
-    commands = " ".join(lst)
-    rx = r"(\"[^\"\\]*(?:\\.[^'\\]*)*\")|('[^'\\]*(?:\\.[^'\\]*)*')|\b{0}\b"
-    res = re.sub(rx.format(separator), _what_to_return, commands)
-    return [command.strip() for command in res.split(_SPLIT_TOKEN_)]
 
 
 def rq_is_for_repl(app):
