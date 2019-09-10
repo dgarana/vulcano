@@ -53,26 +53,26 @@ Key features
    the most similar command name. This improves the user experience. You could define
    your own function to determine which command you should use.
 
-    .. code:: python
+.. code:: python
 
-        >> niu
-        Command niu not found
-        Did you mean: "new"?
-        >>
+    >> niu
+    Command niu not found
+    Did you mean: "new"?
+    >>
 
 -  *Inspect commands source code*: With vulcano, you can inspect a
    command sourcecode by just typing ``?`` at the end of the command.
    For example: ``>> bye?`` it will print this function source with
    syntax highlight.
 
-   .. code:: python
+.. code:: python
 
-       >> bye?
-       @app.command
-       def bye(name="User"):
-           """ Say goodbye to someone """
-           return "Bye {}!".format(name)
-       >> 
+   >> bye?
+   @app.command
+   def bye(name="User"):
+       """ Say goodbye to someone """
+       return "Bye {}!".format(name)
+   >>
 
 Installation
 ------------
