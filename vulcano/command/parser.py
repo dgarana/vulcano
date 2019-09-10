@@ -1,5 +1,7 @@
 # -* coding: utf-8 *-
 # System imports
+import re
+
 # Third-party imports
 import pyparsing as pp
 
@@ -7,7 +9,7 @@ import pyparsing as pp
 from vulcano.exceptions import CommandParseError
 
 
-__all__ = ["inline_parser"]
+__all__ = ["inline_parser", "split_list_by_arg"]
 
 
 allowed_symbols_in_string = r"-_/#@£$€%*+~|<>?."
@@ -114,3 +116,28 @@ def inline_parser(text):
         exception.partial_result = partial_result
         exception.col = e.col
         raise exception
+
+
+_SPLIT_TOKEN_ = "___SPLIT_TOKEN___"
+
+
+def split_list_by_arg(lst, separator):
+    """ Separate a list by a given value into different lists
+
+    :param list lst: List to separate
+    :param str separator: String to use as separator
+    :return:
+    """
+
+    def _what_to_return(match):
+        if match.group(1):
+            return match.group(1)
+        if match.group(2):
+            return match.group(2)
+        return _SPLIT_TOKEN_
+
+    commands = " ".join(lst)
+    rx = r"(\"[^\"\\]*(?:\\.[^'\\]*)*\")|('[^'\\]*(?:\\.[^'\\]*)*')|\b{0}\b"
+    res = re.sub(rx.format(separator), _what_to_return, commands)
+    return [command.strip() for command in res.split(_SPLIT_TOKEN_)]
+
