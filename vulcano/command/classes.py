@@ -53,7 +53,7 @@ class Magma(object):
     def command_completions(self):
         return [command.command_completer for command in self._commands.values() if command.visible]
 
-    def command(self, name_or_function=None, description=None, show_if=None):
+    def command(self, name_or_function=None, description=None, show_if=True):
         """
         Register decorator used to command a command functions directly on vulcano app
 
