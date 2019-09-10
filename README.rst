@@ -49,6 +49,17 @@ Key features
    where you store and read data).
 -  *Command templating*: You can use whatever is on the context to
    format your command and generate it with data from the context.
+-  *Autosuggestion*: Whenever you enter a command that doesn't exists, you'll get
+   the most similar command name. This improves the user experience. You could define
+   your own function to determine which command you should use.
+
+    .. code:: python
+
+        >> niu
+        Command niu not found
+        Did you mean: "new"?
+        >>
+
 -  *Inspect commands source code*: With vulcano, you can inspect a
    command sourcecode by just typing ``?`` at the end of the command.
    For example: ``>> bye?`` it will print this function source with
