@@ -68,6 +68,7 @@ class _VulcanoApp(object):
         self.context = {}  # Type: dict
         self.print_result = True
         self.theme = None
+        self.suggestions = None
 
     @property
     def request_is_for_args(self):
@@ -92,7 +93,7 @@ class _VulcanoApp(object):
         """
         return self.manager.module(module)
 
-    def run(self, prompt=u'>> ', theme=MonokaiTheme, print_result=True, history_file=None):
+    def run(self, prompt=u'>> ', theme=MonokaiTheme, print_result=True, history_file=None, suggestions=did_you_mean):
         """ Start the application
 
         It will run the application in Args or REPL mode, depending on the
@@ -102,6 +103,7 @@ class _VulcanoApp(object):
         :param bool print_result: If True, results from functions will be printed.
         """
         self.theme = theme
+        self.suggestions = suggestions
         self.print_result = print_result
         self._prepare_builtins()
         if self.request_is_for_args:
@@ -128,9 +130,10 @@ class _VulcanoApp(object):
                 self._execute_command(command_name, *args, **kwargs)
             except CommandNotFound:
                 print('Command {} not found'.format(command_name))
-                possible_command = did_you_mean(command_name, self.manager.command_names)
-                if possible_command:
-                    print('Did you mean: "{}"?'.format(possible_command))
+                if self.suggestions:
+                    possible_command = self.suggestions(command_name, self.manager.command_names)
+                    if possible_command:
+                        print('Did you mean: "{}"?'.format(possible_command))
 
     def _exec_from_repl(self, prompt=u'>> ', theme=MonokaiTheme, history_file=None):
         session_extra_options = {}
@@ -169,9 +172,10 @@ class _VulcanoApp(object):
                 self._execute_command(command, *args, **kwargs)
             except CommandNotFound:
                 print('Command {} not found'.format(command))
-                possible_command = did_you_mean(command, self.manager.command_names)
-                if possible_command:
-                    print('Did you mean: "{}"?'.format(possible_command))
+                if self.suggestions:
+                    possible_command = self.suggestions(command, self.manager.command_names)
+                    if possible_command:
+                        print('Did you mean: "{}"?'.format(possible_command))
             except Exception as error:
                 print("Error executing: {}. Error: {}".format(command, error))
 

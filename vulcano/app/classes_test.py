@@ -293,39 +293,39 @@ class TestVulcanoApp(TestCase):
         possible_commands = ['hell', 'halo', 'help']
         self.assertEqual('help', did_you_mean(command, possible_commands))
 
-    @patch("vulcano.app.classes.did_you_mean")
     @patch("vulcano.app.classes.sys")
-    def test_it_should_did_you_mean_on_args_command_not_found(self, sys_mock, did_you_mean_mock):
+    def test_it_should_did_you_mean_on_args_command_not_found(self, sys_mock):
         sys_mock.argv = ["ensure_norepl", "mispeled_comand"]
-        did_you_mean_mock.return_value = 'mispelled_command'
+        suggestion_mock = MagicMock()
+        suggestion_mock.return_value = 'mispelled_command'
         app = VulcanoApp()
         app.command('another_command')(lambda x: x)
         app.command('miespieled_comand')(lambda x: x)
         app.command('misspelled_command')(lambda x: x)
 
-        app.run()
-        did_you_mean_mock.assert_called_with(
+        app.run(suggestions=suggestion_mock)
+        suggestion_mock.assert_called_with(
             'mispeled_comand',
             [u'another_command', u'miespieled_comand', u'misspelled_command', u'exit', u'help']
         )
 
     @patch("vulcano.app.classes.PromptSession")
-    @patch("vulcano.app.classes.did_you_mean")
     @patch("vulcano.app.classes.sys")
-    def test_it_should_did_you_mean_on_repl_command_not_found(self, sys_mock, did_you_mean_mock,
+    def test_it_should_did_you_mean_on_repl_command_not_found(self, sys_mock,
                                                               prompt_session_mock):
 
         session_instance = prompt_session_mock.return_value
         sys_mock.argv = ["ensure_repl"]
         session_instance.prompt.side_effect = ("mispeled_comand", EOFError)
-        did_you_mean_mock.return_value = 'mispelled_command'
+        suggestion_mock = MagicMock()
+        suggestion_mock.return_value = 'mispelled_command'
         app = VulcanoApp()
         app.command('another_command')(lambda x: x)
         app.command('miespieled_comand')(lambda x: x)
         app.command('misspelled_command')(lambda x: x)
 
-        app.run()
-        did_you_mean_mock.assert_called_with(
+        app.run(suggestions=suggestion_mock)
+        suggestion_mock.assert_called_with(
             'mispeled_comand',
             [u'another_command', u'miespieled_comand', u'misspelled_command', u'exit', u'help']
         )
