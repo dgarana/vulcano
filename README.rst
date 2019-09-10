@@ -19,6 +19,9 @@ it helps you to create human-friendly modern command line utils.
 It's simplicity makes it suitable in a lot of scenarios where you just
 want to run already-created functions in a REPL/ARGS mode.
 
+.. figure:: https://github.com/dgarana/vulcano/raw/master/docs/_static/repl_demo.gif?raw=true
+   :alt: REPL Demo gif video
+
 .. note:: Important notes
    Due some design changes we are working on, we recommend you to
    avoid using this framework on a production environment.
