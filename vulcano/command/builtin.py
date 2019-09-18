@@ -35,6 +35,8 @@ def help(app):
     return real_help
 
 
-def exit():
-    """ Exits from the cli """
-    sys.exit(1)
+def exit(app):
+    def _exit():
+        """ Exits from the cli """
+        app.do_repl = False
+    return _exit
