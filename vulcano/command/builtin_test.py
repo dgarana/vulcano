@@ -39,10 +39,12 @@ class TestBuiltin(unittest.TestCase):
         help_func("Unknown command")
         print_mock.assert_called_once()
 
-    @patch('vulcano.command.builtin.sys')
-    def test_exit(self, sys_mock):
-        builtin.exit()
-        sys_mock.exit.assert_called_with(1)
+    def test_exit(self):
+        app = MagicMock()
+        app.do_repl = True
+        exit_func = builtin.exit(app)
+        exit_func()
+        self.assertFalse(app.do_repl)
 
     @patch(print_builtin)
     def test_help_without_command(self, print_mock):

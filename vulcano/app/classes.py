@@ -112,7 +112,7 @@ class _VulcanoApp(object):
             self._exec_from_repl(prompt=prompt, theme=theme, history_file=history_file)
 
     def _prepare_builtins(self):
-        self.manager.register_command(builtin.exit, "exit", show_if=rq_is_for_repl(self))
+        self.manager.register_command(builtin.exit(self), "exit", show_if=rq_is_for_repl(self))
         self.manager.register_command(builtin.help(self), "help")
 
     def _exec_from_args(self):
