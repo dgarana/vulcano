@@ -44,3 +44,8 @@ class TestInlineParser(TestCase):
         command = "`´"
         with self.assertRaises(CommandParseError):
             inline_parser(command)
+
+    def test_should_parse_a_string_with_colon(self):
+        command = "git@github.com:dgarana/vulcano.git"
+        args, kwargs = inline_parser(command)
+        self.assertEqual(args, [command])

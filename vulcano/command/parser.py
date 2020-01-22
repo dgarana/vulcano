@@ -12,7 +12,7 @@ from vulcano.exceptions import CommandParseError
 __all__ = ["inline_parser", "split_list_by_arg"]
 
 
-allowed_symbols_in_string = r"-_/#@£$€%*+~|<>?."
+allowed_symbols_in_string = r"-_/#@£$€%*+~|<>?.:"
 
 
 def _no_transform(x):
