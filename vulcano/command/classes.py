@@ -66,6 +66,7 @@ class Magma(object):
         :param name_or_function: Name of the function or the function itself
         :param str description: Description for the command
         :param function show_if: Function that will determine when we should show this command or not
+        :param function args_opt: A function that provides a list of posibilities for each argument
         :return:
         """
 
@@ -106,8 +107,9 @@ class Magma(object):
         :param str name: Name for this function
         :param str description: Help for displaying to the user
         :param function show_if: Function that will determine when we should show this command or not
-        :raises NameError: If there's a command already registered with
-                                this name
+        :param function args_opt: A function that provides a list of posibilities for each argument
+        :raises NameError: If there's a command already registered with this name
+        
         """
         name = name or func.__name__
         if name in self._commands:
