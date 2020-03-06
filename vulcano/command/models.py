@@ -27,7 +27,7 @@ class Command(object):
     :param str description: Description of this command
     :param function func: Function that has been registered to be executed
     :param function show_if: Determines when you should display a function or not
-    :param function args_opt: A function that provides a list of posibilities for each argument
+    :param function args_opts: A function that provides a list of posibilities for each argument
     """
 
     def __init__(self, func, name=None, description=None, show_if=True, args_opts=None):
