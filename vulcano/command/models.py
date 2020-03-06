@@ -27,9 +27,10 @@ class Command(object):
     :param str description: Description of this command
     :param function func: Function that has been registered to be executed
     :param function show_if: Determines when you should display a function or not
+    :param function args_opt: A function that provides a list of posibilities for each argument
     """
 
-    def __init__(self, func, name=None, description=None, show_if=True):
+    def __init__(self, func, name=None, description=None, show_if=True, args_opts=None):
         self.show_if = show_if
         self.func = func  # type: callable
         func_inspect = get_func_inspect_result(func)
@@ -37,6 +38,7 @@ class Command(object):
         self.short_description = description or func_inspect.short_description
         self.long_description = func_inspect.long_description
         self.args = func_inspect.arguments
+        self.args_opts = args_opts  # type: callable
 
     @property
     def visible(self):
@@ -81,7 +83,11 @@ class Command(object):
 
     @cached_property
     def args_completion(self):
-        return [(u"{}".format(arg.name), u"{}".format(arg.description)) for arg in self.args]
+        if self.args_opts:
+            return [(u"{}".format(opt), None) for opt in self.args_opts()]
+        return [
+            (u"{}".format(arg.name), u"{}".format(arg.description)) for arg in self.args
+        ]
 
     def run(self, *args, **kwargs):
         """
