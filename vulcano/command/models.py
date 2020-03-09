@@ -27,7 +27,7 @@ class Command(object):
     :param str description: Description of this command
     :param function func: Function that has been registered to be executed
     :param function show_if: Determines when you should display a function or not
-    :param function args_opts: A function that provides a list of posibilities for each argument
+    :param dict args_opts: A dictionary that provides a list of posibilities for each argument
     """
 
     def __init__(self, func, name=None, description=None, show_if=True, args_opts=None):
@@ -38,7 +38,7 @@ class Command(object):
         self.short_description = description or func_inspect.short_description
         self.long_description = func_inspect.long_description
         self.args = func_inspect.arguments
-        self.args_opts = args_opts  # type: callable
+        self.args_opts = args_opts if args_opts else {}  # type: callable
 
     @property
     def visible(self):
@@ -73,21 +73,33 @@ class Command(object):
                     arg_description += "({arg.kind})"
                 if arg.is_kwarg and arg.default is not None:
                     arg_description += "(default: {arg.default})"
-                arg_description += ": {arg.description}"
+                if arg.name in self.args_opts:
+                    if callable(self.args_opts[arg.name]):
+                        arg_description += ": from_function"
+                    else:
+                        arg_description += u": {}".format(str(self.args_opts[arg.name]))
+                else:
+                    arg_description += ": {arg.description}"
                 description_item += arg_description.format(arg=arg)
         return description_item + "\n"
 
     @cached_property
     def command_completer(self):
-        return (u"{}".format(self.name), u"{}".format(self.short_description or ""))
+        return [(u"{}".format(self.name), u"{}".format(self.short_description or ""))]
 
     @cached_property
     def args_completion(self):
-        if self.args_opts:
-            return [(u"{}".format(opt), None) for opt in self.args_opts()]
-        return [
-            (u"{}".format(arg.name), u"{}".format(arg.description)) for arg in self.args
-        ]
+        completions = []
+        for arg in self.args:
+            if arg.name in self.args_opts.keys():
+                name_opt = self.args_opts[arg.name]
+                name_opt = name_opt() if callable(name_opt) else name_opt
+                completions.append([(u"{}".format(opt), None) for opt in name_opt])
+            else:
+                completions.append(
+                    [(u"{}".format(arg.name), u"{}".format(arg.description))]
+                )
+        return completions
 
     def run(self, *args, **kwargs):
         """

@@ -9,6 +9,8 @@ from mock import patch, MagicMock, call
 # Local imports
 from vulcano.command import models
 
+ARGS_OPTS = {"arg3": ["Opt1", "Opt2", "Opt3"]}
+
 
 def sample_command(arg1, arg2=None, arg3="Hello"):
     """ Here goes the short description
@@ -28,7 +30,7 @@ class MyTestCase(unittest.TestCase):
         description = "Description"
         name = "Name"
         command = models.Command(
-            func=sample_command, description=description, name=name
+            func=sample_command, description=description, name=name, args_opts=ARGS_OPTS
         )
         self.assertEqual(
             command.short_description,
@@ -43,51 +45,50 @@ class MyTestCase(unittest.TestCase):
         gfunc_inspect_mock.assert_called_with(sample_command)
 
     def test_help(self):
-        command = models.Command(sample_command)
+        command = models.Command(sample_command, args_opts=ARGS_OPTS)
         self.assertEqual(
             command.help,
-            "sample_command: \tHere goes the short description\nHere goes the long description\n\t Args:\n\t\t*arg1(str): Here goes the argument 1 desc \n\t\targ2(str): Here goes the argument 2 desc \n\t\targ3(default: Hello): None\n",
+            "sample_command: \tHere goes the short description\nHere goes the long description\n\t Args:\n\t\t*arg1(str): Here goes the argument 1 desc \n\t\targ2(str): Here goes the argument 2 desc \n\t\targ3(default: Hello): ['Opt1', 'Opt2', 'Opt3']\n",
         )
 
     def test_visible_should_accept_a_function(self):
         visible_func = MagicMock()
         visible_func.visible.side_effect = [True, False]
-        command = models.Command(sample_command, show_if=visible_func.visible)
+        command = models.Command(
+            sample_command, show_if=visible_func.visible, args_opts=ARGS_OPTS
+        )
         self.assertTrue(command.visible)
         self.assertFalse(command.visible)
         visible_func.visible.assert_has_calls([call(), call()])
 
     def test_command_completer(self):
-        command = models.Command(sample_command)
-        completer = command.command_completer
+        command = models.Command(sample_command, args_opts=ARGS_OPTS)
+        completer = command.command_completer[0]
         self.assertIsInstance(completer, tuple)
-        name, description = command.command_completer
+        name, description = command.command_completer[0]
         self.assertEqual(name, command.name)
         self.assertEqual(description, command.short_description)
 
     def test_args_completion(self):
-        command = models.Command(sample_command)
+        command = models.Command(sample_command, args_opts=ARGS_OPTS)
         args_completer = command.args_completion
         self.assertIsInstance(args_completer, list)
         self.assertListEqual(
             args_completer,
             [
-                ("arg1", "Here goes the argument 1 desc "),
-                ("arg2", "Here goes the argument 2 desc "),
-                ("arg3", "None"),
+                [("arg1", "Here goes the argument 1 desc ")],
+                [("arg2", "Here goes the argument 2 desc ")],
+                [("Opt1", None), ("Opt2", None), ("Opt3", None)],
             ],
         )
 
-    def test_args_opts_completion(self):
-        def my_opts():
-            return ["Opt1", "Opt2", "Opt3"]
-
-        command = models.Command(sample_command, args_opts=my_opts)
-        args_completer = command.args_completion
-        self.assertIsInstance(args_completer, list)
-        self.assertListEqual(
-            args_completer, [("Opt1", None), ("Opt2", None), ("Opt3", None)]
-        )
+    # def test_args_opts_completion(self):
+    #     command = models.Command(sample_command, args_opts={"arg1": my_opts})
+    #     args_completer = command.args_completion
+    #     self.assertIsInstance(args_completer, list)
+    #     self.assertListEqual(
+    #         args_completer, [[("Opt1", None), ("Opt2", None), ("Opt3", None)]]
+    #     )
 
 
 if __name__ == "__main__":
