@@ -48,7 +48,9 @@ class MyTestCase(unittest.TestCase):
         command = models.Command(sample_command, args_opts=ARGS_OPTS)
         self.assertEqual(
             command.help,
-            "sample_command: \tHere goes the short description\nHere goes the long description\n\t Args:\n\t\t*arg1(str): Here goes the argument 1 desc \n\t\targ2(str): Here goes the argument 2 desc \n\t\targ3(default: Hello): ['Opt1', 'Opt2', 'Opt3']\n",
+            "sample_command: \tHere goes the short description\nHere goes the long description\n\t Args:\n\t\t*arg1(str): Here goes the argument 1 desc \n\t\targ2(str): Here goes the argument 2 desc \n\t\targ3(default: Hello): "
+            + str(ARGS_OPTS["arg3"])
+            + "\n",
         )
 
     def test_visible_should_accept_a_function(self):
