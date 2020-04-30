@@ -53,3 +53,11 @@ class TestCommandCompleter(unittest.TestCase):
         results = list(self.completer.get_completions(document_mock, complete_event))
         expected_args = ["happened", "here"]
         self.assertListSameItems(expected_args, [result.text for result in results])
+
+
+    def test_it_should_not_fail_if_command_not_found(self):
+        document_mock = MagicMock()
+        document_mock.text_before_cursor = "non_existent "
+        complete_event = MagicMock()
+        results = list(self.completer.get_completions(document_mock, complete_event))
+        self.assertListEqual([], results)
