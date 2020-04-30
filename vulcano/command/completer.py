@@ -9,6 +9,7 @@ Vulcano APP command completer
 from prompt_toolkit.completion import Completer, Completion
 
 # Local imports
+from vulcano.exceptions import CommandNotFound
 
 
 class CommandCompleter(Completer):
@@ -39,7 +40,10 @@ class CommandCompleter(Completer):
     def __get_current_completions(self, text_arr):
         if len(text_arr) >= 1:
             command = text_arr[0]
-            command_obj = self.manager.get(command)
+            try:
+                command_obj = self.manager.get(command)
+            except CommandNotFound:
+                return []
             if command_obj:
                 return command_obj.args_completion
         else:
