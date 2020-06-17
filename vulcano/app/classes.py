@@ -103,13 +103,14 @@ class _VulcanoApp(object):
         :param bool print_result: If True, results from functions will be printed.
         """
         self.theme = theme
+        self.prompt = prompt
         self.suggestions = suggestions
         self.print_result = print_result
         self._prepare_builtins()
         if self.request_is_for_args:
             self._exec_from_args()
         else:
-            self._exec_from_repl(prompt=prompt, theme=theme, history_file=history_file)
+            self._exec_from_repl(theme=theme, history_file=history_file)
 
     def _prepare_builtins(self):
         self.manager.register_command(builtin.exit(self), "exit", show_if=rq_is_for_repl(self))
@@ -135,7 +136,7 @@ class _VulcanoApp(object):
                     if possible_command:
                         print('Did you mean: "{}"?'.format(possible_command))
 
-    def _exec_from_repl(self, prompt=u'>> ', theme=MonokaiTheme, history_file=None):
+    def _exec_from_repl(self, theme=MonokaiTheme, history_file=None):
         session_extra_options = {}
         if history_file:
             session_extra_options['history'] = FileHistory(os.path.expanduser(str(history_file)))
@@ -152,7 +153,7 @@ class _VulcanoApp(object):
         )
         while self.do_repl:
             try:
-                user_input = u"{}".format(session.prompt(prompt))
+                user_input = u"{}".format(session.prompt(self.prompt))
             except KeyboardInterrupt:
                 continue  # Control-C pressed. Try again.
             except EOFError:
