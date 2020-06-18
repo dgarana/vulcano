@@ -49,10 +49,10 @@ class VulcanoApp(object):
     """VulcanoApp"""
     __instances__ = {}
 
-    def __new__(cls, app_name='vulcano_default'):
+    def __new__(cls, app_name='vulcano_default', prompt=u'>> '):
         if app_name in cls.__instances__:
             return cls.__instances__.get(app_name)
-        new_app = _VulcanoApp(app_name)
+        new_app = _VulcanoApp(app_name, prompt)
         cls.__instances__[app_name] = new_app
         return new_app
 
@@ -62,13 +62,14 @@ class _VulcanoApp(object):
 
     It has the all the things needed to command/execute/manage commands."""
 
-    def __init__(self, app_name):
+    def __init__(self, app_name, prompt):
         self.app_name = app_name
         self.manager = Magma()  # type: Magma
         self.context = {}  # Type: dict
         self.print_result = True
         self.theme = None
         self.suggestions = None
+        self.prompt = prompt  # Type: string or func
 
     @property
     def request_is_for_args(self):
@@ -93,7 +94,7 @@ class _VulcanoApp(object):
         """
         return self.manager.module(module)
 
-    def run(self, prompt=u'>> ', theme=MonokaiTheme, print_result=True, history_file=None, suggestions=did_you_mean):
+    def run(self, theme=MonokaiTheme, print_result=True, history_file=None, suggestions=did_you_mean):
         """ Start the application
 
         It will run the application in Args or REPL mode, depending on the
@@ -103,7 +104,6 @@ class _VulcanoApp(object):
         :param bool print_result: If True, results from functions will be printed.
         """
         self.theme = theme
-        self.prompt = prompt
         self.suggestions = suggestions
         self.print_result = print_result
         self._prepare_builtins()
