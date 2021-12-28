@@ -51,15 +51,22 @@ class Magma(object):
 
     @property
     def command_completions(self):
-        return [command.command_completer for command in self._commands.values() if command.visible]
+        return [
+            command.command_completer
+            for command in self._commands.values()
+            if command.visible
+        ]
 
-    def command(self, name_or_function=None, description=None, show_if=True):
+    def command(
+        self, name_or_function=None, description=None, show_if=True, args_opts=None
+    ):
         """
         Register decorator used to command a command functions directly on vulcano app
 
         :param name_or_function: Name of the function or the function itself
         :param str description: Description for the command
         :param function show_if: Function that will determine when we should show this command or not
+        :param function args_opts: A function that provides a list of posibilities for each argument
         :return:
         """
 
@@ -68,7 +75,7 @@ class Magma(object):
 
             As we need access to self, we cannot use wrap from functools.
             """
-            self.register_command(func, name, description, show_if)
+            self.register_command(func, name, description, show_if, args_opts)
 
             def func_wrapper(*args, **kwargs):
                 return func(*args, **kwargs)
@@ -90,7 +97,9 @@ class Magma(object):
         for func in get_module_functions(module):
             self.register_command(func)
 
-    def register_command(self, func, name=None, description=None, show_if=True):
+    def register_command(
+        self, func, name=None, description=None, show_if=True, args_opts=None
+    ):
         """
         Register a function under this Vulcano app instance
 
@@ -98,13 +107,14 @@ class Magma(object):
         :param str name: Name for this function
         :param str description: Help for displaying to the user
         :param function show_if: Function that will determine when we should show this command or not
-        :raises NameError: If there's a command already registered with
-                                this name
+        :param function args_opts: A function that provides a list of posibilities for each argument
+        :raises NameError: If there's a command already registered with this name
+        
         """
         name = name or func.__name__
         if name in self._commands:
             raise NameError("This command already exists")
-        self._commands[name] = Command(func, name, description, show_if)
+        self._commands[name] = Command(func, name, description, show_if, args_opts)
 
     def get(self, command_name):
         """
@@ -115,7 +125,7 @@ class Magma(object):
         :rtype: Command
         """
         if command_name not in self._commands:
-            raise CommandNotFound('Command {} not found'.format(command_name))
+            raise CommandNotFound("Command {} not found".format(command_name))
         return self._commands[command_name]
 
     def run(self, command_name, *args, **kwargs):
