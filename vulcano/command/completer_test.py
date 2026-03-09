@@ -1,10 +1,9 @@
 # -* coding: utf-8 *-
 # System imports
-from __future__ import unicode_literals
 import unittest
 
 # Third-party imports
-from mock import MagicMock
+from unittest.mock import MagicMock
 
 # Local imports
 from vulcano.app.classes import Magma

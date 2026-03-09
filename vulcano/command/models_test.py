@@ -1,10 +1,9 @@
 # -* coding: utf-8 *-
 # System imports
-from __future__ import unicode_literals
 import unittest
 
 # Third-party imports
-from mock import patch, MagicMock, call
+from unittest.mock import patch, MagicMock, call
 
 # Local imports
 from vulcano.command import models

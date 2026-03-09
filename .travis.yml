@@ -1,21 +1,16 @@
-sudo: false
 language: python
 matrix:
   include:
-  - name: Python 2.7 Unit Test
-    python: '2.7'
-  - name: Python 3.4 Unit Test
-    python: '3.4'
-  - name: Python 3.5 Unit Test
-    python: '3.5'
-  - name: Python 3.6 Unit Test
-    python: '3.6'
-  - name: Python 3.7 Unit Test
-    python: '3.7'
-    dist: xenial
-    sudo: true
+  - name: Python 3.10 Unit Test
+    python: '3.10'
+  - name: Python 3.11 Unit Test
+    python: '3.11'
+  - name: Python 3.12 Unit Test
+    python: '3.12'
+  - name: Python 3.13 Unit Test
+    python: '3.13'
+install: pip install uv tox tox-uv
 script: tox
-install: pip install tox-travis codecov
 deploy:
   skip_existing: true
   provider: pypi

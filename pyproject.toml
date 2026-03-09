@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vulcano"
+dynamic = ["version"]
+description = "Vulcano"
+readme = "README.rst"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    {name = "David Garaña"},
+]
+keywords = ["console", "development", "cli", "repl"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Build Tools",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "pyparsing>=2.3.1",
+    "pygments",
+    "pynspector>=0.0.4",
+    "prompt_toolkit>=2.0.1",
+    "cached-property",
+]
+
+[project.scripts]
+vulcano = "vulcano.vulcano_cli:main"
+
+[project.urls]
+Homepage = "https://github.com/dgarana/vulcano"
+
+[tool.setuptools.dynamic]
+version = {attr = "vulcano.__version__"}
+
+[tool.setuptools.packages.find]
+exclude = ["contrib*", "docs*", "tests*", "examples*"]
+
+[dependency-groups]
+test = [
+    "pytest",
+    "pytest-cov",
+    "codecov",
+]
+docs = [
+    "sphinx",
+    "sphinx-rtd-theme",
+]
+lint = [
+    "black",
+    "pylint",
+    "flake8",
+]

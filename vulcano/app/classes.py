@@ -5,7 +5,6 @@
 Vulcano APP Classes
 """
 # System imports
-from __future__ import print_function
 import sys
 import os
 from difflib import SequenceMatcher

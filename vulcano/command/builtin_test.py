@@ -3,17 +3,13 @@
 import unittest
 
 # Third-party imports
-from mock import MagicMock, patch
-import six
+from unittest.mock import MagicMock, patch
 
 # Local imports
 from . import builtin
 
 
-# Builtins have different names depending on the python version
 print_builtin = "builtins.print"
-if six.PY2:
-    print_builtin = "__builtin__.print"
 
 
 class TestBuiltin(unittest.TestCase):

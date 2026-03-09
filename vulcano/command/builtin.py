@@ -5,8 +5,6 @@
 Builtin commands that comes by default with vulcano.
 """
 # System imports
-from __future__ import print_function
-
 # Third-party imports
 # Local imports
 
