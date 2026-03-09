@@ -1056,6 +1056,7 @@ docs = [
 lint = [
     { name = "black" },
     { name = "flake8" },
+    { name = "isort" },
     { name = "pylint" },
 ]
 test = [
@@ -1081,6 +1082,7 @@ docs = [
 lint = [
     { name = "black" },
     { name = "flake8" },
+    { name = "isort" },
     { name = "pylint" },
 ]
 test = [

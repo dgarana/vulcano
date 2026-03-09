@@ -3,6 +3,7 @@ Vulcano Command Line
 --------------------
 Vulcano uses itself for creating vulcano application from command line
 """
+
 # System imports
 # Third-party imports
 try:
@@ -14,15 +15,15 @@ except ImportError:
 
 # Local imports
 from vulcano import __version__ as vulcano_version
-from .app.classes import VulcanoApp
 
+from .app.classes import VulcanoApp
 
 APP = VulcanoApp()
 
 
 @APP.command
 def new():
-    """ This command helps people to create new command line applications
+    """This command helps people to create new command line applications
     by just using cookiecutter to create it through a scaffold."""
     if not CK_SUPPORT:
         return """
@@ -39,25 +40,21 @@ And restart the command line.
 
 @APP.command
 def version():
-    """ Returns the vulcano version """
+    """Returns the vulcano version"""
     return vulcano_version
 
 
 def main():
-    """ Main vulcano application excution """
+    """Main vulcano application excution"""
     if not APP.request_is_for_args:
-        print(
-            """
+        print(r"""
              _
             | |
 __   ___   _| | ___ __ _ _ __   ___
-\ \ / / | | | |/ __/ _` | '_ \ / _ \\
+\ \ / / | | | |/ __/ _` | '_ \ / _ \
  \ V /| |_| | | (_| (_| | | | | (_) |
   \_/  \__,_|_|\___\__,_|_| |_|\___/
-=====================================
-Version: {}
-        """.format(vulcano_version)
-        )
+=====================================""" + f"\nVersion: {vulcano_version}\n        ")
     APP.run()
 
 

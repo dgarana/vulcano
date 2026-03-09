@@ -4,12 +4,14 @@
 --------------------------------
 Vulcano models
 """
+
 # System imports
 import inspect
 
+from cached_property import cached_property
+
 # Third-party imports
 from pynspector.func_inspections import get_func_inspect_result
-from cached_property import cached_property
 
 # Local imports
 
@@ -50,7 +52,7 @@ class Command(object):
 
     @property
     def help(self):
-        """ Returns the help for this command
+        """Returns the help for this command
 
         There should be 2 kind of helps, one for args and another one for REPL mode.
 
@@ -77,11 +79,13 @@ class Command(object):
 
     @cached_property
     def command_completer(self):
-        return (u"{}".format(self.name), u"{}".format(self.short_description or ""))
+        return ("{}".format(self.name), "{}".format(self.short_description or ""))
 
     @cached_property
     def args_completion(self):
-        return [(u"{}".format(arg.name), u"{}".format(arg.description)) for arg in self.args]
+        return [
+            ("{}".format(arg.name), "{}".format(arg.description)) for arg in self.args
+        ]
 
     def run(self, *args, **kwargs):
         """

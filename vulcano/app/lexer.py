@@ -5,15 +5,17 @@
 This module contains needed classes with different lexers to use cross the
 application.
 """
+
 # System imports
 import re
 
-# Third-party imports
-from pygments.styles.monokai import MonokaiStyle
-from pygments.style import Style
 from prompt_toolkit.styles import style_from_pygments_dict
 from pygments.lexer import RegexLexer
-from pygments.token import Punctuation, Text, Operator, Keyword, Name, String, Number
+from pygments.style import Style
+
+# Third-party imports
+from pygments.styles.monokai import MonokaiStyle
+from pygments.token import Keyword, Name, Number, Operator, Punctuation, String, Text
 
 # Local imports
 
@@ -22,7 +24,7 @@ __all__ = ["MonokaiTheme", "create_lexer"]
 
 
 class VulcanoStyle(Style):
-    """ All styles used on Vulcano must inherit from this class """
+    """All styles used on Vulcano must inherit from this class"""
 
     styles = {}
 
@@ -32,7 +34,7 @@ class VulcanoStyle(Style):
 
 
 class MonokaiTheme(MonokaiStyle, VulcanoStyle):
-    """ Implementation of the Monokai theme for Vulcano """
+    """Implementation of the Monokai theme for Vulcano"""
 
     pass
 
@@ -57,9 +59,9 @@ class VulcanoLexer(RegexLexer):
 
 
 def create_lexer(commands=None):
-    """ Modifies the VulcanoLexer to add the commands generated through the
-    vulcano application 
-    
+    """Modifies the VulcanoLexer to add the commands generated through the
+    vulcano application
+
     :param list commands: List of commands to add to the lexer
     :return: VulcanoLexer class to use
     :rtype: VulcanoLexer

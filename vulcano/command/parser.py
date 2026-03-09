@@ -8,7 +8,6 @@ import pyparsing as pp
 # Local imports
 from vulcano.exceptions import CommandParseError
 
-
 __all__ = ["inline_parser", "split_list_by_arg"]
 
 
@@ -121,7 +120,7 @@ _SPLIT_TOKEN_ = "___SPLIT_TOKEN___"
 
 
 def split_list_by_arg(lst, separator):
-    """ Separate a list by a given value into different lists
+    """Separate a list by a given value into different lists
 
     :param list lst: List to separate
     :param str separator: String to use as separator
@@ -139,4 +138,3 @@ def split_list_by_arg(lst, separator):
     rx = r"(\"[^\"\\]*(?:\\.[^'\\]*)*\")|('[^'\\]*(?:\\.[^'\\]*)*')|\b{0}\b"
     res = re.sub(rx.format(separator), _what_to_return, commands)
     return [command.strip() for command in res.split(_SPLIT_TOKEN_)]
-
