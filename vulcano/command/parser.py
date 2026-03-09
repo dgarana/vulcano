@@ -1,4 +1,5 @@
-# -* coding: utf-8 *-
+"""Inline parser for command arguments and helper split utilities."""
+
 # System imports
 import re
 
@@ -15,14 +16,17 @@ allowed_symbols_in_string = r"-_/#@£$€%*+~|<>?.:"
 
 
 def _no_transform(x):
+    """Return input unchanged."""
     return x
 
 
 def _bool_transform(x):
+    """Parse booleans from textual values."""
     return x in ["True", "true"]
 
 
 def _str_transform(x):
+    """Strip surrounding quotes from string values."""
     return x.strip("\"'")
 
 
@@ -36,6 +40,7 @@ _TRANSFORMS = {
 
 
 def _parse_type(datatype):
+    """Create a pyparsing parse action for a target datatype."""
     transform = _TRANSFORMS.get(datatype, _no_transform)
 
     def _parse(s, loc, toks):
@@ -98,6 +103,17 @@ command = positionals + key_value
 
 
 def inline_parser(text):
+    """Parse inline command text into positional and keyword arguments.
+
+    Args:
+        text (str): Raw argument text.
+
+    Returns:
+        tuple[list, dict]: Parsed positional args and keyword args.
+
+    Raises:
+        CommandParseError: If parsing fails.
+    """
     expected_pattern = command
     if not text:
         return [], {}
@@ -120,11 +136,14 @@ _SPLIT_TOKEN_ = "___SPLIT_TOKEN___"  # nosec B105
 
 
 def split_list_by_arg(lst, separator):
-    """Separate a list by a given value into different lists
+    """Split a token list into command chunks by separator word.
 
-    :param list lst: List to separate
-    :param str separator: String to use as separator
-    :return:
+    Args:
+        lst (list[str]): Input tokens.
+        separator (str): Word separator (for example, ``and``).
+
+    Returns:
+        list[str]: Command chunks preserving quoted separator usage.
     """
 
     def _what_to_return(match):

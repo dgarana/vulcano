@@ -1,9 +1,4 @@
-# -* coding: utf-8 *-
-"""
-:py:mod:`vulcano.command.models`
---------------------------------
-Vulcano models
-"""
+"""Data models used to represent registered Vulcano commands."""
 
 # System imports
 import inspect
@@ -20,15 +15,13 @@ __all__ = ["Command"]
 
 
 class Command(object):
-    """
-    Vulcano Command
+    """Representation of a single registered command.
 
-    This represents a Command registered for Vulcano
-
-    :param str name: Name for this command
-    :param str description: Description of this command
-    :param function func: Function that has been registered to be executed
-    :param function show_if: Determines when you should display a function or not
+    Args:
+        func (callable): Function to execute.
+        name (str | None): Optional command name override.
+        description (str | None): Optional short description override.
+        show_if (bool | callable): Visibility rule for help/completion.
     """
 
     def __init__(self, func, name=None, description=None, show_if=True):
@@ -42,22 +35,22 @@ class Command(object):
 
     @property
     def visible(self):
+        """Return whether the command should appear in UX surfaces."""
         if isinstance(self.show_if, bool):
             return self.show_if
         return self.show_if()
 
     @property
     def source_code(self):
+        """Return original Python source code for the command function."""
         return inspect.getsource(self.func)
 
     @property
     def help(self):
-        """Returns the help for this command
+        """Build a printable help string for the command.
 
-        There should be 2 kind of helps, one for args and another one for REPL mode.
-
-        :return: Help to print
-        :rtype: str
+        Returns:
+            str: Multiline help text with description and arguments.
         """
         description_item = "{}: \t{}".format(self.name, self.short_description)
         if self.long_description:
@@ -79,20 +72,24 @@ class Command(object):
 
     @cached_property
     def command_completer(self):
+        """Return tuple used by prompt_toolkit for command completion."""
         return ("{}".format(self.name), "{}".format(self.short_description or ""))
 
     @cached_property
     def args_completion(self):
+        """Return completion metadata for command arguments."""
         return [
             ("{}".format(arg.name), "{}".format(arg.description)) for arg in self.args
         ]
 
     def run(self, *args, **kwargs):
-        """
-        Execute this command and return it's result
+        """Execute the command function.
 
-        :param args: Arguments to pass the function
-        :param kwargs: Known arguments to pass the function
-        :return: The result of the function execution
+        Args:
+            *args: Positional args passed by parser/dispatcher.
+            **kwargs: Keyword args passed by parser/dispatcher.
+
+        Returns:
+            Any: Function return value.
         """
         return self.func(*args, **kwargs)

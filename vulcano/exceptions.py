@@ -1,28 +1,19 @@
-# -* coding: utf-8 *-
-"""
-:py:mod:`vulcano.exceptions`
-----------------------------
-Exceptions raised by Vulcano
-"""
-
-# System imports
-# Third-party imports
-# Local imports
+"""Custom exception hierarchy used by Vulcano."""
 
 
 class VulcanoException(Exception):
-    """Main vulcano exceptions"""
+    """Base exception for all Vulcano-specific errors."""
 
     pass
 
 
 class CommandNotFound(VulcanoException):
-    """Raised when there's no command"""
+    """Raised when a command name is not registered."""
 
     pass
 
 
 class CommandParseError(VulcanoException):
-    """Raised when there's an error parsing a command"""
+    """Raised when user input cannot be parsed into args/kwargs."""
 
     pass

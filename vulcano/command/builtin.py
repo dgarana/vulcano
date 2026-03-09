@@ -1,9 +1,4 @@
-# -* coding: utf-8 *-
-"""
-:py:mod:`vulcano.command.builtin`
----------------------------------
-Builtin commands that comes by default with vulcano.
-"""
+"""Built-in commands automatically registered by Vulcano."""
 
 # System imports
 # Third-party imports
@@ -14,10 +9,20 @@ __all__ = ["help", "exit"]
 
 
 def help(app):
-    def real_help(command=None):
-        """Print help about the application or for a given command
+    """Create the built-in `help` command bound to an app instance.
 
-        :param str command: Command to retrieve it's help
+    Args:
+        app (_VulcanoApp): Current app instance.
+
+    Returns:
+        callable: Command function printing global or per-command help.
+    """
+
+    def real_help(command=None):
+        """Print global help or details for a specific command.
+
+        Args:
+            command (str | None): Optional command name.
         """
         if command:
             command = app.manager._commands.get(command)
@@ -34,8 +39,17 @@ def help(app):
 
 
 def exit(app):
+    """Create the built-in `exit` command bound to an app instance.
+
+    Args:
+        app (_VulcanoApp): Current app instance.
+
+    Returns:
+        callable: Command function that stops the REPL loop.
+    """
+
     def _exit():
-        """Exits from the cli"""
+        """Exit the interactive REPL session."""
         app.do_repl = False
 
     return _exit

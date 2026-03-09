@@ -1,9 +1,4 @@
-# -* coding: utf-8 *-
-"""
-:py:mod:`vulcano.app.classes`
------------------------------
-Vulcano APP Classes
-"""
+"""Core application objects and execution flow for Vulcano."""
 
 import os
 
@@ -31,6 +26,8 @@ __all__ = ["VulcanoApp"]
 
 
 def rq_is_for_repl(app):
+    """Return a lazy predicate indicating REPL visibility context."""
+
     def _func():
         return not app.request_is_for_args
 
@@ -38,6 +35,7 @@ def rq_is_for_repl(app):
 
 
 def did_you_mean(command, possible_commands):
+    """Return best fuzzy-matched command suggestion."""
     suggested_command = None
     ratio = 0
     for possible_command in possible_commands:
@@ -49,7 +47,7 @@ def did_you_mean(command, possible_commands):
 
 
 class VulcanoApp(object):
-    """VulcanoApp"""
+    """Factory/singleton interface for creating named app instances."""
 
     __instances__ = {}
 
@@ -62,9 +60,7 @@ class VulcanoApp(object):
 
 
 class _VulcanoApp(object):
-    """App is the class choosen for managing the application.
-
-    It has the all the things needed to command/execute/manage commands."""
+    """Concrete app implementation with registration and execution state."""
 
     def __init__(self, app_name, prompt):
         self.app_name = app_name
@@ -77,24 +73,22 @@ class _VulcanoApp(object):
 
     @property
     def request_is_for_args(self):
-        """Returns if the request is for running with args or in REPL mode
+        """Return whether execution should run from CLI args.
 
-        :return: Request is to be run with args or not
-        :rtype: bool
+        Returns:
+            bool: ``True`` when at least one CLI argument was provided.
         """
         return len(sys.argv) >= 2
 
     def command(self, *args, **kwargs):
-        """Register a command under current Vulcano instance
-
-        For more options take a look at `vulcano.command.classes.CommandManager.command`
-        """
+        """Register a command via decorator in the current app instance."""
         return self.manager.command(*args, **kwargs)
 
     def module(self, module):
-        """Register a module under current Vulcano instance
+        """Register all public functions from a module.
 
-        :param module: Module could be a string or a module object
+        Args:
+            module (str | module): Import path or imported module object.
         """
         return self.manager.module(module)
 
@@ -105,13 +99,14 @@ class _VulcanoApp(object):
         history_file=None,
         suggestions=did_you_mean,
     ):
-        """Start the application
+        """Run the app in argument mode or interactive REPL mode.
 
-        It will run the application in Args or REPL mode, depending on the
-        parameters sent.
-
-        :param theme: Theme to use for this application, NOTE: only used for the REPL.
-        :param bool print_result: If True, results from functions will be printed.
+        Args:
+            theme (type[VulcanoStyle]): Theme used in REPL mode.
+            print_result (bool): Print command return values when truthy.
+            history_file (str | Path | None): Optional history file path.
+            suggestions (callable | None): Suggestion callback for unknown
+                commands.
         """
         self.theme = theme
         self.suggestions = suggestions
@@ -123,12 +118,14 @@ class _VulcanoApp(object):
             self._exec_from_repl(theme=theme, history_file=history_file)
 
     def _prepare_builtins(self):
+        """Register built-in commands."""
         self.manager.register_command(
             builtin.exit(self), "exit", show_if=rq_is_for_repl(self)
         )
         self.manager.register_command(builtin.help(self), "help")
 
     def _exec_from_args(self):
+        """Execute one or more commands provided in CLI argument mode."""
         commands = split_list_by_arg(lst=sys.argv[1:], separator="and")
         for command in commands:
             command_list = command.split()
@@ -151,6 +148,7 @@ class _VulcanoApp(object):
                         print('Did you mean: "{}"?'.format(possible_command))
 
     def _exec_from_repl(self, theme=MonokaiTheme, history_file=None):
+        """Execute the interactive REPL loop."""
         session_extra_options = {}
         if history_file:
             session_extra_options["history"] = FileHistory(
@@ -199,6 +197,7 @@ class _VulcanoApp(object):
                 print("Error executing: {}. Error: {}".format(command, error))
 
     def _execute_command(self, command_name, *args, **kwargs):
+        """Execute a command and persist result in shared context."""
         self.context["last_result"] = self.manager.run(command_name, *args, **kwargs)
         if self.print_result and self.context["last_result"]:
             print(self.context["last_result"])
