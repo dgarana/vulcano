@@ -5,14 +5,12 @@
 Vulcano command classes are active classes that handles with commands.
 """
 # System imports
-from __future__ import print_function
 import importlib
 from inspect import getmembers, isfunction
 from functools import partial
 from collections import OrderedDict
 
 # Third-party imports
-import six
 from pygments import highlight
 from pygments.lexers import PythonLexer
 from pygments.formatters import Terminal256Formatter
@@ -85,7 +83,7 @@ class Magma(object):
         """
         Register a module under this vulcano app instance
         """
-        if isinstance(module, six.string_types):
+        if isinstance(module, str):
             module = importlib.import_module(module)
         for func in get_module_functions(module):
             self.register_command(func)

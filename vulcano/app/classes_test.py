@@ -1,21 +1,16 @@
 # -* coding: utf-8 *-
 # System imports
-from __future__ import unicode_literals
 from unittest import TestCase
 
 # Third-party imports
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from prompt_toolkit.history import FileHistory
-import six
 
 # Local imports
 from .classes import VulcanoApp, split_list_by_arg, did_you_mean
 
 
-# Builtins have different names depending on the python version
 print_builtin = "builtins.print"
-if six.PY2:
-    print_builtin = "__builtin__.print"
 
 
 class TestVulcanoApp(TestCase):
