@@ -8,7 +8,6 @@ from unittest.mock import MagicMock, patch
 # Local imports
 from . import builtin
 
-
 print_builtin = "builtins.print"
 
 
@@ -49,8 +48,7 @@ class TestBuiltin(unittest.TestCase):
         fake_command.visible = True
         fake2_command = MagicMock()
         fake2_command.visible = True
-        app.manager._commands = {'fake': fake_command,
-                                 'fake2': fake2_command}
+        app.manager._commands = {"fake": fake_command, "fake2": fake2_command}
         help_func = builtin.help(app)
         help_func()
         print_mock.assert_called()

@@ -4,6 +4,7 @@
 -----------------------------------
 Vulcano APP command completer
 """
+
 # System imports
 # Third-party imports
 from prompt_toolkit.completion import Completer, Completion
@@ -14,7 +15,7 @@ from vulcano.exceptions import CommandNotFound
 
 class CommandCompleter(Completer):
     def __init__(self, manager, ignore_case=True):
-        """ Command completer
+        """Command completer
 
         This class is used to generate everything related with the completer
         for the REPL mode.
@@ -35,7 +36,7 @@ class CommandCompleter(Completer):
 
         for completion, meta in completions:
             if completion not in document.text_before_cursor and "=" not in last_words:
-                yield Completion(completion, -len(last_words), display_meta=meta or u"")
+                yield Completion(completion, -len(last_words), display_meta=meta or "")
 
     def __get_current_completions(self, text_arr):
         if len(text_arr) >= 1:

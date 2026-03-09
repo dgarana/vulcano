@@ -4,25 +4,28 @@
 -----------------------------
 Vulcano APP Classes
 """
+
+import os
+
 # System imports
 import sys
-import os
 from difflib import SequenceMatcher
 
 # Third-party imports
 from prompt_toolkit import PromptSession
-from prompt_toolkit.history import FileHistory
 from prompt_toolkit.completion import FuzzyCompleter
+from prompt_toolkit.history import FileHistory
 from prompt_toolkit.lexers import PygmentsLexer
 
-# Local imports
-from vulcano.exceptions import CommandNotFound
 from vulcano.command import builtin
 from vulcano.command.classes import Magma
 from vulcano.command.completer import CommandCompleter
 from vulcano.command.parser import inline_parser, split_list_by_arg
-from .lexer import create_lexer, MonokaiTheme
 
+# Local imports
+from vulcano.exceptions import CommandNotFound
+
+from .lexer import MonokaiTheme, create_lexer
 
 __all__ = ["VulcanoApp"]
 
@@ -30,6 +33,7 @@ __all__ = ["VulcanoApp"]
 def rq_is_for_repl(app):
     def _func():
         return not app.request_is_for_args
+
     return _func
 
 
@@ -46,9 +50,10 @@ def did_you_mean(command, possible_commands):
 
 class VulcanoApp(object):
     """VulcanoApp"""
+
     __instances__ = {}
 
-    def __new__(cls, app_name='vulcano_default', prompt=u'>> '):
+    def __new__(cls, app_name="vulcano_default", prompt=">> "):
         if app_name in cls.__instances__:
             return cls.__instances__.get(app_name)
         new_app = _VulcanoApp(app_name, prompt)
@@ -57,7 +62,7 @@ class VulcanoApp(object):
 
 
 class _VulcanoApp(object):
-    """ App is the class choosen for managing the application.
+    """App is the class choosen for managing the application.
 
     It has the all the things needed to command/execute/manage commands."""
 
@@ -72,7 +77,7 @@ class _VulcanoApp(object):
 
     @property
     def request_is_for_args(self):
-        """ Returns if the request is for running with args or in REPL mode
+        """Returns if the request is for running with args or in REPL mode
 
         :return: Request is to be run with args or not
         :rtype: bool
@@ -80,21 +85,27 @@ class _VulcanoApp(object):
         return len(sys.argv) >= 2
 
     def command(self, *args, **kwargs):
-        """ Register a command under current Vulcano instance
+        """Register a command under current Vulcano instance
 
         For more options take a look at `vulcano.command.classes.CommandManager.command`
         """
         return self.manager.command(*args, **kwargs)
 
     def module(self, module):
-        """ Register a module under current Vulcano instance
+        """Register a module under current Vulcano instance
 
         :param module: Module could be a string or a module object
         """
         return self.manager.module(module)
 
-    def run(self, theme=MonokaiTheme, print_result=True, history_file=None, suggestions=did_you_mean):
-        """ Start the application
+    def run(
+        self,
+        theme=MonokaiTheme,
+        print_result=True,
+        history_file=None,
+        suggestions=did_you_mean,
+    ):
+        """Start the application
 
         It will run the application in Args or REPL mode, depending on the
         parameters sent.
@@ -112,7 +123,9 @@ class _VulcanoApp(object):
             self._exec_from_repl(theme=theme, history_file=history_file)
 
     def _prepare_builtins(self):
-        self.manager.register_command(builtin.exit(self), "exit", show_if=rq_is_for_repl(self))
+        self.manager.register_command(
+            builtin.exit(self), "exit", show_if=rq_is_for_repl(self)
+        )
         self.manager.register_command(builtin.help(self), "help")
 
     def _exec_from_args(self):
@@ -129,16 +142,20 @@ class _VulcanoApp(object):
             try:
                 self._execute_command(command_name, *args, **kwargs)
             except CommandNotFound:
-                print('Command {} not found'.format(command_name))
+                print("Command {} not found".format(command_name))
                 if self.suggestions:
-                    possible_command = self.suggestions(command_name, self.manager.command_names)
+                    possible_command = self.suggestions(
+                        command_name, self.manager.command_names
+                    )
                     if possible_command:
                         print('Did you mean: "{}"?'.format(possible_command))
 
     def _exec_from_repl(self, theme=MonokaiTheme, history_file=None):
         session_extra_options = {}
         if history_file:
-            session_extra_options['history'] = FileHistory(os.path.expanduser(str(history_file)))
+            session_extra_options["history"] = FileHistory(
+                os.path.expanduser(str(history_file))
+            )
         self.do_repl = True
         manager_completer = FuzzyCompleter(
             CommandCompleter(self.manager, ignore_case=True)
@@ -148,11 +165,11 @@ class _VulcanoApp(object):
             completer=manager_completer,
             lexer=PygmentsLexer(lexer),
             style=theme.pygments_style(),
-            **session_extra_options
+            **session_extra_options,
         )
         while self.do_repl:
             try:
-                user_input = u"{}".format(session.prompt(self.prompt))
+                user_input = "{}".format(session.prompt(self.prompt))
             except KeyboardInterrupt:
                 continue  # Control-C pressed. Try again.
             except EOFError:
@@ -171,9 +188,11 @@ class _VulcanoApp(object):
                 args, kwargs = inline_parser(arguments)
                 self._execute_command(command, *args, **kwargs)
             except CommandNotFound:
-                print('Command {} not found'.format(command))
+                print("Command {} not found".format(command))
                 if self.suggestions:
-                    possible_command = self.suggestions(command, self.manager.command_names)
+                    possible_command = self.suggestions(
+                        command, self.manager.command_names
+                    )
                     if possible_command:
                         print('Did you mean: "{}"?'.format(possible_command))
             except Exception as error:

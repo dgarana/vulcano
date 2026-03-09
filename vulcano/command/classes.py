@@ -4,22 +4,23 @@
 ---------------------------------
 Vulcano command classes are active classes that handles with commands.
 """
+
 # System imports
 import importlib
-from inspect import getmembers, isfunction
-from functools import partial
 from collections import OrderedDict
+from functools import partial
+from inspect import getmembers, isfunction
 
 # Third-party imports
 from pygments import highlight
-from pygments.lexers import PythonLexer
 from pygments.formatters import Terminal256Formatter
+from pygments.lexers import PythonLexer
 
-# Local imports
-from .models import Command
 from vulcano.app.lexer import MonokaiTheme
 from vulcano.exceptions import CommandNotFound
 
+# Local imports
+from .models import Command
 
 __all__ = ["Magma"]
 
@@ -45,11 +46,15 @@ class Magma(object):
 
     @property
     def command_names(self):
-        return [u"{}".format(command) for command in self._commands.keys()]
+        return ["{}".format(command) for command in self._commands.keys()]
 
     @property
     def command_completions(self):
-        return [command.command_completer for command in self._commands.values() if command.visible]
+        return [
+            command.command_completer
+            for command in self._commands.values()
+            if command.visible
+        ]
 
     def command(self, name_or_function=None, description=None, show_if=True):
         """
@@ -57,12 +62,13 @@ class Magma(object):
 
         :param name_or_function: Name of the function or the function itself
         :param str description: Description for the command
-        :param function show_if: Function that will determine when we should show this command or not
+        :param function show_if: Function that will determine when we should
+            show this command or not
         :return:
         """
 
         def decorator_register(func, name=None):
-            """ Function wrapper used as decorator
+            """Function wrapper used as decorator
 
             As we need access to self, we cannot use wrap from functools.
             """
@@ -95,7 +101,8 @@ class Magma(object):
         :param function func: Executable function to command
         :param str name: Name for this function
         :param str description: Help for displaying to the user
-        :param function show_if: Function that will determine when we should show this command or not
+        :param function show_if: Function that will determine when we should
+            show this command or not
         :raises NameError: If there's a command already registered with
                                 this name
         """
@@ -113,7 +120,7 @@ class Magma(object):
         :rtype: Command
         """
         if command_name not in self._commands:
-            raise CommandNotFound('Command {} not found'.format(command_name))
+            raise CommandNotFound("Command {} not found".format(command_name))
         return self._commands[command_name]
 
     def run(self, command_name, *args, **kwargs):

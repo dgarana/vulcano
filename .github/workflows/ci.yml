@@ -25,3 +25,22 @@ jobs:
 
       - name: Run tests
         run: uv run --group test pytest --cov=vulcano -k "test_"
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: black
+        run: uv run --group lint black --check vulcano
+
+      - name: isort
+        run: uv run --group lint isort --check-only vulcano
+
+      - name: flake8
+        run: uv run --group lint flake8 vulcano

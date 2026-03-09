@@ -95,7 +95,7 @@ class TestMagma(unittest.TestCase):
         """
 
         def test_function():
-            """ This is just a description form Docstrings
+            """This is just a description form Docstrings
 
             And this is just the extended text.
             """
@@ -112,10 +112,12 @@ class TestMagma(unittest.TestCase):
 
     def test_it_should_register_with_arguments_description(self):
         """
-        Vulcano app should be able to register a command and extract it's variable configurations
+        Vulcano app should be able to register a command and
+        extract it's variable configurations
         """
+
         def test_function(a, b):
-            """ This is just a description form Docstrings
+            """This is just a description form Docstrings
 
             And this is just the extended text.
 
@@ -132,15 +134,12 @@ class TestMagma(unittest.TestCase):
         self.assertEqual(
             command.long_description, "And this is just the extended text."
         )
-        self.assertEqual(
-            len(command.args), 2
-        )
-
+        self.assertEqual(len(command.args), 2)
 
     def test_register_decorator(self):
         @self.magma.command()
         def foo_function(arg1=0, arg2=0):
-            """ Docstring """
+            """Docstring"""
             return arg1 + arg2
 
         command = self.magma.get("foo_function")
@@ -151,7 +150,7 @@ class TestMagma(unittest.TestCase):
     def test_register_decorator_without_parentheses(self):
         @self.magma.command
         def foo_function(arg1=0, arg2=0):
-            """ Docstring """
+            """Docstring"""
             return arg1 + arg2
 
         command = self.magma.get("foo_function")

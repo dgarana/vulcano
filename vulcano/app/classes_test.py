@@ -3,12 +3,12 @@
 from unittest import TestCase
 
 # Third-party imports
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+
 from prompt_toolkit.history import FileHistory
 
 # Local imports
-from .classes import VulcanoApp, split_list_by_arg, did_you_mean
-
+from .classes import VulcanoApp, did_you_mean, split_list_by_arg
 
 print_builtin = "builtins.print"
 
@@ -153,7 +153,7 @@ class TestVulcanoApp(TestCase):
 
         @app.command
         def not_executed():
-            never_arrived_here.executed()  # pragma: no cover (exclude this from testing)
+            never_arrived_here.executed()  # pragma: no cover
 
         with self.assertRaises(Exception):
             app.run(print_result=False)
@@ -277,57 +277,70 @@ class TestVulcanoApp(TestCase):
         sys_mock.argv = ["ensure_repl"]
         session_instance.prompt.side_effect = ("", EOFError)
         app = VulcanoApp()
-        app.run(print_result=False, history_file='somefile.txt')
+        app.run(print_result=False, history_file="somefile.txt")
         prompt_session_mock.assert_called_once()
         _call_args = prompt_session_mock.call_args_list[0][1]
-        _history = _call_args.get('history')
+        _history = _call_args.get("history")
         self.assertIsInstance(_history, FileHistory)
 
     def test_did_you_mean(self):
-        command = 'hilp'
-        possible_commands = ['hell', 'halo', 'help']
-        self.assertEqual('help', did_you_mean(command, possible_commands))
+        command = "hilp"
+        possible_commands = ["hell", "halo", "help"]
+        self.assertEqual("help", did_you_mean(command, possible_commands))
 
     @patch("vulcano.app.classes.sys")
     def test_it_should_did_you_mean_on_args_command_not_found(self, sys_mock):
         sys_mock.argv = ["ensure_norepl", "mispeled_comand"]
         suggestion_mock = MagicMock()
-        suggestion_mock.return_value = 'mispelled_command'
+        suggestion_mock.return_value = "mispelled_command"
         app = VulcanoApp()
-        app.command('another_command')(lambda x: x)
-        app.command('miespieled_comand')(lambda x: x)
-        app.command('misspelled_command')(lambda x: x)
+        app.command("another_command")(lambda x: x)
+        app.command("miespieled_comand")(lambda x: x)
+        app.command("misspelled_command")(lambda x: x)
 
         app.run(suggestions=suggestion_mock)
         suggestion_mock.assert_called_with(
-            'mispeled_comand',
-            [u'another_command', u'miespieled_comand', u'misspelled_command', u'exit', u'help']
+            "mispeled_comand",
+            [
+                "another_command",
+                "miespieled_comand",
+                "misspelled_command",
+                "exit",
+                "help",
+            ],
         )
 
     @patch("vulcano.app.classes.PromptSession")
     @patch("vulcano.app.classes.sys")
-    def test_it_should_did_you_mean_on_repl_command_not_found(self, sys_mock,
-                                                              prompt_session_mock):
+    def test_it_should_did_you_mean_on_repl_command_not_found(
+        self, sys_mock, prompt_session_mock
+    ):
 
         session_instance = prompt_session_mock.return_value
         sys_mock.argv = ["ensure_repl"]
         session_instance.prompt.side_effect = ("mispeled_comand", EOFError)
         suggestion_mock = MagicMock()
-        suggestion_mock.return_value = 'mispelled_command'
+        suggestion_mock.return_value = "mispelled_command"
         app = VulcanoApp()
-        app.command('another_command')(lambda x: x)
-        app.command('miespieled_comand')(lambda x: x)
-        app.command('misspelled_command')(lambda x: x)
+        app.command("another_command")(lambda x: x)
+        app.command("miespieled_comand")(lambda x: x)
+        app.command("misspelled_command")(lambda x: x)
 
         app.run(suggestions=suggestion_mock)
         suggestion_mock.assert_called_with(
-            'mispeled_comand',
-            [u'another_command', u'miespieled_comand', u'misspelled_command', u'exit', u'help']
+            "mispeled_comand",
+            [
+                "another_command",
+                "miespieled_comand",
+                "misspelled_command",
+                "exit",
+                "help",
+            ],
         )
 
     def test_ensure_multi_application(self):
-        app_one = VulcanoApp('app_one')
-        app_two = VulcanoApp('app_two')
-        app_one_copy = VulcanoApp('app_one')
+        app_one = VulcanoApp("app_one")
+        app_two = VulcanoApp("app_two")
+        app_one_copy = VulcanoApp("app_one")
         self.assertNotEqual(app_one, app_two)
         self.assertEqual(app_one, app_one_copy)

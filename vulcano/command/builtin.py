@@ -4,6 +4,7 @@
 ---------------------------------
 Builtin commands that comes by default with vulcano.
 """
+
 # System imports
 # Third-party imports
 # Local imports
@@ -14,7 +15,7 @@ __all__ = ["help", "exit"]
 
 def help(app):
     def real_help(command=None):
-        """ Print help about the application or for a given command
+        """Print help about the application or for a given command
 
         :param str command: Command to retrieve it's help
         """
@@ -34,6 +35,7 @@ def help(app):
 
 def exit(app):
     def _exit():
-        """ Exits from the cli """
+        """Exits from the cli"""
         app.do_repl = False
+
     return _exit

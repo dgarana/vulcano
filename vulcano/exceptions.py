@@ -4,6 +4,7 @@
 ----------------------------
 Exceptions raised by Vulcano
 """
+
 # System imports
 # Third-party imports
 # Local imports
@@ -11,14 +12,17 @@ Exceptions raised by Vulcano
 
 class VulcanoException(Exception):
     """Main vulcano exceptions"""
+
     pass
 
 
 class CommandNotFound(VulcanoException):
     """Raised when there's no command"""
+
     pass
 
 
 class CommandParseError(VulcanoException):
     """Raised when there's an error parsing a command"""
+
     pass

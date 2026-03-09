@@ -37,6 +37,13 @@ vulcano = "vulcano.vulcano_cli:main"
 [project.urls]
 Homepage = "https://github.com/dgarana/vulcano"
 
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 88
+target-version = ["py310", "py311", "py312", "py313"]
+
 [tool.setuptools.dynamic]
 version = {attr = "vulcano.__version__"}
 
@@ -55,6 +62,7 @@ docs = [
 ]
 lint = [
     "black",
+    "isort",
     "pylint",
     "flake8",
 ]

@@ -4,7 +4,7 @@ from unittest import TestCase
 
 # Third-party imports
 # Local imports
-from .parser import inline_parser, CommandParseError
+from .parser import CommandParseError, inline_parser
 
 
 class TestInlineParser(TestCase):

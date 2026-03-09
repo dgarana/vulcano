@@ -4,5 +4,4 @@
 # Local imports
 from .classes import VulcanoApp
 
-
-__all__ = ['VulcanoApp']
+__all__ = ["VulcanoApp"]
