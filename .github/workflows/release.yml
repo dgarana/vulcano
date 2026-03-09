@@ -16,11 +16,18 @@ jobs:
   release:
     name: Bump version and tag
     runs-on: ubuntu-latest
+    # Prevent accidental releases from feature branches
+    if: github.ref == 'refs/heads/master'
     permissions:
       contents: write
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          # A PAT is required so the tag push triggers publish.yml.
+          # GITHUB_TOKEN pushes are intentionally blocked from triggering
+          # other workflows (GitHub security restriction).
+          token: ${{ secrets.RELEASE_PAT }}
 
       - name: Bump version
         id: bump
