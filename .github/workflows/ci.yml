@@ -44,3 +44,6 @@ jobs:
 
       - name: flake8
         run: uv run --group lint flake8 vulcano
+
+      - name: bandit
+        run: uv run --group lint bandit -r vulcano -c pyproject.toml

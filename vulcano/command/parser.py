@@ -116,7 +116,7 @@ def inline_parser(text):
         raise exception
 
 
-_SPLIT_TOKEN_ = "___SPLIT_TOKEN___"
+_SPLIT_TOKEN_ = "___SPLIT_TOKEN___"  # nosec B105
 
 
 def split_list_by_arg(lst, separator):

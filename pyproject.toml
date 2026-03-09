@@ -37,6 +37,9 @@ vulcano = "vulcano.vulcano_cli:main"
 [project.urls]
 Homepage = "https://github.com/dgarana/vulcano"
 
+[tool.bandit]
+exclude_dirs = ["tests"]
+
 [tool.isort]
 profile = "black"
 
@@ -61,6 +64,7 @@ docs = [
     "sphinx-rtd-theme",
 ]
 lint = [
+    "bandit",
     "black",
     "isort",
     "pylint",
