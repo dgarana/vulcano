@@ -1,7 +1,5 @@
-# -* coding: utf-8 *-
-# System imports
-# Third-party imports
-# Local imports
+"""Application layer objects for creating Vulcano CLIs."""
+
 from .classes import VulcanoApp
 
 __all__ = ["VulcanoApp"]

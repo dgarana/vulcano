@@ -1,9 +1,4 @@
-# -* coding: utf-8 *-
-"""
-:py:mod:`vulcano.command.completer`
------------------------------------
-Vulcano APP command completer
-"""
+"""Autocomplete logic for Vulcano REPL commands and arguments."""
 
 # System imports
 # Third-party imports
@@ -15,18 +10,17 @@ from vulcano.exceptions import CommandNotFound
 
 class CommandCompleter(Completer):
     def __init__(self, manager, ignore_case=True):
-        """Command completer
+        """Initialize command completion behavior.
 
-        This class is used to generate everything related with the completer
-        for the REPL mode.
-
-
-        :param CommandManager manager: Vulcano Command manager
+        Args:
+            manager (Magma): Command manager instance.
+            ignore_case (bool): Whether completion matching is case-insensitive.
         """
         self.manager = manager
         self.ignore_case = ignore_case
 
     def get_completions(self, document, complete_event):
+        """Yield completion candidates for the current cursor context."""
         text_before_cursor = str(document.text_before_cursor)
         if self.ignore_case:
             text_before_cursor = text_before_cursor.lower()
@@ -39,6 +33,7 @@ class CommandCompleter(Completer):
                 yield Completion(completion, -len(last_words), display_meta=meta or "")
 
     def __get_current_completions(self, text_arr):
+        """Return command or argument completion items for current tokens."""
         if len(text_arr) >= 1:
             command = text_arr[0]
             try:

@@ -1,10 +1,4 @@
-# -* coding: utf-8 *-
-"""
-:py:mod:`vulcano.app.lexer`
----------------------------
-This module contains needed classes with different lexers to use cross the
-application.
-"""
+"""Syntax highlighting styles and lexer helpers for the REPL."""
 
 # System imports
 import re
@@ -24,17 +18,18 @@ __all__ = ["MonokaiTheme", "create_lexer"]
 
 
 class VulcanoStyle(Style):
-    """All styles used on Vulcano must inherit from this class"""
+    """Base style class for Vulcano themes."""
 
     styles = {}
 
     @classmethod
     def pygments_style(cls):
+        """Return a prompt-toolkit style object from pygments style mapping."""
         return style_from_pygments_dict(cls.styles)
 
 
 class MonokaiTheme(MonokaiStyle, VulcanoStyle):
-    """Implementation of the Monokai theme for Vulcano"""
+    """Monokai-based color theme for Vulcano REPL output."""
 
     pass
 
@@ -59,12 +54,13 @@ class VulcanoLexer(RegexLexer):
 
 
 def create_lexer(commands=None):
-    """Modifies the VulcanoLexer to add the commands generated through the
-    vulcano application
+    """Return a lexer class enriched with registered command keywords.
 
-    :param list commands: List of commands to add to the lexer
-    :return: VulcanoLexer class to use
-    :rtype: VulcanoLexer
+    Args:
+        commands (list[str] | None): Command names to mark as keywords.
+
+    Returns:
+        type[VulcanoLexer]: Lexer class configured for current commands.
     """
     lexer = VulcanoLexer
     if commands:

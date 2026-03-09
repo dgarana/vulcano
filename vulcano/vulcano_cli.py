@@ -1,8 +1,4 @@
-"""
-Vulcano Command Line
---------------------
-Vulcano uses itself for creating vulcano application from command line
-"""
+"""Top-level command-line entrypoint for the Vulcano executable."""
 
 # System imports
 # Third-party imports
@@ -23,8 +19,7 @@ APP = VulcanoApp()
 
 @APP.command
 def new():
-    """This command helps people to create new command line applications
-    by just using cookiecutter to create it through a scaffold."""
+    """Create a new CLI project from the official cookiecutter template."""
     if not CK_SUPPORT:
         return """
 Seems that you don't have cookiecutter installed on your environment.
@@ -40,12 +35,12 @@ And restart the command line.
 
 @APP.command
 def version():
-    """Returns the vulcano version"""
+    """Return the installed Vulcano version."""
     return vulcano_version
 
 
 def main():
-    """Main vulcano application excution"""
+    """Run Vulcano's own CLI application."""
     if not APP.request_is_for_args:
         print(r"""
              _

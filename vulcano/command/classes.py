@@ -1,9 +1,4 @@
-# -* coding: utf-8 *-
-"""
-:py:mod:`vulcano.command.classes`
----------------------------------
-Vulcano command classes are active classes that handles with commands.
-"""
+"""Command manager and registration helpers."""
 
 # System imports
 import importlib
@@ -26,6 +21,7 @@ __all__ = ["Magma"]
 
 
 def get_module_functions(module):
+    """Yield public functions defined in a module."""
     return (
         func_obj
         for func_name, func_obj in getmembers(module)
@@ -34,22 +30,19 @@ def get_module_functions(module):
 
 
 class Magma(object):
-    """
-    Magic Manager (A.K.A Magma)
-
-    Magma is the choosen one to handle with registration of each
-    command you want to use on your command line application.
-    """
+    """Manage command registration, lookup, completion, and execution."""
 
     def __init__(self):
         self._commands = OrderedDict()  # type: OrderedDict
 
     @property
     def command_names(self):
+        """Return registered command names as strings."""
         return ["{}".format(command) for command in self._commands.keys()]
 
     @property
     def command_completions(self):
+        """Return completion tuples for visible commands."""
         return [
             command.command_completer
             for command in self._commands.values()
@@ -57,21 +50,20 @@ class Magma(object):
         ]
 
     def command(self, name_or_function=None, description=None, show_if=True):
-        """
-        Register decorator used to command a command functions directly on vulcano app
+        """Decorator-based command registration entrypoint.
 
-        :param name_or_function: Name of the function or the function itself
-        :param str description: Description for the command
-        :param function show_if: Function that will determine when we should
-            show this command or not
-        :return:
+        Args:
+            name_or_function (str | callable | None): Command name or decorated
+                function.
+            description (str | None): Optional command description.
+            show_if (bool | callable): Visibility rule.
+
+        Returns:
+            callable: Decorator or wrapped function.
         """
 
         def decorator_register(func, name=None):
-            """Function wrapper used as decorator
-
-            As we need access to self, we cannot use wrap from functools.
-            """
+            """Wrap a function and register it as a command."""
             self.register_command(func, name, description, show_if)
 
             def func_wrapper(*args, **kwargs):
@@ -86,25 +78,23 @@ class Magma(object):
         return partial(decorator_register, name=name)
 
     def module(self, module):
-        """
-        Register a module under this vulcano app instance
-        """
+        """Register all public functions from a module as commands."""
         if isinstance(module, str):
             module = importlib.import_module(module)
         for func in get_module_functions(module):
             self.register_command(func)
 
     def register_command(self, func, name=None, description=None, show_if=True):
-        """
-        Register a function under this Vulcano app instance
+        """Register one function as a command.
 
-        :param function func: Executable function to command
-        :param str name: Name for this function
-        :param str description: Help for displaying to the user
-        :param function show_if: Function that will determine when we should
-            show this command or not
-        :raises NameError: If there's a command already registered with
-                                this name
+        Args:
+            func (callable): Function to execute.
+            name (str | None): Optional command name override.
+            description (str | None): Optional command description.
+            show_if (bool | callable): Visibility rule.
+
+        Raises:
+            NameError: If a command with the same name already exists.
         """
         name = name or func.__name__
         if name in self._commands:
@@ -112,25 +102,31 @@ class Magma(object):
         self._commands[name] = Command(func, name, description, show_if)
 
     def get(self, command_name):
-        """
-        Returns a registered command
+        """Return a registered command by name.
 
-        :param str command_name: Name of the command to get
-        :return: Command registered under this name
-        :rtype: Command
+        Args:
+            command_name (str): Command name.
+
+        Returns:
+            Command: Registered command object.
+
+        Raises:
+            CommandNotFound: If command is not registered.
         """
         if command_name not in self._commands:
             raise CommandNotFound("Command {} not found".format(command_name))
         return self._commands[command_name]
 
     def run(self, command_name, *args, **kwargs):
-        """
-        Runs a command
+        """Execute a registered command.
 
-        :param str command_name: Name of the command to execute
-        :param list args: List of arguments to pass to command
-        :param dict kwargs: Known arguments to pass to command
-        :return: Function execution result
+        Args:
+            command_name (str): Command name.
+            *args: Positional arguments.
+            **kwargs: Keyword arguments.
+
+        Returns:
+            Any: Command result, if any.
         """
         if command_name.endswith("?"):
             command = self.get(command_name[:-1])

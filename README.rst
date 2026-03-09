@@ -1,107 +1,110 @@
 Vulcano
 =======
-|PyPI version| |Code style: black| |Build Status| |codecov|
-|readthedocs| |Downloads|
 
+|PyPI version| |Code style: black| |Build Status| |codecov| |readthedocs| |Downloads|
 
-Please, help us to continue improving, become a `patreon <https://www.patreon.com/dgarana>`__
+Vulcano is a Python framework for building interactive command-line
+applications with minimal boilerplate.
+
+`Support the project on Patreon <https://www.patreon.com/dgarana>`__
 
 
 What is Vulcano?
 ----------------
 
-Vulcano is a framework for creating command line utils.
-
 Built on top of
 `prompt\_toolkit <https://github.com/prompt-toolkit/python-prompt-toolkit>`__,
-it helps you to create human-friendly modern command line utils.
+Vulcano turns plain Python functions into fully featured CLI commands —
+complete with autocompletion, inline help, syntax highlighting, and
+command history — with no extra configuration required.
 
-It's simplicity makes it suitable in a lot of scenarios where you just
-want to run already-created functions in a REPL/ARGS mode.
+Its simplicity makes it suitable for a wide range of scenarios where you
+need to expose existing functions through a REPL or a one-shot argument
+interface.
 
 .. figure:: https://github.com/dgarana/vulcano/raw/master/docs/_static/repl_demo.gif?raw=true
-   :alt: REPL Demo gif video
+   :alt: REPL demo
 
-.. note:: Important notes
-   Due some design changes we are working on, we recommend you to
-   avoid using this framework on a production environment.
-   We're still looking forward having a more idiomatic module name
-   convention. If you're happy with the current state, just use it ;)
+.. note::
+   Vulcano is under active development. The public API may change
+   between minor versions while we work toward a stable 1.x release.
+   For production use, pin to a specific version.
 
-Key features
+
+Key Features
 ------------
 
--  *Autocomplete*: Vulcano will inspect all the functions you register,
-   and will create a list of autocomplete with your command name and
-   it's arguments.
--  *Help*: It will create help based on your functions docstrings or the
-   help provided during the registration process.
--  *History*: Use up & down arrows to select a command from your
-   history.
--  *Register modules*: It can register all the functions inside a module
-   just by calling the register module function. It will help you to
-   prevent modifying the source module.
--  *Lexer*: Of course, we use lexer with pygments to colorize your
-   command line ;)
--  *Concatenated commands*: You want to execute more than one command at
-   once from the command line arguments? Just use the "and".
-   ``python your_script.py my_func arg=\"something\˝ and my_func_2 arg=\"another thing here\"``
-   , such hacker!
--  *Context*: If you want to communicate different functions between
-   them, you can use the VulcanoApp.context (it's just a dictionary
-   where you store and read data).
--  *Command templating*: You can use whatever is on the context to
-   format your command and generate it with data from the context.
--  *Autosuggestion*: Whenever you enter a command that doesn't exists, you'll get
-   the most similar command name. This improves the user experience. You could define
-   your own function to determine which command you should use.
+- **Autocomplete** — Vulcano inspects every registered function and
+  automatically builds a completion list that includes command names
+  and their arguments.
+- **Inline help** — Help text is derived from docstrings or from the
+  description provided at registration time.
+- **History** — Use the up and down arrow keys to navigate through
+  previous commands.
+- **Module registration** — Register all public functions from an
+  existing module without modifying its source.
+- **Syntax highlighting** — Powered by Pygments and prompt\_toolkit for
+  a polished REPL experience.
+- **Concatenated commands** — Chain multiple commands in argument mode
+  using ``and``:
 
-.. code:: python
+  .. code:: bash
 
-    >> niu
-    Command niu not found
-    Did you mean: "new"?
-    >>
+      python your_script.py my_func arg="something" and my_func_2 arg="another thing"
 
--  *Inspect commands source code*: With vulcano, you can inspect a
-   command sourcecode by just typing ``?`` at the end of the command.
-   For example: ``>> bye?`` it will print this function source with
-   syntax highlight.
+- **Context** — Share data between commands through ``VulcanoApp.context``,
+  a plain dictionary available to all registered functions.
+- **Command templating** — Use any value stored in the context to
+  parameterise commands at runtime.
+- **Autosuggestion** — When an unknown command is entered, Vulcano
+  suggests the closest match:
 
-.. code:: python
+  .. code:: text
 
-   >> bye?
-   @app.command
-   def bye(name="User"):
-       """ Say goodbye to someone """
-       return "Bye {}!".format(name)
-   >>
+      >> niu
+      Command niu not found
+      Did you mean: "new"?
+      >>
+
+- **Source inspection** — Append ``?`` to any command name to view its
+  source code with syntax highlighting:
+
+  .. code:: text
+
+      >> bye?
+      @app.command
+      def bye(name="User"):
+          """ Say goodbye to someone """
+          return "Bye {}!".format(name)
+      >>
+
 
 Installation
 ------------
 
-Vulcano is automatically delivered through TravisCI, which means that we
-usually keep the pip package up to date, this will help you to install
-the vulcano latest version by just executing the:
-``pip install vulcano``
+Install the latest release from PyPI:
 
-But in case you're looking for installing a non-delivered version or
-just a custom branch, you can install it by cloning the repository and
-executing the: ``python setup.py install``
+.. code:: bash
 
-Lets keep things simple.
+    pip install vulcano
 
-Learn by example
-----------------
+To install a development version directly from the repository:
 
-The repository usually holds a simple sample ready to execute which
-brings an example of almost all the features.
+.. code:: bash
 
-In case you don't want to clone it, you can copy paste it:
+    git clone https://github.com/dgarana/vulcano.git
+    cd vulcano
+    pip install -e .
+
+
+Getting Started
+---------------
+
+The repository includes a complete example in ``examples/simple_example.py``.
+The snippet below covers the most common features:
 
 .. code:: python
 
-    from __future__ import print_function
     import random
     from vulcano.app import VulcanoApp
     from vulcano.app.lexer import MonokaiTheme
@@ -109,90 +112,87 @@ In case you don't want to clone it, you can copy paste it:
 
     app = VulcanoApp()
 
-    @app.command("hi", "Salute people given form parameter")
-    def salute_method_here(name, title="Mr."):
-        """Salute to someone
 
-        :param str name: Name of who you want to say hi!
-        :param str title: Title of this person
+    @app.command("hi", "Greet someone by name")
+    def salute_method_here(name, title="Mr."):
+        """Greet a person.
+
+        Args:
+            name (str): Name of the person to greet.
+            title (str): Honorific title.
         """
-        print("Hi! {} {} :) Glad to see you.".format(title, name))
+        print("Hi! {} {} — glad to see you.".format(title, name))
 
 
     def has_context_name():
-        """Function to hide a command from command line
-
-        This function is to prevent showing help and autocomplete for commands that need the name
-        to be set up on the context.
-        """
-        return 'name' in app.context
+        """Return True only when a name has been set in the context."""
+        return "name" in app.context
 
 
     @app.command
     def i_am(name):
-        """Set your name
+        """Store your name in the context.
 
-        :param str name: Your name goes here!
+        Args:
+            name (str): Your name.
         """
-        app.context['name'] = name
+        app.context["name"] = name
 
 
     @app.command(show_if=has_context_name)
     def whoami():
-        """Returns your name from the context
+        """Return your name from the context.
 
-        This is only shown where you've set your name
+        Only shown after ``i_am`` has been called.
         """
-        return app.context['name']
+        return app.context["name"]
 
 
     @app.command
     def bye(name="User"):
-        """ Say goodbye to someone """
+        """Say goodbye to someone."""
         return "Bye {}!".format(name)
 
 
     @app.command
     def sum_numbers(*args):
-        """ Sums all numbers passed as parameters """
+        """Return the sum of all provided numbers."""
         return sum(args)
 
 
     @app.command
     def multiply(number1, number2):
-        """ Just multiply two numbers """
+        """Multiply two numbers."""
         return number1 * number2
 
 
     @app.command
     def reverse_word(word):
-        """ Reverse a word """
+        """Return the word reversed."""
         return word[::-1]
 
 
     @app.command
     def random_upper_word(word):
-        """ Returns the word with random upper letters """
+        """Return the word with randomly capitalised letters."""
         return "".join(random.choice([letter.upper(), letter]) for letter in word)
 
 
-    if __name__ == '__main__':
+    if __name__ == "__main__":
         app.run(theme=MonokaiTheme)
 
+The snippet above registers the following commands:
+``hi``, ``bye``, ``i_am``, ``whoami``, ``sum_numbers``, ``multiply``,
+``reverse_word``, and ``random_upper_word``.
 
+Commands that ``return`` a value have their result printed automatically
+and stored in ``context["last_result"]``, making it available for
+subsequent commands via templating.
 
-This will create next commands: - hi - bye - i\_am - whoami -
-sum\_numbers - multiply - reverse\_word - random\_upper\_word
-
-Those commands can ``return`` data that will be printed (if there's
-something) and the result will be stored inside the context under the
-``last_result`` node. This helps you to be able to use it on the command
-line templating.
-
-You can execute from ``repl`` mode:
+**REPL mode**
 
 .. figure:: https://github.com/dgarana/vulcano/raw/master/docs/_static/repl_demo.gif?raw=true
-   :alt: REPL Demo gif video
+   :alt: REPL demo
 
 .. code:: bash
 
@@ -203,34 +203,41 @@ You can execute from ``repl`` mode:
     EMosEWa si SiHT !ybAB OlLEH
     >> exit
 
-And also can be executed from ``args`` mode:
+**Argument mode**
 
 .. figure:: https://github.com/dgarana/vulcano/raw/master/docs/_static/args_demo.gif?raw=true
-   :alt: REPL Demo gif video
+   :alt: Args mode demo
 
 .. code:: bash
 
-    $ python simple_example.py reverse_word \"Hello Baby! This is awesome\" and random_upper_word \"{last_result}\"
+    $ python simple_example.py reverse_word "Hello Baby! This is awesome" and random_upper_word "{last_result}"
     emosewa si sihT !ybaB olleH
     EMOSEWa Si siHT !YbAB olLeH
 
-Nice, right?
 
-Contribute
-----------
+Contributing
+------------
 
-If you have an idea, you want to help improving something ... or
-whatever you think you can help, you're welcome.
+Contributions of all kinds are welcome — bug reports, feature requests,
+documentation improvements, and pull requests.
 
-All the pull requests will be checked (and also the bugs you report).
+Before submitting a pull request, please ensure that:
+
+1. All existing tests pass (``pytest``).
+2. New functionality is covered by tests.
+3. The code is formatted with ``black`` and ``isort``.
+4. There are no ``flake8`` or ``bandit`` warnings.
+
+Open an issue first if you are planning a significant change, so the
+approach can be discussed before implementation.
 
 
 .. |PyPI version| image:: https://badge.fury.io/py/vulcano.svg
    :target: https://badge.fury.io/py/vulcano
 .. |Code style: black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/ambv/black
-.. |Build Status| image:: https://travis-ci.org/dgarana/vulcano.svg?branch=master
-   :target: https://travis-ci.org/dgarana/vulcano
+.. |Build Status| image:: https://github.com/dgarana/vulcano/actions/workflows/ci.yml/badge.svg
+   :target: https://github.com/dgarana/vulcano/actions/workflows/ci.yml
 .. |codecov| image:: https://codecov.io/gh/dgarana/vulcano/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/dgarana/vulcano
 .. |readthedocs| image:: https://readthedocs.org/projects/vulcano/badge/?version=latest
