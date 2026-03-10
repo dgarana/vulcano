@@ -24,7 +24,16 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Run tests
-        run: uv run --group test pytest --cov=vulcano -k "test_"
+        run: uv run --group test pytest --cov=vulcano --cov-report=xml -k "test_"
+
+      - name: Upload coverage to Codecov
+        # Only upload once — using the latest Python version in the matrix
+        # to avoid duplicate reports.
+        if: matrix.python-version == '3.13'
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage.xml
+          fail_ci_if_error: false
 
   lint:
     name: Lint
