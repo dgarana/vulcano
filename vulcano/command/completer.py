@@ -9,15 +9,21 @@ from vulcano.exceptions import CommandNotFound
 
 
 class CommandCompleter(Completer):
-    def __init__(self, manager, ignore_case=True):
+    def __init__(self, manager, ignore_case=True, flat_commands=None):
         """Initialize command completion behavior.
 
         Args:
             manager (Magma): Command manager instance.
             ignore_case (bool): Whether completion matching is case-insensitive.
+            flat_commands (dict | None): Mapping of dot-path string to
+                :class:`Command` for commands living inside groups, e.g.
+                ``{"text.hi": cmd, "text.formal.dear": cmd}``.  When
+                provided, these are offered as additional completions and
+                used for argument / arg-value lookup.
         """
         self.manager = manager
         self.ignore_case = ignore_case
+        self.flat_commands = flat_commands or {}
 
     def get_completions(self, document, complete_event):
         """Yield completion candidates for the current cursor context."""
@@ -31,6 +37,17 @@ class CommandCompleter(Completer):
             partial_value = last_words.split("=", 1)[1]
             for value, meta in self.__get_arg_value_completions(text_arr):
                 yield Completion(value, -len(partial_value), display_meta=meta or "")
+        elif "." in last_words:
+            # User is typing a dot-path command (e.g. "text." or "text.hi").
+            # Only offer flat_commands whose full path starts with this prefix
+            # so that root commands are never suggested mid-path.
+            prefix = last_words
+            for path, cmd in self.flat_commands.items():
+                cmp = path.lower() if self.ignore_case else path
+                if cmp.startswith(prefix) and path not in document.text_before_cursor:
+                    yield Completion(
+                        path, -len(prefix), display_meta=cmd.short_description or ""
+                    )
         else:
             for completion, meta in self.__get_current_completions(text_arr[:-1]):
                 if completion not in document.text_before_cursor:
@@ -57,6 +74,8 @@ class CommandCompleter(Completer):
         try:
             command_obj = self.manager.get(command_name)
         except CommandNotFound:
+            command_obj = self.flat_commands.get(command_name)
+        if not command_obj:
             return []
         options = command_obj.get_arg_value_completions(arg_name)
         return [
@@ -72,8 +91,14 @@ class CommandCompleter(Completer):
             try:
                 command_obj = self.manager.get(command)
             except CommandNotFound:
-                return []
+                # Fall back to flat dot-path commands (e.g. "text.formal.dear").
+                command_obj = self.flat_commands.get(command)
             if command_obj:
                 return command_obj.args_completion
+            return []
         else:
-            return self.manager.command_completions
+            completions = list(self.manager.command_completions)
+            for path, cmd in self.flat_commands.items():
+                if cmd.visible:
+                    completions.append((path, cmd.short_description or ""))
+            return completions

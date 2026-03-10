@@ -404,3 +404,49 @@ class TestVulcanoApp(TestCase):
         app_one_copy = VulcanoApp("app_one")
         self.assertNotEqual(app_one, app_two)
         self.assertEqual(app_one, app_one_copy)
+
+    @patch("vulcano.app.classes.sys")
+    def test_dot_path_executes_command_in_group_from_args(self, sys_mock):
+        sys_mock.argv = ["ensure_no_repl", "grp.my_cmd", "x=42"]
+        app = VulcanoApp()
+        grp = app.group("grp", "Test group")
+
+        @grp.command("my_cmd", "A command")
+        def my_cmd(x):
+            return x
+
+        app.run(print_result=False)
+        self.assertEqual(app.context["last_result"], 42)
+
+    @patch("vulcano.app.classes.sys")
+    def test_dot_path_executes_nested_group_command_from_args(self, sys_mock):
+        sys_mock.argv = ["ensure_no_repl", "outer.inner.cmd"]
+        app = VulcanoApp()
+        outer = app.group("outer", "Outer")
+        inner = outer.group("inner", "Inner")
+        received = MagicMock()
+
+        @inner.command("cmd", "Deep command")
+        def deep_cmd():
+            received.executed()
+
+        app.run(print_result=False)
+        received.executed.assert_called_once()
+
+    def test_flat_commands_includes_all_group_commands(self):
+        app = VulcanoApp()
+        grp = app.group("g", "G")
+        sub = grp.group("s", "S")
+
+        @grp.command("cmd_a")
+        def cmd_a():
+            pass
+
+        @sub.command("cmd_b")
+        def cmd_b():
+            pass
+
+        flat = app._flat_commands
+        self.assertIn("g.cmd_a", flat)
+        self.assertIn("g.s", flat)   # sub-group entry registered in g.manager
+        self.assertIn("g.s.cmd_b", flat)
