@@ -44,7 +44,9 @@ class CommandGroup:
         self.description = description
         # Always store a reference to the root _VulcanoApp so nested groups
         # share the same theme, context, suggestions, and print_result.
-        self._app = parent_app._app if isinstance(parent_app, CommandGroup) else parent_app
+        self._app = (
+            parent_app._app if isinstance(parent_app, CommandGroup) else parent_app
+        )
         # Full prompt string (e.g. "\U0001f30b  text > subtopic > ").
         # None means compute lazily from the root app's prompt in __call__.
         self._prompt = prompt
@@ -117,7 +119,7 @@ class CommandGroup:
         for full_path, group in self._app._groups.items():
             if not full_path.startswith(my_prefix):
                 continue
-            rel_path = full_path[len(my_prefix):]
+            rel_path = full_path[len(my_prefix) :]
             for cmd_name, cmd in group.manager._commands.items():
                 if cmd_name not in ("exit", "help"):
                     result["{}.{}".format(rel_path, cmd_name)] = cmd

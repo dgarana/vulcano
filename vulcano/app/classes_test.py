@@ -448,5 +448,5 @@ class TestVulcanoApp(TestCase):
 
         flat = app._flat_commands
         self.assertIn("g.cmd_a", flat)
-        self.assertIn("g.s", flat)   # sub-group entry registered in g.manager
+        self.assertIn("g.s", flat)  # sub-group entry registered in g.manager
         self.assertIn("g.s.cmd_b", flat)
