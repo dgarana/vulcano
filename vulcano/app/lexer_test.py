@@ -7,6 +7,22 @@ from unittest import TestCase
 from .lexer import create_lexer
 
 
+class TestThemesModule(TestCase):
+    def test_themes_module_exports_all_themes(self):
+        """Importing vulcano.themes re-exports all built-in theme classes."""
+        import vulcano.themes as themes
+
+        for name in [
+            "VulcanoStyle",
+            "MonokaiTheme",
+            "DraculaTheme",
+            "NordTheme",
+            "SolarizedDarkTheme",
+            "OneDarkTheme",
+        ]:
+            self.assertTrue(hasattr(themes, name), "Missing: {}".format(name))
+
+
 class TestCreateLexer(TestCase):
     def test_should_have_commands_inside(self):
         # Commands are sorted longest-first; names are re.escape()-d.

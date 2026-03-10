@@ -398,6 +398,58 @@ class TestVulcanoApp(TestCase):
         printed = " ".join(str(c) for c in print_mock.call_args_list)
         self.assertIn("my_cmd", printed)
 
+    def test_resolve_dot_command_falls_back_for_unknown_group(self):
+        app = VulcanoApp()
+        manager, name = app._resolve_dot_command("nonexistent.cmd")
+        self.assertIs(manager, app.manager)
+        self.assertEqual(name, "nonexistent.cmd")
+
+    @patch("vulcano.app.classes.PromptSession")
+    @patch("vulcano.app.classes.sys")
+    def test_repl_skips_empty_command_in_and_chain(self, sys_mock, session_mock):
+        sys_mock.argv = ["ensure_repl"]
+        session_mock.return_value.prompt.side_effect = ("test_cmd and ", EOFError)
+        app = VulcanoApp()
+        executed = MagicMock()
+
+        @app.command
+        def test_cmd():
+            executed()
+
+        app.run(print_result=False)
+        executed.assert_called_once()
+
+    @patch(print_builtin)
+    @patch("vulcano.app.classes.sys")
+    def test_dot_path_source_view_from_args(self, sys_mock, print_mock):
+        sys_mock.argv = ["ensure_no_repl", "grp.my_cmd?"]
+        app = VulcanoApp()
+        grp = app.group("grp")
+
+        @grp.command("my_cmd")
+        def my_cmd():
+            """My command."""
+            pass  # pragma: no cover
+
+        app.run(print_result=False)
+        printed = " ".join(str(c) for c in print_mock.call_args_list)
+        self.assertIn("my_cmd", printed)
+
+    @patch("vulcano.app.group.PromptSession")
+    @patch("vulcano.app.classes.PromptSession")
+    @patch("vulcano.app.classes.sys")
+    def test_entering_group_from_main_repl(
+        self, sys_mock, classes_ps_mock, group_ps_mock
+    ):
+        sys_mock.argv = ["ensure_repl"]
+        classes_ps_mock.return_value.prompt.side_effect = ("grp", EOFError)
+        group_ps_mock.return_value.prompt.side_effect = EOFError
+        app = VulcanoApp()
+        app.group("grp", "Test group")
+        app.run(print_result=False)
+        # The group's PromptSession was created, meaning grp() was called.
+        self.assertTrue(group_ps_mock.called)
+
     def test_ensure_multi_application(self):
         app_one = VulcanoApp("app_one")
         app_two = VulcanoApp("app_two")
@@ -440,11 +492,11 @@ class TestVulcanoApp(TestCase):
 
         @grp.command("cmd_a")
         def cmd_a():
-            pass
+            pass  # pragma: no cover
 
         @sub.command("cmd_b")
         def cmd_b():
-            pass
+            pass  # pragma: no cover
 
         flat = app._flat_commands
         self.assertIn("g.cmd_a", flat)

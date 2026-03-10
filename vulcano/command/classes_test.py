@@ -1,6 +1,7 @@
 # -* coding: utf-8 *-
 # System imports
 import unittest
+from unittest import mock
 
 # Third-party imports
 # Local imports
@@ -161,6 +162,20 @@ class TestMagma(unittest.TestCase):
     def test_register_module_from_string(self):
         self.magma.module("vulcano.command.classes_test")
         self.assertListEqual(self.magma.command_names, ["test_function"])
+
+    @mock.patch("builtins.print")
+    def test_run_with_question_mark_prints_source(self, print_mock):
+        """Appending '?' to a command name prints its source code."""
+
+        def my_func():
+            """My function."""
+            pass  # pragma: no cover
+
+        self.magma.register_command(my_func)
+        self.magma.run("my_func?")
+        print_mock.assert_called()
+        printed = " ".join(str(c) for c in print_mock.call_args_list)
+        self.assertIn("my_func", printed)
 
     def test_register_module_from_import(self):
         # TODO: Same as dummy_function, should be into another module

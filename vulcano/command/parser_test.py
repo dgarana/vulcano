@@ -49,3 +49,8 @@ class TestInlineParser(TestCase):
         command = "git@github.com:dgarana/vulcano.git"
         args, kwargs = inline_parser(command)
         self.assertEqual(args, [command])
+
+    def test_should_parse_list_value(self):
+        """List values exercise the _no_transform path in _parse_type."""
+        args, kwargs = inline_parser("items=[1, 2, 3]")
+        self.assertEqual(kwargs["items"], [1, 2, 3])

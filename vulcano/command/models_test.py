@@ -126,6 +126,21 @@ class MyTestCase(unittest.TestCase):
             ],
         )
 
+    def test_source_code_property(self):
+        command = models.Command(sample_command)
+        src = command.source_code
+        self.assertIn("sample_command", src)
 
-if __name__ == "__main__":
+    def test_args_completion_with_arg_opts_includes_options_hint(self):
+        def cmd_with_opts(role="user"):
+            """Set role."""
+            pass  # pragma: no cover
+
+        command = models.Command(cmd_with_opts, arg_opts={"role": ["admin", "user"]})
+        completions = dict(command.args_completion)  # {arg_name: description}
+        self.assertIn("admin", completions["role"])
+        self.assertIn("user", completions["role"])
+
+
+if __name__ == "__main__":  # pragma: no cover
     unittest.main()

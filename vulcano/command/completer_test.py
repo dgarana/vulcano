@@ -140,6 +140,21 @@ class TestCommandCompleter(unittest.TestCase):
         self.assertIn("name", texts)
         self.assertIn("title", texts)
 
+    def test_arg_value_completion_without_leading_command_returns_empty(self):
+        """__get_arg_value_completions returns [] when no command precedes '='."""
+        document_mock = MagicMock()
+        # Single token containing '=' with no space before it — text_arr length is 1.
+        document_mock.text_before_cursor = "arg=value"
+        results = list(self.completer.get_completions(document_mock, MagicMock()))
+        self.assertEqual([], results)
+
+    def test_arg_value_completion_for_unknown_command_returns_empty(self):
+        """Returns [] when the command name is not in manager or flat_commands."""
+        document_mock = MagicMock()
+        document_mock.text_before_cursor = "unknown_cmd role="
+        results = list(self.completer.get_completions(document_mock, MagicMock()))
+        self.assertEqual([], results)
+
     def test_dot_path_prefix_does_not_show_root_commands(self):
         """Typing 'grp.' must not suggest root-level commands."""
         from vulcano.command.models import Command
