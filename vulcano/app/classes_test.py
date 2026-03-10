@@ -8,6 +8,8 @@ from unittest.mock import MagicMock, patch
 from prompt_toolkit.history import FileHistory
 
 # Local imports
+from vulcano.exceptions import CommandParseError
+
 from .classes import VulcanoApp, did_you_mean, split_list_by_arg
 
 print_builtin = "builtins.print"
@@ -337,6 +339,64 @@ class TestVulcanoApp(TestCase):
                 "help",
             ],
         )
+
+    @patch("vulcano.app.classes.sys")
+    def test_it_should_handle_multi_word_args(self, sys_mock):
+        sys_mock.argv = [
+            "ensure_no_repl",
+            "reverse_word",
+            "Hello Baby! This is awesome",
+        ]
+        app = VulcanoApp()
+        result_mock = MagicMock()
+
+        @app.command
+        def reverse_word(word):
+            result_mock.result(word)
+            return word[::-1]
+
+        app.run(print_result=False)
+        result_mock.result.assert_called_with("Hello Baby! This is awesome")
+
+    @patch("vulcano.app.classes.sys")
+    def test_it_should_handle_multi_word_context_substitution_in_args(self, sys_mock):
+        sys_mock.argv = [
+            "ensure_no_repl",
+            "reverse_word",
+            "Hello Baby",
+            "and",
+            "reverse_word",
+            "{last_result}",
+        ]
+        app = VulcanoApp()
+        result_mock = MagicMock()
+
+        @app.command
+        def reverse_word(word):
+            result = word[::-1]
+            result_mock.result(word)
+            return result
+
+        app.run(print_result=False)
+        # First call: reverse_word("Hello Baby") -> "ybaB olleH"
+        # Second call: reverse_word("ybaB olleH") -> "Hello Baby" (round-trip)
+        self.assertEqual(app.context["last_result"], "Hello Baby")
+
+    @patch(print_builtin)
+    @patch("vulcano.app.classes.sys")
+    def test_it_prints_parse_error_before_raising_in_args(self, sys_mock, print_mock):
+        sys_mock.argv = ["ensure_no_repl", "my_cmd", "`invalid`"]
+        app = VulcanoApp()
+
+        @app.command
+        def my_cmd(param):
+            pass  # pragma: no cover
+
+        with self.assertRaises(CommandParseError):
+            app.run(print_result=False)
+
+        printed = " ".join(str(c) for c in print_mock.call_args_list)
+        self.assertIn("my_cmd", printed)
 
     def test_ensure_multi_application(self):
         app_one = VulcanoApp("app_one")

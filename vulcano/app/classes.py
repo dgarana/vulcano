@@ -18,7 +18,7 @@ from vulcano.command.completer import CommandCompleter
 from vulcano.command.parser import inline_parser, split_list_by_arg
 
 # Local imports
-from vulcano.exceptions import CommandNotFound
+from vulcano.exceptions import CommandNotFound, CommandParseError
 
 from .lexer import MonokaiTheme, create_lexer
 
@@ -124,18 +124,46 @@ class _VulcanoApp(object):
         )
         self.manager.register_command(builtin.help(self), "help")
 
+    @staticmethod
+    def _quote_if_spaced(value):
+        """Wrap a value in double quotes if it contains spaces.
+
+        Args:
+            value (str): Value to potentially quote.
+
+        Returns:
+            str: Original value, or double-quoted version when spaces are present.
+        """
+        if " " in str(value):
+            return '"{}"'.format(str(value).replace('"', '\\"'))
+        return value
+
     def _exec_from_args(self):
         """Execute one or more commands provided in CLI argument mode."""
-        commands = split_list_by_arg(lst=sys.argv[1:], separator="and")
+        # Re-quote argv tokens that contain spaces so that multi-word shell
+        # arguments (e.g. "Hello world") survive the join→split round-trip.
+        quoted_args = [self._quote_if_spaced(a) for a in sys.argv[1:]]
+        commands = split_list_by_arg(lst=quoted_args, separator="and")
         for command in commands:
             command_list = command.split()
             command_name = command_list[0]
             arguments = " ".join(command_list[1:])
             try:
-                arguments = arguments.format(**self.context)
+                # Quote context values that contain spaces so that a substituted
+                # multi-word result is still treated as a single argument.
+                safe_context = {
+                    k: self._quote_if_spaced(v) for k, v in self.context.items()
+                }
+                arguments = arguments.format(**safe_context)
             except KeyError:
                 pass
-            args, kwargs = inline_parser(arguments)
+            try:
+                args, kwargs = inline_parser(arguments)
+            except CommandParseError as error:
+                print(
+                    "Error parsing arguments for '{}': {}".format(command_name, error)
+                )
+                raise
             try:
                 self._execute_command(command_name, *args, **kwargs)
             except CommandNotFound:
