@@ -22,8 +22,20 @@ Its simplicity makes it suitable for a wide range of scenarios where you
 need to expose existing functions through a REPL or a one-shot argument
 interface.
 
-.. figure:: https://github.com/dgarana/vulcano/raw/master/docs/_static/repl_demo.gif?raw=true
-   :alt: REPL demo
+.. code:: text
+
+    $ python your_app.py help
+
+                               📖  Available Commands
+    ╭───────────────────┬──────────────────────────────────────────────────────╮
+    │ Command           │ Description                                          │
+    ├───────────────────┼──────────────────────────────────────────────────────┤
+    │ reverse_word      │ Return the word reversed.                            │
+    │ random_upper_word │ Return the word with randomly capitalised letters.   │
+    │ multiply          │ Multiply two numbers.                                │
+    │ bye               │ Say goodbye to someone.                              │
+    │ help              │ Print global help or details for a specific command. │
+    ╰───────────────────┴──────────────────────────────────────────────────────╯
 
 .. note::
    Vulcano is under active development. The public API may change
@@ -61,22 +73,22 @@ Key Features
 
   .. code:: text
 
-      >> niu
-      Command niu not found
-      Did you mean: "new"?
-      >>
+      🌋   niu
+      🤔  Command 'niu' not found
+      💡  Did you mean: "new"?
+      🌋
 
 - **Source inspection** — Append ``?`` to any command name to view its
   source code with syntax highlighting:
 
   .. code:: text
 
-      >> bye?
+      🌋   bye?
       @app.command
       def bye(name="User"):
           """ Say goodbye to someone """
           return "Bye {}!".format(name)
-      >>
+      🌋
 
 
 Installation
@@ -189,30 +201,43 @@ Commands that ``return`` a value have their result printed automatically
 and stored in ``context["last_result"]``, making it available for
 subsequent commands via templating.
 
-**REPL mode**
+**REPL mode** — launch with no arguments to start the interactive shell:
 
-.. figure:: https://github.com/dgarana/vulcano/raw/master/docs/_static/repl_demo.gif?raw=true
-   :alt: REPL demo
-
-.. code:: bash
+.. code:: text
 
     $ python simple_example.py
-    >> reverse_word "Hello Baby! This is awesome"
-    emosewa si sihT !ybaB olleH
-    >> random_upper_word "{last_result}"
-    EMosEWa si SiHT !ybAB OlLEH
-    >> exit
+    🌋   i_am name=Alice
+    🌋   whoami
+    Alice
+    🌋   reverse_word word=vulcano
+    onacluv
+    🌋   multiply number1=6 number2=7
+    42
+    🌋   bye
+    Bye User!
+    🌋   help command=reverse_word
+    ╭────────────────────────── ⚙️  reverse_word ─────────────────────────╮
+    │ Return the word reversed.                                            │
+    │                                                                      │
+    │   Argument   Type   Default   Description                            │
+    │  ────────────────────────────────────────────────────────  │
+    │   ⚡ word    str              The word to reverse.                   │
+    │                                                                      │
+    ╰────────────────────────────────────────────────────────────────────────╯
+    🌋   exit
+    👋  See you soon!
 
-**Argument mode**
-
-.. figure:: https://github.com/dgarana/vulcano/raw/master/docs/_static/args_demo.gif?raw=true
-   :alt: Args mode demo
+**Argument mode** — pass commands directly; chain with ``and``:
 
 .. code:: bash
+
+    $ python simple_example.py multiply number1=6 number2=7 and reverse_word word=vulcano
+    42
+    onacluv
 
     $ python simple_example.py reverse_word "Hello Baby! This is awesome" and random_upper_word "{last_result}"
     emosewa si sihT !ybaB olleH
-    EMOSEWa Si siHT !YbAB olLeH
+    eMOsEwa SI SIHT !YbaB OLlEH
 
 
 Development

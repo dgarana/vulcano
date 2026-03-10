@@ -5,6 +5,8 @@ import unittest
 # Third-party imports
 from unittest.mock import MagicMock, call, patch
 
+from rich.panel import Panel
+
 # Local imports
 from vulcano.command import models
 
@@ -39,7 +41,7 @@ class MyTestCase(unittest.TestCase):
         )
         self.assertEqual(command.func, sample_command)
         self.assertTrue(command.visible)
-        gfunc_inspect_mock.assert_called_with(sample_command)
+        gfunc_inspect_mock.assert_called_once()
 
     def test_help(self):
         command = models.Command(sample_command)
@@ -47,11 +49,53 @@ class MyTestCase(unittest.TestCase):
             command.help,
             "sample_command: \tHere goes the short description\n"
             "Here goes the long description\n"
-            "\t Args:\n"
-            "\t\t*arg1(str): Here goes the argument 1 desc \n"
-            "\t\targ2(str): Here goes the argument 2 desc \n"
+            "\t 📋  Args:\n"
+            "\t\t*arg1(str): Here goes the argument 1 desc\n"
+            "\t\targ2(str): Here goes the argument 2 desc\n"
             "\t\targ3(default: Hello): None\n",
         )
+
+    def test_rich_panel(self):
+        command = models.Command(sample_command)
+        panel = command.rich_panel
+        self.assertIsInstance(panel, Panel)
+        self.assertIn("sample_command", panel.title)
+
+    def test_rich_panel_google_docstring(self):
+        def google_func(name, count=1):
+            """Do something cool.
+
+            Args:
+                name (str): The name to use.
+                count (int): How many times.
+            """
+            pass  # pragma: no cover
+
+        command = models.Command(google_func)
+        self.assertEqual(command.short_description, "Do something cool.")
+        # Arg type and description parsed from Google-style docstring
+        arg_name = next(a for a in command.args if a.name == "name")
+        self.assertEqual(arg_name.kind, "str")
+        self.assertIn("name", arg_name.description)
+
+    def test_rich_panel_numpy_docstring(self):
+        def numpy_func(x, y=0):
+            """
+            Compute something.
+
+            Parameters
+            ----------
+            x : float
+                The input value.
+            y : float, optional
+                Offset, by default 0.
+            """
+            pass  # pragma: no cover
+
+        command = models.Command(numpy_func)
+        self.assertEqual(command.short_description, "Compute something.")
+        arg_x = next(a for a in command.args if a.name == "x")
+        self.assertEqual(arg_x.kind, "float")
 
     def test_visible_should_accept_a_function(self):
         visible_func = MagicMock()
@@ -76,8 +120,8 @@ class MyTestCase(unittest.TestCase):
         self.assertListEqual(
             args_completer,
             [
-                ("arg1", "Here goes the argument 1 desc "),
-                ("arg2", "Here goes the argument 2 desc "),
+                ("arg1", "Here goes the argument 1 desc"),
+                ("arg2", "Here goes the argument 2 desc"),
                 ("arg3", "None"),
             ],
         )

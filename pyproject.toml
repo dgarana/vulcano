@@ -29,6 +29,8 @@ dependencies = [
     "pynspector>=0.0.4",
     "prompt_toolkit>=2.0.1",
     "cached-property",
+    "rich>=13.0",
+    "docstring-parser>=0.16",
 ]
 
 [project.scripts]
