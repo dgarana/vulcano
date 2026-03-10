@@ -49,7 +49,7 @@ class Magma(object):
             if command.visible
         ]
 
-    def command(self, name_or_function=None, description=None, show_if=True):
+    def command(self, name_or_function=None, description=None, show_if=True, arg_opts=None):
         """Decorator-based command registration entrypoint.
 
         Args:
@@ -57,6 +57,8 @@ class Magma(object):
                 function.
             description (str | None): Optional command description.
             show_if (bool | callable): Visibility rule.
+            arg_opts (dict | None): Mapping of argument name to a list of
+                predefined values offered as autocomplete options.
 
         Returns:
             callable: Decorator or wrapped function.
@@ -64,7 +66,7 @@ class Magma(object):
 
         def decorator_register(func, name=None):
             """Wrap a function and register it as a command."""
-            self.register_command(func, name, description, show_if)
+            self.register_command(func, name, description, show_if, arg_opts)
 
             def func_wrapper(*args, **kwargs):
                 return func(*args, **kwargs)
@@ -84,7 +86,7 @@ class Magma(object):
         for func in get_module_functions(module):
             self.register_command(func)
 
-    def register_command(self, func, name=None, description=None, show_if=True):
+    def register_command(self, func, name=None, description=None, show_if=True, arg_opts=None):
         """Register one function as a command.
 
         Args:
@@ -92,6 +94,8 @@ class Magma(object):
             name (str | None): Optional command name override.
             description (str | None): Optional command description.
             show_if (bool | callable): Visibility rule.
+            arg_opts (dict | None): Mapping of argument name to a list of
+                predefined values offered as autocomplete options.
 
         Raises:
             NameError: If a command with the same name already exists.
@@ -99,7 +103,7 @@ class Magma(object):
         name = name or func.__name__
         if name in self._commands:
             raise NameError("This command already exists")
-        self._commands[name] = Command(func, name, description, show_if)
+        self._commands[name] = Command(func, name, description, show_if, arg_opts)
 
     def get(self, command_name):
         """Return a registered command by name.

@@ -26,11 +26,42 @@ class CommandCompleter(Completer):
             text_before_cursor = text_before_cursor.lower()
         text_arr = text_before_cursor.split(" ")
         last_words = text_arr[-1]
-        completions = self.__get_current_completions(text_arr[:-1])
 
-        for completion, meta in completions:
-            if completion not in document.text_before_cursor and "=" not in last_words:
-                yield Completion(completion, -len(last_words), display_meta=meta or "")
+        if "=" in last_words:
+            partial_value = last_words.split("=", 1)[1]
+            for value, meta in self.__get_arg_value_completions(text_arr):
+                yield Completion(value, -len(partial_value), display_meta=meta or "")
+        else:
+            for completion, meta in self.__get_current_completions(text_arr[:-1]):
+                if completion not in document.text_before_cursor:
+                    yield Completion(completion, -len(last_words), display_meta=meta or "")
+
+    def __get_arg_value_completions(self, text_arr):
+        """Return value completion candidates for an arg=value context.
+
+        Args:
+            text_arr (list[str]): Lowercased tokens from the current input,
+                where ``text_arr[0]`` is the command name and
+                ``text_arr[-1]`` is the ``arg=partial_value`` token.
+
+        Returns:
+            list[tuple[str, str]]: ``(value, meta)`` pairs for matching options.
+        """
+        if len(text_arr) < 2:
+            return []
+        command_name = text_arr[0]
+        last_word = text_arr[-1]
+        arg_name, partial_value = last_word.split("=", 1)
+        try:
+            command_obj = self.manager.get(command_name)
+        except CommandNotFound:
+            return []
+        options = command_obj.get_arg_value_completions(arg_name)
+        return [
+            ('"{}"'.format(opt) if " " in opt else opt, "")
+            for opt in options
+            if (opt.lower() if self.ignore_case else opt).startswith(partial_value)
+        ]
 
     def __get_current_completions(self, text_arr):
         """Return command or argument completion items for current tokens."""

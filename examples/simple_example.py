@@ -73,5 +73,15 @@ def random_upper_word(word):
     return "".join(random.choice([letter.upper(), letter]) for letter in word)
 
 
+@app.command("greet", "Greet someone by role", arg_opts={"role": ["Super Admin", "user", "guest"]})
+def greet_by_role(name, role="user"):
+    """Greet someone and mention their role.
+
+    :param str name: Name of the person to greet.
+    :param str role: Role of the person (admin, user or guest).
+    """
+    return "Hello, {} {}!".format(role.capitalize(), name)
+
+
 if __name__ == '__main__':
     app.run(theme=MonokaiTheme)
