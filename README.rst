@@ -215,6 +215,26 @@ subsequent commands via templating.
     EMOSEWa Si siHT !YbAB olLeH
 
 
+Development
+-----------
+
+The project ships a ``Makefile`` that wraps all common development tasks.
+Run ``make help`` (or just ``make``) to see the full list of targets:
+
+.. code:: bash
+
+    make fmt        # Format code with black and isort
+    make black      # Format with black only
+    make isort      # Sort imports with isort only
+    make lint       # Check style with flake8
+    make flake8     # Run flake8 only
+    make security   # Scan with bandit
+    make bandit     # Run bandit only
+    make test       # Run the test suite
+    make check      # All checks without modifying files (CI-friendly)
+    make all        # Format, check, and test in one step
+
+
 Contributing
 ------------
 
@@ -223,10 +243,9 @@ documentation improvements, and pull requests.
 
 Before submitting a pull request, please ensure that:
 
-1. All existing tests pass (``pytest``).
+1. All existing tests pass (``make test``).
 2. New functionality is covered by tests.
-3. The code is formatted with ``black`` and ``isort``.
-4. There are no ``flake8`` or ``bandit`` warnings.
+3. Code is formatted and all checks pass (``make check``).
 
 Open an issue first if you are planning a significant change, so the
 approach can be discussed before implementation.
