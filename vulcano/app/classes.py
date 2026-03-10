@@ -51,7 +51,7 @@ class VulcanoApp(object):
 
     __instances__ = {}
 
-    def __new__(cls, app_name="vulcano_default", prompt=">> "):
+    def __new__(cls, app_name="vulcano_default", prompt="🌋  "):
         if app_name in cls.__instances__:
             return cls.__instances__.get(app_name)
         new_app = _VulcanoApp(app_name, prompt)
@@ -161,19 +161,21 @@ class _VulcanoApp(object):
                 args, kwargs = inline_parser(arguments)
             except CommandParseError as error:
                 print(
-                    "Error parsing arguments for '{}': {}".format(command_name, error)
+                    "🚨  Error parsing arguments for '{}': {}".format(
+                        command_name, error
+                    )
                 )
                 raise
             try:
                 self._execute_command(command_name, *args, **kwargs)
             except CommandNotFound:
-                print("Command {} not found".format(command_name))
+                print("🤔  Command '{}' not found".format(command_name))
                 if self.suggestions:
                     possible_command = self.suggestions(
                         command_name, self.manager.command_names
                     )
                     if possible_command:
-                        print('Did you mean: "{}"?'.format(possible_command))
+                        print('💡  Did you mean: "{}"?'.format(possible_command))
 
     def _exec_from_repl(self, theme=MonokaiTheme, history_file=None):
         """Execute the interactive REPL loop."""
@@ -214,15 +216,15 @@ class _VulcanoApp(object):
                 args, kwargs = inline_parser(arguments)
                 self._execute_command(command, *args, **kwargs)
             except CommandNotFound:
-                print("Command {} not found".format(command))
+                print("🤔  Command '{}' not found".format(command))
                 if self.suggestions:
                     possible_command = self.suggestions(
                         command, self.manager.command_names
                     )
                     if possible_command:
-                        print('Did you mean: "{}"?'.format(possible_command))
+                        print('💡  Did you mean: "{}"?'.format(possible_command))
             except Exception as error:
-                print("Error executing: {}. Error: {}".format(command, error))
+                print("💥  Error executing '{}': {}".format(command, error))
 
     def _execute_command(self, command_name, *args, **kwargs):
         """Execute a command and persist result in shared context."""

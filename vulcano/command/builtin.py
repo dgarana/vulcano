@@ -2,8 +2,13 @@
 
 # System imports
 # Third-party imports
+from rich import box
+from rich.console import Console
+from rich.table import Table
+
 # Local imports
 
+console = Console()
 
 __all__ = ["help", "exit"]
 
@@ -25,15 +30,28 @@ def help(app):
             command (str | None): Optional command name.
         """
         if command:
-            command = app.manager._commands.get(command)
-            if command:
-                print(command.help)
+            cmd_obj = app.manager._commands.get(command)
+            if cmd_obj:
+                console.print(cmd_obj.rich_panel)
             else:
-                print("Command `{}` not found".format(command))
+                console.print("🤔  Command '{}' not found".format(command))
         else:
-            for command in app.manager._commands.values():
-                if command.visible:
-                    print(command.help)
+            table = Table(
+                title="📖  Available Commands",
+                box=box.ROUNDED,
+                show_header=True,
+                header_style="bold cyan",
+                border_style="blue",
+            )
+            table.add_column("Command", style="cyan bold", no_wrap=True)
+            table.add_column("Description")
+            for cmd in app.manager._commands.values():
+                if cmd.visible:
+                    table.add_row(
+                        cmd.name,
+                        cmd.short_description or "",
+                    )
+            console.print(table)
 
     return real_help
 
@@ -50,6 +68,7 @@ def exit(app):
 
     def _exit():
         """Exit the interactive REPL session."""
+        console.print("👋  See you soon!")
         app.do_repl = False
 
     return _exit
