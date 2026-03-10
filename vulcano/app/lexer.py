@@ -9,7 +9,16 @@ from pygments.style import Style
 
 # Third-party imports
 from pygments.styles.monokai import MonokaiStyle
-from pygments.token import Comment, Keyword, Name, Number, Operator, Punctuation, String, Text
+from pygments.token import (
+    Comment,
+    Keyword,
+    Name,
+    Number,
+    Operator,
+    Punctuation,
+    String,
+    Text,
+)
 
 # Local imports
 
