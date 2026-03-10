@@ -34,7 +34,9 @@ class CommandCompleter(Completer):
         else:
             for completion, meta in self.__get_current_completions(text_arr[:-1]):
                 if completion not in document.text_before_cursor:
-                    yield Completion(completion, -len(last_words), display_meta=meta or "")
+                    yield Completion(
+                        completion, -len(last_words), display_meta=meta or ""
+                    )
 
     def __get_arg_value_completions(self, text_arr):
         """Return value completion candidates for an arg=value context.

@@ -49,7 +49,9 @@ class Magma(object):
             if command.visible
         ]
 
-    def command(self, name_or_function=None, description=None, show_if=True, arg_opts=None):
+    def command(
+        self, name_or_function=None, description=None, show_if=True, arg_opts=None
+    ):
         """Decorator-based command registration entrypoint.
 
         Args:
@@ -86,7 +88,9 @@ class Magma(object):
         for func in get_module_functions(module):
             self.register_command(func)
 
-    def register_command(self, func, name=None, description=None, show_if=True, arg_opts=None):
+    def register_command(
+        self, func, name=None, description=None, show_if=True, arg_opts=None
+    ):
         """Register one function as a command.
 
         Args:
