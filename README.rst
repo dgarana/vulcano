@@ -42,7 +42,6 @@ interface.
    between minor versions while we work toward a stable 1.x release.
    For production use, pin to a specific version.
 
-
 Key Features
 ------------
 
@@ -119,7 +118,7 @@ The snippet below covers the most common features:
 
     import random
     from vulcano.app import VulcanoApp
-    from vulcano.app.lexer import MonokaiTheme
+    from vulcano.themes import MonokaiTheme
 
 
     app = VulcanoApp()
@@ -193,7 +192,62 @@ The snippet below covers the most common features:
     if __name__ == "__main__":
         app.run(theme=MonokaiTheme)
 
-The snippet above registers the following commands:
+
+Themes
+------
+
+Vulcano ships five built-in themes, all importable from
+``vulcano.themes``:
+
++---------------------+--------------------------------------------------+
+| Theme               | Description                                      |
++=====================+==================================================+
+| ``MonokaiTheme``    | Classic Monokai (default).                       |
++---------------------+--------------------------------------------------+
+| ``DraculaTheme``    | Dracula — pink keywords, purple numbers,         |
+|                     | yellow strings.                                  |
++---------------------+--------------------------------------------------+
+| ``NordTheme``       | Nord — muted blues and greens on a dark          |
+|                     | background.                                      |
++---------------------+--------------------------------------------------+
+| ``SolarizedDarkTheme`` | Solarized Dark — blue keywords, cyan          |
+|                     | strings, magenta numbers.                        |
++---------------------+--------------------------------------------------+
+| ``OneDarkTheme``    | Atom One Dark — purple keywords, green strings,  |
+|                     | orange numbers.                                  |
++---------------------+--------------------------------------------------+
+
+Pass any theme to ``app.run()``:
+
+.. code:: python
+
+    from vulcano.app import VulcanoApp
+    from vulcano.themes import DraculaTheme
+
+    app.run(theme=DraculaTheme)
+
+To create a custom theme, subclass ``VulcanoStyle`` and define a
+``styles`` dict using standard `Pygments token types
+<https://pygments.org/docs/tokens/>`__:
+
+.. code:: python
+
+    from pygments.token import Keyword, Name, Number, String, Text
+    from vulcano.themes import VulcanoStyle
+
+    class MyTheme(VulcanoStyle):
+        styles = {
+            Text:    "#ffffff",
+            Keyword: "bold #ff0000",
+            Name:    "#00ff00",
+            Number:  "#0000ff",
+            String:  "#ffff00",
+        }
+
+    app.run(theme=MyTheme)
+
+
+The snippet above
 ``hi``, ``bye``, ``i_am``, ``whoami``, ``sum_numbers``, ``multiply``,
 ``reverse_word``, and ``random_upper_word``.
 
@@ -234,7 +288,6 @@ subsequent commands via templating.
     $ python simple_example.py multiply number1=6 number2=7 and reverse_word word=vulcano
     42
     onacluv
-
     $ python simple_example.py reverse_word "Hello Baby! This is awesome" and random_upper_word "{last_result}"
     emosewa si sihT !ybaB olleH
     eMOsEwa SI SIHT !YbaB OLlEH
