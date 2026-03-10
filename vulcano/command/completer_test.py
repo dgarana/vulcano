@@ -110,3 +110,82 @@ class TestCommandCompleter(unittest.TestCase):
             ['"power admin"', '"regular user"', '"guest"'],
             [r.text for r in results],
         )
+
+    def test_flat_commands_are_offered_as_completions(self):
+        from vulcano.command.models import Command
+
+        flat_cmd = Command(lambda name: None, "grp.hello", "Say hello")
+        completer = CommandCompleter(
+            self.manager, ignore_case=True, flat_commands={"grp.hello": flat_cmd}
+        )
+        document_mock = MagicMock()
+        document_mock.text_before_cursor = ""
+        complete_event = MagicMock()
+        results = list(completer.get_completions(document_mock, complete_event))
+        texts = [r.text for r in results]
+        self.assertIn("grp.hello", texts)
+
+    def test_flat_command_args_are_completed(self):
+        from vulcano.command.models import Command
+
+        flat_cmd = Command(lambda name, title="Mr.": None, "grp.hi", "Greet")
+        completer = CommandCompleter(
+            self.manager, ignore_case=True, flat_commands={"grp.hi": flat_cmd}
+        )
+        document_mock = MagicMock()
+        document_mock.text_before_cursor = "grp.hi "
+        complete_event = MagicMock()
+        results = list(completer.get_completions(document_mock, complete_event))
+        texts = [r.text for r in results]
+        self.assertIn("name", texts)
+        self.assertIn("title", texts)
+
+    def test_dot_path_prefix_does_not_show_root_commands(self):
+        """Typing 'grp.' must not suggest root-level commands."""
+        from vulcano.command.models import Command
+
+        flat_cmd = Command(lambda name: None, "grp.hello", "Say hello")
+        completer = CommandCompleter(
+            self.manager, ignore_case=True, flat_commands={"grp.hello": flat_cmd}
+        )
+        document_mock = MagicMock()
+        document_mock.text_before_cursor = "grp."
+        complete_event = MagicMock()
+        results = list(completer.get_completions(document_mock, complete_event))
+        texts = [r.text for r in results]
+        # Only the dot-path command, never root commands like 'no_args'
+        self.assertIn("grp.hello", texts)
+        self.assertNotIn("no_args", texts)
+        self.assertNotIn("test_function", texts)
+
+    def test_dot_path_with_trailing_dot_on_leaf_shows_nothing(self):
+        """Typing 'grp.hello.' (trailing dot on a leaf command) shows nothing."""
+        from vulcano.command.models import Command
+
+        flat_cmd = Command(lambda name: None, "grp.hello", "Say hello")
+        completer = CommandCompleter(
+            self.manager, ignore_case=True, flat_commands={"grp.hello": flat_cmd}
+        )
+        document_mock = MagicMock()
+        document_mock.text_before_cursor = "grp.hello."
+        complete_event = MagicMock()
+        results = list(completer.get_completions(document_mock, complete_event))
+        self.assertEqual([], results)
+
+    def test_flat_command_arg_opts_are_completed(self):
+        from vulcano.command.models import Command
+
+        flat_cmd = Command(
+            lambda role="user": None,
+            "grp.set_role",
+            "Set role",
+            arg_opts={"role": ["admin", "guest"]},
+        )
+        completer = CommandCompleter(
+            self.manager, ignore_case=True, flat_commands={"grp.set_role": flat_cmd}
+        )
+        document_mock = MagicMock()
+        document_mock.text_before_cursor = "grp.set_role role="
+        complete_event = MagicMock()
+        results = list(completer.get_completions(document_mock, complete_event))
+        self.assertListSameItems(["admin", "guest"], [r.text for r in results])

@@ -149,18 +149,36 @@ class VulcanoLexer(RegexLexer):
     }
 
 
+# Snapshot of the base token list captured before any create_lexer call so
+# that each invocation always starts from a clean, unmodified state.
+_BASE_ROOT_TOKENS = list(VulcanoLexer.tokens["root"])
+
+
 def create_lexer(commands=None):
-    """Return a lexer class enriched with registered command keywords.
+    """Return a fresh lexer subclass enriched with registered command keywords.
+
+    A new subclass is created on every call so that Pygments' metaclass
+    compiles a clean ``_tokens`` cache for each REPL context (main or group).
+    Mutating the shared ``VulcanoLexer`` class in-place is avoided entirely.
 
     Args:
-        commands (list[str] | None): Command names to mark as keywords.
+        commands (list[str] | None): Command names to highlight as keywords.
+            Dot-path names such as ``"text.formal.dear"`` are supported;
+            their dots are escaped so the regex matches them literally.
 
     Returns:
-        type[VulcanoLexer]: Lexer class configured for current commands.
+        type[VulcanoLexer]: Fresh lexer subclass configured for current commands.
     """
-    lexer = VulcanoLexer
+    root_tokens = list(_BASE_ROOT_TOKENS)
     if commands:
-        commands_list = "|".join(commands)
+        # Sort longest-first so more-specific dot-paths (e.g. "text.formal.dear")
+        # are tried before their shorter prefixes ("text.formal", "text").
+        sorted_cmds = sorted(commands, key=len, reverse=True)
+        commands_list = "|".join(re.escape(cmd) for cmd in sorted_cmds)
         regex_commands = r"^({})\b".format(commands_list)
-        lexer.tokens["root"].insert(0, (regex_commands, Keyword))
-    return lexer
+        root_tokens = [(regex_commands, Keyword)] + root_tokens
+    return type(
+        "VulcanoLexer",
+        (VulcanoLexer,),
+        {"tokens": {"root": root_tokens}},
+    )

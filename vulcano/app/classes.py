@@ -70,6 +70,9 @@ class _VulcanoApp(object):
         self.theme = None
         self.suggestions = None
         self.prompt = prompt  # Type: string or func
+        # Flat registry of all CommandGroup objects keyed by their full
+        # dot-path (e.g. {"text": grp, "text.formal": formal_grp}).
+        self._groups = {}  # type: dict
 
     @property
     def request_is_for_args(self):
@@ -83,6 +86,60 @@ class _VulcanoApp(object):
     def command(self, *args, **kwargs):
         """Register a command via decorator in the current app instance."""
         return self.manager.command(*args, **kwargs)
+
+    def group(self, name, description=None):
+        """Create and register a named command group.
+
+        Returns a :class:`CommandGroup` whose ``.command()`` decorator
+        registers commands inside the group's isolated sub-REPL.
+        Typing the group name in the main REPL enters the sub-REPL;
+        ``exit`` returns to the parent session.
+
+        Args:
+            name (str): Group name — what the user types to enter it.
+            description (str | None): Short description shown in help.
+
+        Returns:
+            CommandGroup: New group to use as a command decorator factory.
+        """
+        from .group import CommandGroup
+
+        grp = CommandGroup(name, description, self)
+        self._groups[name] = grp
+
+        def _enter_group():
+            grp()
+
+        _enter_group.__doc__ = description or "Enter the {} command group.".format(name)
+        self.manager.register_command(_enter_group, name, description)
+        return grp
+
+    @property
+    def _flat_commands(self):
+        """Return ``{dot.path: Command}`` for every command in every group.
+
+        Includes commands in nested sub-groups, e.g. ``"text.formal.dear"``.
+        Built-ins (``exit``, ``help``) are excluded.
+        """
+        result = {}
+        for group_path, group in self._groups.items():
+            for cmd_name, cmd in group.manager._commands.items():
+                if cmd_name not in ("exit", "help"):
+                    result["{}.{}".format(group_path, cmd_name)] = cmd
+        return result
+
+    def _resolve_dot_command(self, command_name):
+        """Resolve ``group.subgroup.command`` to ``(manager, simple_name)``.
+
+        Returns the root manager unchanged when the path cannot be resolved
+        (the subsequent ``manager.run`` will raise ``CommandNotFound``).
+        """
+        parts = command_name.split(".")
+        group_path = ".".join(parts[:-1])
+        simple_name = parts[-1]
+        if group_path in self._groups:
+            return self._groups[group_path].manager, simple_name
+        return self.manager, command_name
 
     def module(self, module):
         """Register all public functions from a module.
@@ -144,6 +201,8 @@ class _VulcanoApp(object):
         # arguments (e.g. "Hello world") survive the join→split round-trip.
         quoted_args = [self._quote_if_spaced(a) for a in sys.argv[1:]]
         commands = split_list_by_arg(lst=quoted_args, separator="and")
+        flat_cmds = self._flat_commands
+        all_names = self.manager.command_names + list(flat_cmds.keys())
         for command in commands:
             command_list = command.split()
             command_name = command_list[0]
@@ -171,9 +230,7 @@ class _VulcanoApp(object):
             except CommandNotFound:
                 print("🤔  Command '{}' not found".format(command_name))
                 if self.suggestions:
-                    possible_command = self.suggestions(
-                        command_name, self.manager.command_names
-                    )
+                    possible_command = self.suggestions(command_name, all_names)
                     if possible_command:
                         print('💡  Did you mean: "{}"?'.format(possible_command))
 
@@ -185,10 +242,12 @@ class _VulcanoApp(object):
                 os.path.expanduser(str(history_file))
             )
         self.do_repl = True
+        flat_cmds = self._flat_commands
+        all_names = self.manager.command_names + list(flat_cmds.keys())
         manager_completer = FuzzyCompleter(
-            CommandCompleter(self.manager, ignore_case=True)
+            CommandCompleter(self.manager, ignore_case=True, flat_commands=flat_cmds)
         )
-        lexer = create_lexer(commands=self.manager.command_names)
+        lexer = create_lexer(commands=all_names)
         session = PromptSession(
             completer=manager_completer,
             lexer=PygmentsLexer(lexer),
@@ -224,17 +283,26 @@ class _VulcanoApp(object):
             except CommandNotFound:
                 print("🤔  Command '{}' not found".format(command))
                 if self.suggestions:
-                    possible_command = self.suggestions(
-                        command, self.manager.command_names
-                    )
+                    possible_command = self.suggestions(command, all_names)
                     if possible_command:
                         print('💡  Did you mean: "{}"?'.format(possible_command))
             except Exception as error:
                 print("💥  Error executing '{}': {}".format(command, error))
 
     def _execute_command(self, command_name, *args, **kwargs):
-        """Execute a command and persist result in shared context."""
-        self.context["last_result"] = self.manager.run(command_name, *args, **kwargs)
+        """Execute a command and persist result in shared context.
+
+        Supports dot-path commands like ``text.formal.dear`` by resolving
+        the group segment against ``self._groups``.
+        """
+        base_name = command_name.rstrip("?")
+        if "." in base_name:
+            manager, simple_name = self._resolve_dot_command(base_name)
+            if command_name.endswith("?"):
+                simple_name += "?"
+        else:
+            manager, simple_name = self.manager, command_name
+        self.context["last_result"] = manager.run(simple_name, *args, **kwargs)
         if self.print_result and self.context["last_result"]:
             print(self.context["last_result"])
         return self.context["last_result"]

@@ -87,8 +87,34 @@ Key Features
       💡  Did you mean: "new"?
       🌋
 
+- **Command groups** — Organise commands into named sub-contexts with
+  ``app.group()``.  Typing the group name in the REPL enters an isolated
+  sub-session; ``exit`` returns to the parent.  Commands in any group can
+  also be run directly with dot-path syntax — both in REPL and argument
+  modes — without entering the sub-session at all:
+
+  .. code:: text
+
+      🌋   text.hi name=Alice
+      Hi! Mr. Alice :) Glad to see you.
+      🌋
+
+  Groups can be nested to any depth.  The prompt chains all ancestor
+  names so the current nesting level is always visible:
+
+  .. code:: text
+
+      🌋   text
+      🌋  text > formal
+      🌋  text > formal > dear name=Alice
+      Dear Dr. Alice, I trust this finds you well.
+      🌋  text > formal > exit
+      🌋  text > exit
+      🌋
+
 - **Source inspection** — Append ``?`` to any command name to view its
-  source code with syntax highlighting:
+  source code with syntax highlighting.  Dot-path commands are supported
+  too:
 
   .. code:: text
 
@@ -214,6 +240,96 @@ The snippet below covers the most common features:
         app.run(theme=MonokaiTheme)
 
 
+Command Groups
+--------------
+
+Groups let you organise commands into named sub-contexts, each with its
+own isolated sub-REPL.  Create a group with ``app.group()`` and register
+commands on it the same way you would on the main app:
+
+.. code:: python
+
+    from vulcano.app import VulcanoApp
+
+    app = VulcanoApp()
+
+    # Create a group — its name is what the user types to enter it.
+    text = app.group("text", "Text-related commands")
+
+
+    @text.command("hi", "Greet someone")
+    def say_hi(name, title="Mr."):
+        print("Hi! {} {}!".format(title, name))
+
+
+    @text.command("greet", "Greet by role", arg_opts={"role": ["admin", "user"]})
+    def greet_by_role(name, role="user"):
+        return "Hello, {} {}!".format(role.capitalize(), name)
+
+
+    if __name__ == "__main__":
+        app.run()
+
+Typing the group name in the REPL enters the sub-session, where only
+that group's commands — plus a local ``help`` and ``exit`` — are
+available.  The prompt reflects the current depth:
+
+.. code:: text
+
+    🌋   text
+    🌋  text > hi name=Alice
+    Hi! Mr. Alice!
+    🌋  text > exit
+    🌋
+
+**Nested groups** — Groups can contain other groups to any depth:
+
+.. code:: python
+
+    formal = text.group("formal", "Formal greetings")
+
+
+    @formal.command("dear", "Send a formal greeting")
+    def formal_dear(name, title="Dr."):
+        return "Dear {} {}, I trust this finds you well.".format(title, name)
+
+The prompt chains all ancestor names:
+
+.. code:: text
+
+    🌋   text
+    🌋  text > formal
+    🌋  text > formal > dear name=Alice title=Prof.
+    Dear Prof. Alice, I trust this finds you well.
+    🌋  text > formal > exit
+    🌋  text > exit
+    🌋
+
+**Dot-path syntax** — Run any group command directly without entering
+the sub-session, using ``group.command`` notation.  This works in both
+REPL and argument modes and can cross multiple nesting levels:
+
+.. code:: text
+
+    🌋   text.hi name=Alice
+    Hi! Mr. Alice!
+    🌋   text.formal.dear name=Alice title="Prof."
+    Dear Prof. Alice, I trust this finds you well.
+
+.. code:: bash
+
+    $ python your_app.py text.hi name=Alice
+    Hi! Mr. Alice!
+    $ python your_app.py text.formal.dear name=Alice and bye
+    Dear Dr. Alice, I trust this finds you well.
+    Bye User!
+
+Autocomplete is dot-path aware: typing ``text.`` offers ``text.hi``,
+``text.greet``, ``text.formal``; typing ``text.formal.`` narrows to
+``text.formal.dear``.  Argument and ``arg_opts`` completions work the
+same as for top-level commands once the full path is typed.
+
+
 Themes
 ------
 
@@ -269,8 +385,10 @@ To create a custom theme, subclass ``VulcanoStyle`` and define a
 
 
 The snippet above registers the following commands:
-``hi``, ``bye``, ``i_am``, ``whoami``, ``sum_numbers``, ``multiply``,
+``i_am``, ``whoami``, ``bye``, ``sum_numbers``, ``multiply``,
 ``reverse_word``, ``random_upper_word``, and ``greet``.
+See `Command Groups`_ below to learn how to organise commands into
+named sub-contexts.
 
 Commands that ``return`` a value have their result printed automatically
 and stored in ``context["last_result"]``, making it available for

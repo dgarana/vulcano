@@ -6,7 +6,13 @@ from vulcano.themes import MonokaiTheme
 
 app = VulcanoApp()
 
-@app.command("hi", "Salute people given form parameter")
+# --- "text" group: text-related greeting commands ---
+text = app.group("text", "Text-related commands")
+# --- nested group inside "text": formal greetings ---
+formal = text.group("formal", "Formal greetings")
+
+
+@text.command("hi", "Salute people given form parameter")
 def salute_method_here(name, title="Mr."):
     """Salute to someone
 
@@ -73,7 +79,7 @@ def random_upper_word(word):
     return "".join(random.choice([letter.upper(), letter]) for letter in word)
 
 
-@app.command("greet", "Greet someone by role", arg_opts={"role": ["Super Admin", "user", "guest"]})
+@text.command("greet", "Greet someone by role", arg_opts={"role": ["power admin", "user", "guest"]})
 def greet_by_role(name, role="user"):
     """Greet someone and mention their role.
 
@@ -81,6 +87,16 @@ def greet_by_role(name, role="user"):
     :param str role: Role of the person (admin, user or guest).
     """
     return "Hello, {} {}!".format(role.capitalize(), name)
+
+
+@formal.command("dear", "Greet someone very formally")
+def formal_dear(name, title="Dr."):
+    """Send a formal greeting.
+
+    :param str name: Name of the recipient.
+    :param str title: Honorific title (Dr., Prof., Sir ...).
+    """
+    return "Dear {} {}, I trust this finds you well.".format(title, name)
 
 
 if __name__ == '__main__':
