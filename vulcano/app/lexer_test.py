@@ -24,7 +24,7 @@ class TestCreateLexer(TestCase):
         command_tokens, _ = root_tokens[0]
         # Longest first; dots must be re.escape()-d to "\." in the pattern.
         self.assertTrue(command_tokens.startswith(r"^("))
-        parts = command_tokens[len(r"^("):-len(r"\b")].rstrip(")").split("|")
+        parts = command_tokens[len(r"^(") : -len(r"\b")].rstrip(")").split("|")
         self.assertEqual(parts[0], r"text\.formal\.dear")
         self.assertEqual(parts[1], r"text\.hi")
         self.assertEqual(parts[2], "text")
