@@ -26,9 +26,11 @@ class Command(object):
         name (str | None): Optional command name override.
         description (str | None): Optional short description override.
         show_if (bool | callable): Visibility rule for help/completion.
+        arg_opts (dict | None): Mapping of argument name to a list of
+            predefined values offered as autocomplete options.
     """
 
-    def __init__(self, func, name=None, description=None, show_if=True):
+    def __init__(self, func, name=None, description=None, show_if=True, arg_opts=None):
         self.show_if = show_if
         self.func = func  # type: callable
         func_inspect = get_func_inspect_result(func, doc_parser=multi_doc_parser)
@@ -36,6 +38,7 @@ class Command(object):
         self.short_description = description or func_inspect.short_description
         self.long_description = func_inspect.long_description
         self.args = func_inspect.arguments
+        self.arg_opts = arg_opts or {}  # type: dict
 
     @property
     def visible(self):
@@ -132,12 +135,29 @@ class Command(object):
         """Return tuple used by prompt_toolkit for command completion."""
         return ("{}".format(self.name), "{}".format(self.short_description or ""))
 
+    def get_arg_value_completions(self, arg_name):
+        """Return predefined value options for the given argument name.
+
+        Args:
+            arg_name (str): Name of the argument to look up.
+
+        Returns:
+            list: Predefined option values, or an empty list if none defined.
+        """
+        return self.arg_opts.get(arg_name, [])
+
     @cached_property
     def args_completion(self):
         """Return completion metadata for command arguments."""
-        return [
-            ("{}".format(arg.name), "{}".format(arg.description)) for arg in self.args
-        ]
+        result = []
+        for arg in self.args:
+            description = "{}".format(arg.description)
+            options = self.arg_opts.get(arg.name, [])
+            if options:
+                opts_hint = "options: {}".format(", ".join(str(o) for o in options))
+                description = "{} [{}]".format(description, opts_hint)
+            result.append(("{}".format(arg.name), description))
+        return result
 
     def run(self, *args, **kwargs):
         """Execute the command function.

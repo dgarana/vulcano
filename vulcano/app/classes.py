@@ -203,18 +203,24 @@ class _VulcanoApp(object):
             except EOFError:
                 break  # Control-D Pressed. Finish
 
+            if not user_input.strip():
+                continue
+            command = ""
             try:
-                command_list = user_input.split()
-                if not command_list:
-                    continue
-                command = command_list[0]
-                arguments = " ".join(command_list[1:])
-                try:
-                    arguments = arguments.format(**self.context)
-                except KeyError:
-                    pass
-                args, kwargs = inline_parser(arguments)
-                self._execute_command(command, *args, **kwargs)
+                commands = split_list_by_arg(lst=[user_input], separator="and")
+                for command_str in commands:
+                    command_str = command_str.strip()
+                    if not command_str:
+                        continue
+                    command_parts = command_str.split()
+                    command = command_parts[0]
+                    arguments = " ".join(command_parts[1:])
+                    try:
+                        arguments = arguments.format(**self.context)
+                    except KeyError:
+                        pass
+                    args, kwargs = inline_parser(arguments)
+                    self._execute_command(command, *args, **kwargs)
             except CommandNotFound:
                 print("🤔  Command '{}' not found".format(command))
                 if self.suggestions:

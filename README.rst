@@ -56,14 +56,24 @@ Key Features
   existing module without modifying its source.
 - **Syntax highlighting** — Powered by Pygments and prompt\_toolkit for
   a polished REPL experience.
-- **Concatenated commands** — Chain multiple commands in argument mode
-  using ``and``:
+- **Argument value options** — Attach a list of predefined choices to any
+  argument with ``arg_opts``; the autocompleter offers them and quotes
+  values that contain spaces automatically:
+
+  .. code:: python
+
+      @app.command("greet", "Greet by role", arg_opts={"role": ["admin", "user", "guest"]})
+      def greet(name, role="user"):
+          return "Hello, {} {}!".format(role.capitalize(), name)
+
+- **Concatenated commands** — Chain multiple commands with ``and``, both
+  in argument mode and in the interactive REPL:
 
   .. code:: bash
 
       python your_script.py my_func arg="something" and my_func_2 arg="another thing"
 
-- **Context** — Share data between commands through ``VulcanoApp.context``,
+- **Context**
   a plain dictionary available to all registered functions.
 - **Command templating** — Use any value stored in the context to
   parameterise commands at runtime.
@@ -189,6 +199,17 @@ The snippet below covers the most common features:
         return "".join(random.choice([letter.upper(), letter]) for letter in word)
 
 
+    @app.command("greet", "Greet someone by role", arg_opts={"role": ["admin", "user", "guest"]})
+    def greet_by_role(name, role="user"):
+        """Greet someone and mention their role.
+
+        Args:
+            name (str): Name of the person to greet.
+            role (str): Role of the person.
+        """
+        return "Hello, {} {}!".format(role.capitalize(), name)
+
+
     if __name__ == "__main__":
         app.run(theme=MonokaiTheme)
 
@@ -247,9 +268,9 @@ To create a custom theme, subclass ``VulcanoStyle`` and define a
     app.run(theme=MyTheme)
 
 
-The snippet above
+The snippet above registers the following commands:
 ``hi``, ``bye``, ``i_am``, ``whoami``, ``sum_numbers``, ``multiply``,
-``reverse_word``, and ``random_upper_word``.
+``reverse_word``, ``random_upper_word``, and ``greet``.
 
 Commands that ``return`` a value have their result printed automatically
 and stored in ``context["last_result"]``, making it available for
@@ -278,6 +299,11 @@ subsequent commands via templating.
     │   ⚡ word    str              The word to reverse.                   │
     │                                                                      │
     ╰────────────────────────────────────────────────────────────────────────╯
+    🌋   greet name=Alice role=admin
+    Hello, Admin Alice!
+    🌋   multiply number1=6 number2=7 and reverse_word word=vulcano
+    42
+    onacluv
     🌋   exit
     👋  See you soon!
 

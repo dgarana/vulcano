@@ -24,6 +24,16 @@ class TestCommandCompleter(unittest.TestCase):
             lambda what, happened, here: None, "test_function"
         )
         self.manager.register_command(lambda: None, "no_args")
+        self.manager.register_command(
+            lambda name, title="Mr.": None,
+            "greet",
+            arg_opts={"name": ["bob", "rob", "alice"]},
+        )
+        self.manager.register_command(
+            lambda role="user": None,
+            "set_role",
+            arg_opts={"role": ["power admin", "regular user", "guest"]},
+        )
 
     @staticmethod
     def assertListSameItems(L1, L2):
@@ -62,3 +72,41 @@ class TestCommandCompleter(unittest.TestCase):
         complete_event = MagicMock()
         results = list(self.completer.get_completions(document_mock, complete_event))
         self.assertListEqual([], results)
+
+    def test_it_should_return_all_arg_opts_when_no_prefix(self):
+        document_mock = MagicMock()
+        document_mock.text_before_cursor = "greet name="
+        complete_event = MagicMock()
+        results = list(self.completer.get_completions(document_mock, complete_event))
+        self.assertListSameItems(["bob", "rob", "alice"], [r.text for r in results])
+
+    def test_it_should_filter_arg_opts_by_prefix(self):
+        document_mock = MagicMock()
+        document_mock.text_before_cursor = "greet name=b"
+        complete_event = MagicMock()
+        results = list(self.completer.get_completions(document_mock, complete_event))
+        self.assertListSameItems(["bob"], [r.text for r in results])
+
+    def test_it_should_match_arg_opts_case_insensitively(self):
+        document_mock = MagicMock()
+        document_mock.text_before_cursor = "greet name=BOB"
+        complete_event = MagicMock()
+        results = list(self.completer.get_completions(document_mock, complete_event))
+        self.assertListSameItems(["bob"], [r.text for r in results])
+
+    def test_it_should_return_empty_for_unknown_arg_opts(self):
+        document_mock = MagicMock()
+        document_mock.text_before_cursor = "greet title="
+        complete_event = MagicMock()
+        results = list(self.completer.get_completions(document_mock, complete_event))
+        self.assertListEqual([], results)
+
+    def test_it_should_quote_arg_opts_values_with_spaces(self):
+        document_mock = MagicMock()
+        document_mock.text_before_cursor = "set_role role="
+        complete_event = MagicMock()
+        results = list(self.completer.get_completions(document_mock, complete_event))
+        self.assertListSameItems(
+            ['"power admin"', '"regular user"', '"guest"'],
+            [r.text for r in results],
+        )
