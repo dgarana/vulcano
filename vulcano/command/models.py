@@ -2,6 +2,8 @@
 
 # System imports
 import inspect
+from collections.abc import Callable
+from typing import Any
 
 from cached_property import cached_property
 
@@ -32,30 +34,43 @@ class Command(object):
             values and returns a list of options dynamically.
     """
 
-    def __init__(self, func, name=None, description=None, show_if=True, arg_opts=None):
+    def __init__(
+        self,
+        func: Callable[..., Any],
+        name: str | None = None,
+        description: str | None = None,
+        show_if: bool | Callable[[], bool] = True,
+        arg_opts: (
+            dict[str, list[str] | Callable[[dict[str, str]], list[str]]] | None
+        ) = None,
+    ) -> None:
         self.show_if = show_if
-        self.func = func  # type: callable
+        self.func = func
         func_inspect = get_func_inspect_result(func, doc_parser=multi_doc_parser)
-        self.name = name or func_inspect.name  # type: str
-        self.short_description = description or func_inspect.short_description
-        self.long_description = func_inspect.long_description
+        self.name: str = name or func_inspect.name
+        self.short_description: str | None = (
+            description or func_inspect.short_description
+        )
+        self.long_description: str | None = func_inspect.long_description
         self.args = func_inspect.arguments
-        self.arg_opts = arg_opts or {}  # type: dict
+        self.arg_opts: dict[str, list[str] | Callable[[dict[str, str]], list[str]]] = (
+            arg_opts or {}
+        )
 
     @property
-    def visible(self):
+    def visible(self) -> bool:
         """Return whether the command should appear in UX surfaces."""
         if isinstance(self.show_if, bool):
             return self.show_if
         return self.show_if()
 
     @property
-    def source_code(self):
+    def source_code(self) -> str:
         """Return original Python source code for the command function."""
         return inspect.getsource(self.func)
 
     @property
-    def help(self):
+    def help(self) -> str:
         """Build a printable help string for the command.
 
         Returns:
@@ -80,7 +95,7 @@ class Command(object):
         return description_item + "\n"
 
     @cached_property
-    def rich_panel(self):
+    def rich_panel(self) -> Panel:
         """Return a rich Panel with formatted command help.
 
         Returns:
@@ -133,11 +148,13 @@ class Command(object):
         )
 
     @cached_property
-    def command_completer(self):
+    def command_completer(self) -> tuple[str, str]:
         """Return tuple used by prompt_toolkit for command completion."""
         return ("{}".format(self.name), "{}".format(self.short_description or ""))
 
-    def get_arg_value_completions(self, arg_name, filled_params=None):
+    def get_arg_value_completions(
+        self, arg_name: str, filled_params: dict[str, str] | None = None
+    ) -> list[str]:
         """Return value options for the given argument name.
 
         When the registered option is a callable, it is invoked with a
@@ -161,7 +178,7 @@ class Command(object):
         return opts
 
     @cached_property
-    def args_completion(self):
+    def args_completion(self) -> list[tuple[str, str]]:
         """Return completion metadata for command arguments."""
         result = []
         for arg in self.args:
@@ -175,7 +192,7 @@ class Command(object):
             result.append(("{}".format(arg.name), description))
         return result
 
-    def run(self, *args, **kwargs):
+    def run(self, *args: Any, **kwargs: Any) -> Any:
         """Execute the command function.
 
         Args:

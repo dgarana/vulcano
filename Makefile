@@ -1,6 +1,7 @@
 .DEFAULT_GOAL := help
 
-PYTHON := python
+UV_LINT := uv run --group lint
+UV_TEST := uv run --group test
 SRC     := vulcano
 
 .PHONY: help fmt black isort lint flake8 security bandit test check all
@@ -14,36 +15,36 @@ help:           ## Show this help message
 fmt: black isort  ## Run all formatters (black + isort)
 
 black:          ## Format code with black
-	$(PYTHON) -m black $(SRC)
+	$(UV_LINT) black $(SRC)
 
 isort:          ## Sort imports with isort
-	$(PYTHON) -m isort $(SRC)
+	$(UV_LINT) isort $(SRC)
 
 # ── Linting ───────────────────────────────────────────────────────────────────
 
 lint: flake8    ## Run all linters
 
 flake8:         ## Check style with flake8
-	$(PYTHON) -m flake8 $(SRC)
+	$(UV_LINT) flake8 $(SRC)
 
 # ── Security ──────────────────────────────────────────────────────────────────
 
 security: bandit  ## Run all security checks
 
 bandit:         ## Scan for common security issues with bandit
-	$(PYTHON) -m bandit -r $(SRC) -ll
+	$(UV_LINT) bandit -r $(SRC) -ll
 
 # ── Tests ─────────────────────────────────────────────────────────────────────
 
 test:           ## Run the test suite with pytest
-	$(PYTHON) -m pytest $(SRC)
+	$(UV_TEST) pytest $(SRC)
 
 # ── Convenience ───────────────────────────────────────────────────────────────
 
 check:          ## Run all checks without modifying files (CI-friendly)
-	$(PYTHON) -m black --check $(SRC)
-	$(PYTHON) -m isort --check-only $(SRC)
-	$(PYTHON) -m flake8 $(SRC)
-	$(PYTHON) -m bandit -r $(SRC) -ll
+	$(UV_LINT) black --check $(SRC)
+	$(UV_LINT) isort --check-only $(SRC)
+	$(UV_LINT) flake8 $(SRC)
+	$(UV_LINT) bandit -r $(SRC) -ll
 
 all: fmt check test  ## Format, check, and test everything

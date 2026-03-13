@@ -3,8 +3,11 @@
 # System imports
 import importlib
 from collections import OrderedDict
+from collections.abc import Callable, Iterator
 from functools import partial
 from inspect import getmembers, isfunction
+from types import ModuleType
+from typing import Any
 
 # Third-party imports
 from pygments import highlight
@@ -20,7 +23,7 @@ from .models import Command
 __all__ = ["Magma"]
 
 
-def get_module_functions(module):
+def get_module_functions(module: ModuleType) -> Iterator[Callable[..., Any]]:
     """Yield public functions defined in a module."""
     return (
         func_obj
@@ -32,16 +35,16 @@ def get_module_functions(module):
 class Magma(object):
     """Manage command registration, lookup, completion, and execution."""
 
-    def __init__(self):
-        self._commands = OrderedDict()  # type: OrderedDict
+    def __init__(self) -> None:
+        self._commands: OrderedDict[str, Command] = OrderedDict()
 
     @property
-    def command_names(self):
+    def command_names(self) -> list[str]:
         """Return registered command names as strings."""
         return ["{}".format(command) for command in self._commands.keys()]
 
     @property
-    def command_completions(self):
+    def command_completions(self) -> list[tuple[str, str]]:
         """Return completion tuples for visible commands."""
         return [
             command.command_completer
@@ -50,8 +53,14 @@ class Magma(object):
         ]
 
     def command(
-        self, name_or_function=None, description=None, show_if=True, arg_opts=None
-    ):
+        self,
+        name_or_function: str | Callable[..., Any] | None = None,
+        description: str | None = None,
+        show_if: bool | Callable[[], bool] = True,
+        arg_opts: (
+            dict[str, list[str] | Callable[[dict[str, str]], list[str]]] | None
+        ) = None,
+    ) -> Callable[..., Any]:
         """Decorator-based command registration entrypoint.
 
         Args:
@@ -68,11 +77,13 @@ class Magma(object):
             callable: Decorator or wrapped function.
         """
 
-        def decorator_register(func, name=None):
+        def decorator_register(
+            func: Callable[..., Any], name: str | None = None
+        ) -> Callable[..., Any]:
             """Wrap a function and register it as a command."""
             self.register_command(func, name, description, show_if, arg_opts)
 
-            def func_wrapper(*args, **kwargs):
+            def func_wrapper(*args: Any, **kwargs: Any) -> Any:
                 return func(*args, **kwargs)
 
             return func_wrapper
@@ -83,7 +94,7 @@ class Magma(object):
         name = name_or_function
         return partial(decorator_register, name=name)
 
-    def module(self, module):
+    def module(self, module: str | ModuleType) -> None:
         """Register all public functions from a module as commands."""
         if isinstance(module, str):
             module = importlib.import_module(module)
@@ -91,8 +102,15 @@ class Magma(object):
             self.register_command(func)
 
     def register_command(
-        self, func, name=None, description=None, show_if=True, arg_opts=None
-    ):
+        self,
+        func: Callable[..., Any],
+        name: str | None = None,
+        description: str | None = None,
+        show_if: bool | Callable[[], bool] = True,
+        arg_opts: (
+            dict[str, list[str] | Callable[[dict[str, str]], list[str]]] | None
+        ) = None,
+    ) -> None:
         """Register one function as a command.
 
         Args:
@@ -113,7 +131,7 @@ class Magma(object):
             raise NameError("This command already exists")
         self._commands[name] = Command(func, name, description, show_if, arg_opts)
 
-    def get(self, command_name):
+    def get(self, command_name: str) -> Command:
         """Return a registered command by name.
 
         Args:
@@ -129,7 +147,7 @@ class Magma(object):
             raise CommandNotFound("Command {} not found".format(command_name))
         return self._commands[command_name]
 
-    def run(self, command_name, *args, **kwargs):
+    def run(self, command_name: str, *args: Any, **kwargs: Any) -> Any:
         """Execute a registered command.
 
         Args:

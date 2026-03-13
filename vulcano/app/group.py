@@ -1,5 +1,11 @@
 """Command group support for nested sub-REPL contexts."""
 
+from __future__ import annotations
+
+# System imports
+from collections.abc import Callable
+from typing import Any
+
 # Third-party imports
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import FuzzyCompleter
@@ -39,9 +45,16 @@ class CommandGroup:
     templating, ``arg_opts`` autocomplete — work inside a group too.
     """
 
-    def __init__(self, name, description, parent_app, prompt=None, path=None):
-        self.name = name
-        self.description = description
+    def __init__(
+        self,
+        name: str,
+        description: str | None,
+        parent_app: Any,
+        prompt: str | None = None,
+        path: str | None = None,
+    ) -> None:
+        self.name: str = name
+        self.description: str | None = description
         # Always store a reference to the root _VulcanoApp so nested groups
         # share the same theme, context, suggestions, and print_result.
         self._app = (
@@ -49,21 +62,21 @@ class CommandGroup:
         )
         # Full prompt string (e.g. "\U0001f30b  text > subtopic > ").
         # None means compute lazily from the root app's prompt in __call__.
-        self._prompt = prompt
+        self._prompt: str | None = prompt
         # Dot-path from root, e.g. "text" or "text.formal".  Used for
         # resolving relative dot-path commands inside this group's sub-REPL.
-        self._path = path or name
-        self.manager = Magma()
-        self.do_repl = False
+        self._path: str = path or name
+        self.manager: Magma = Magma()
+        self.do_repl: bool = False
 
-        def _exit_group():
+        def _exit_group() -> None:
             """Exit this command group and return to the parent."""
             self.do_repl = False
 
         self.manager.register_command(_exit_group, "exit")
         self.manager.register_command(builtin.help(self), "help")
 
-    def command(self, *args, **kwargs):
+    def command(self, *args: Any, **kwargs: Any) -> Callable[..., Any]:
         """Register a command within this group.
 
         Accepts the same arguments as :meth:`VulcanoApp.command`,
@@ -71,14 +84,14 @@ class CommandGroup:
         """
         return self.manager.command(*args, **kwargs)
 
-    def _build_prompt(self):
+    def _build_prompt(self) -> str:
         """Return the full prompt string for this group's sub-REPL."""
         if self._prompt is not None:
             return self._prompt
         base = self._app.prompt if isinstance(self._app.prompt, str) else "🌋  "
         return "{}{} > ".format(base, self.name)
 
-    def group(self, name, description=None):
+    def group(self, name: str, description: str | None = None) -> CommandGroup:
         """Create and register a nested command group within this group.
 
         The resulting sub-REPL prompt chains all ancestor names so the
@@ -108,7 +121,7 @@ class CommandGroup:
         return child
 
     @property
-    def _flat_commands(self):
+    def _flat_commands(self) -> dict[str, Any]:
         """Return ``{relative.path: Command}`` for all sub-group commands.
 
         Paths are relative to this group — e.g. inside the ``text`` group,
@@ -125,7 +138,7 @@ class CommandGroup:
                     result["{}.{}".format(rel_path, cmd_name)] = cmd
         return result
 
-    def _resolve_dot_command(self, command_name):
+    def _resolve_dot_command(self, command_name: str) -> tuple[Magma, str]:
         """Resolve a relative dot-path (e.g. ``formal.dear``) to ``(manager, name)``.
 
         The group segment is resolved against this group's path in the root
@@ -139,7 +152,7 @@ class CommandGroup:
             return self._app._groups[full_group_path].manager, simple_name
         return self.manager, command_name  # will raise CommandNotFound
 
-    def __call__(self):
+    def __call__(self) -> None:
         """Enter the nested sub-REPL for this command group."""
         self.do_repl = True
         group_prompt = self._build_prompt()
