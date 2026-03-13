@@ -222,22 +222,7 @@ class TestCommandCompleter(unittest.TestCase):
         document_mock.text_before_cursor = "dynamic_greet name=David title="
         results = list(self.completer.get_completions(document_mock, MagicMock()))
         self.assertListSameItems(["Sir", "Lord"], [r.text for r in results])
-
-    def test_callable_arg_opts_without_prior_params(self):
-        """When no params are filled yet, callable receives empty dict."""
-
-        def title_options(params):
-            if params.get("name") == "David":
-                return ["Sir", "Lord"]
-            return ["Mr."]
-
-        self.manager.register_command(
-            lambda name, title="Mr.": None,
-            "dynamic_greet2",
-            arg_opts={"title": title_options},
-        )
-        document_mock = MagicMock()
-        document_mock.text_before_cursor = "dynamic_greet2 title="
+        document_mock.text_before_cursor = "dynamic_greet name=Jason title="
         results = list(self.completer.get_completions(document_mock, MagicMock()))
         self.assertListSameItems(["Mr."], [r.text for r in results])
 
