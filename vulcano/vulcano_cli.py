@@ -18,7 +18,7 @@ APP = VulcanoApp()
 
 
 @APP.command
-def new():
+def new() -> str | None:
     """Create a new CLI project from the official cookiecutter template."""
     if not CK_SUPPORT:
         return """
@@ -34,12 +34,12 @@ And restart the command line.
 
 
 @APP.command
-def version():
+def version() -> str:
     """Return the installed Vulcano version."""
     return vulcano_version
 
 
-def main():
+def main() -> None:
     """Run Vulcano's own CLI application."""
     if not APP.request_is_for_args:
         print(r"""

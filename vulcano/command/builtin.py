@@ -1,6 +1,9 @@
 """Built-in commands automatically registered by Vulcano."""
 
 # System imports
+from collections.abc import Callable
+from typing import Any
+
 # Third-party imports
 from rich import box
 from rich.console import Console
@@ -13,7 +16,7 @@ console = Console()
 __all__ = ["help", "exit"]
 
 
-def help(app):
+def help(app: Any) -> Callable[..., None]:
     """Create the built-in `help` command bound to an app instance.
 
     Args:
@@ -23,7 +26,7 @@ def help(app):
         callable: Command function printing global or per-command help.
     """
 
-    def real_help(command=None):
+    def real_help(command: str | None = None) -> None:
         """Print global help or details for a specific command.
 
         Args:
@@ -56,7 +59,7 @@ def help(app):
     return real_help
 
 
-def exit(app):
+def exit(app: Any) -> Callable[[], None]:
     """Create the built-in `exit` command bound to an app instance.
 
     Args:
@@ -66,7 +69,7 @@ def exit(app):
         callable: Command function that stops the REPL loop.
     """
 
-    def _exit():
+    def _exit() -> None:
         """Exit the interactive REPL session."""
         console.print("👋  See you soon!")
         app.do_repl = False

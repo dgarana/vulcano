@@ -2,6 +2,7 @@
 
 # System imports
 import re
+from typing import Any
 
 from prompt_toolkit.styles import style_from_pygments_dict
 from pygments.lexer import RegexLexer
@@ -36,10 +37,10 @@ __all__ = [
 class VulcanoStyle(Style):
     """Base style class for Vulcano themes."""
 
-    styles = {}
+    styles: dict[Any, str] = {}
 
     @classmethod
-    def pygments_style(cls):
+    def pygments_style(cls) -> Any:
         """Return a prompt-toolkit style object from pygments style mapping."""
         return style_from_pygments_dict(cls.styles)
 
@@ -154,7 +155,7 @@ class VulcanoLexer(RegexLexer):
 _BASE_ROOT_TOKENS = list(VulcanoLexer.tokens["root"])
 
 
-def create_lexer(commands=None):
+def create_lexer(commands: list[str] | None = None) -> type[VulcanoLexer]:
     """Return a fresh lexer subclass enriched with registered command keywords.
 
     A new subclass is created on every call so that Pygments' metaclass

@@ -1,10 +1,15 @@
 """Core application objects and execution flow for Vulcano."""
 
+from __future__ import annotations
+
 import os
 
 # System imports
 import sys
+from collections.abc import Callable
 from difflib import SequenceMatcher
+from pathlib import Path
+from typing import Any
 
 # Third-party imports
 from prompt_toolkit import PromptSession
@@ -25,19 +30,19 @@ from .lexer import MonokaiTheme, create_lexer
 __all__ = ["VulcanoApp"]
 
 
-def rq_is_for_repl(app):
+def rq_is_for_repl(app: _VulcanoApp) -> Callable[[], bool]:
     """Return a lazy predicate indicating REPL visibility context."""
 
-    def _func():
+    def _func() -> bool:
         return not app.request_is_for_args
 
     return _func
 
 
-def did_you_mean(command, possible_commands):
+def did_you_mean(command: str, possible_commands: list[str]) -> str | None:
     """Return best fuzzy-matched command suggestion."""
-    suggested_command = None
-    ratio = 0
+    suggested_command: str | None = None
+    ratio: float = 0
     for possible_command in possible_commands:
         possible_ratio = SequenceMatcher(None, command, possible_command).ratio()
         if possible_ratio > ratio:
@@ -51,7 +56,9 @@ class VulcanoApp(object):
 
     __instances__ = {}
 
-    def __new__(cls, app_name="vulcano_default", prompt="🌋  "):
+    def __new__(
+        cls, app_name: str = "vulcano_default", prompt: str = "🌋  "
+    ) -> _VulcanoApp:
         if app_name in cls.__instances__:
             return cls.__instances__.get(app_name)
         new_app = _VulcanoApp(app_name, prompt)
@@ -62,20 +69,20 @@ class VulcanoApp(object):
 class _VulcanoApp(object):
     """Concrete app implementation with registration and execution state."""
 
-    def __init__(self, app_name, prompt):
-        self.app_name = app_name
-        self.manager = Magma()  # type: Magma
-        self.context = {}  # Type: dict
-        self.print_result = True
-        self.theme = None
-        self.suggestions = None
-        self.prompt = prompt  # Type: string or func
+    def __init__(self, app_name: str, prompt: str) -> None:
+        self.app_name: str = app_name
+        self.manager: Magma = Magma()
+        self.context: dict[str, Any] = {}
+        self.print_result: bool = True
+        self.theme: Any = None
+        self.suggestions: Callable[[str, list[str]], str | None] | None = None
+        self.prompt: str = prompt
         # Flat registry of all CommandGroup objects keyed by their full
         # dot-path (e.g. {"text": grp, "text.formal": formal_grp}).
-        self._groups = {}  # type: dict
+        self._groups: dict[str, Any] = {}
 
     @property
-    def request_is_for_args(self):
+    def request_is_for_args(self) -> bool:
         """Return whether execution should run from CLI args.
 
         Returns:
@@ -83,11 +90,11 @@ class _VulcanoApp(object):
         """
         return len(sys.argv) >= 2
 
-    def command(self, *args, **kwargs):
+    def command(self, *args: Any, **kwargs: Any) -> Callable[..., Any]:
         """Register a command via decorator in the current app instance."""
         return self.manager.command(*args, **kwargs)
 
-    def group(self, name, description=None):
+    def group(self, name: str, description: str | None = None) -> Any:
         """Create and register a named command group.
 
         Returns a :class:`CommandGroup` whose ``.command()`` decorator
@@ -115,7 +122,7 @@ class _VulcanoApp(object):
         return grp
 
     @property
-    def _flat_commands(self):
+    def _flat_commands(self) -> dict[str, Any]:
         """Return ``{dot.path: Command}`` for every command in every group.
 
         Includes commands in nested sub-groups, e.g. ``"text.formal.dear"``.
@@ -128,7 +135,7 @@ class _VulcanoApp(object):
                     result["{}.{}".format(group_path, cmd_name)] = cmd
         return result
 
-    def _resolve_dot_command(self, command_name):
+    def _resolve_dot_command(self, command_name: str) -> tuple[Magma, str]:
         """Resolve ``group.subgroup.command`` to ``(manager, simple_name)``.
 
         Returns the root manager unchanged when the path cannot be resolved
@@ -141,7 +148,7 @@ class _VulcanoApp(object):
             return self._groups[group_path].manager, simple_name
         return self.manager, command_name
 
-    def module(self, module):
+    def module(self, module: str | Any) -> None:
         """Register all public functions from a module.
 
         Args:
@@ -151,11 +158,11 @@ class _VulcanoApp(object):
 
     def run(
         self,
-        theme=MonokaiTheme,
-        print_result=True,
-        history_file=None,
-        suggestions=did_you_mean,
-    ):
+        theme: Any = MonokaiTheme,
+        print_result: bool = True,
+        history_file: str | Path | None = None,
+        suggestions: Callable[[str, list[str]], str | None] | None = did_you_mean,
+    ) -> None:
         """Run the app in argument mode or interactive REPL mode.
 
         Args:
@@ -174,7 +181,7 @@ class _VulcanoApp(object):
         else:
             self._exec_from_repl(theme=theme, history_file=history_file)
 
-    def _prepare_builtins(self):
+    def _prepare_builtins(self) -> None:
         """Register built-in commands."""
         self.manager.register_command(
             builtin.exit(self), "exit", show_if=rq_is_for_repl(self)
@@ -182,7 +189,7 @@ class _VulcanoApp(object):
         self.manager.register_command(builtin.help(self), "help")
 
     @staticmethod
-    def _quote_if_spaced(value):
+    def _quote_if_spaced(value: Any) -> str:
         """Wrap a value in double quotes if it contains spaces.
 
         Args:
@@ -195,7 +202,7 @@ class _VulcanoApp(object):
             return '"{}"'.format(str(value).replace('"', '\\"'))
         return value
 
-    def _exec_from_args(self):
+    def _exec_from_args(self) -> None:
         """Execute one or more commands provided in CLI argument mode."""
         # Re-quote argv tokens that contain spaces so that multi-word shell
         # arguments (e.g. "Hello world") survive the join→split round-trip.
@@ -234,7 +241,9 @@ class _VulcanoApp(object):
                     if possible_command:
                         print('💡  Did you mean: "{}"?'.format(possible_command))
 
-    def _exec_from_repl(self, theme=MonokaiTheme, history_file=None):
+    def _exec_from_repl(
+        self, theme: Any = MonokaiTheme, history_file: str | Path | None = None
+    ) -> None:
         """Execute the interactive REPL loop."""
         session_extra_options = {}
         if history_file:
@@ -289,7 +298,7 @@ class _VulcanoApp(object):
             except Exception as error:
                 print("💥  Error executing '{}': {}".format(command, error))
 
-    def _execute_command(self, command_name, *args, **kwargs):
+    def _execute_command(self, command_name: str, *args: Any, **kwargs: Any) -> Any:
         """Execute a command and persist result in shared context.
 
         Supports dot-path commands like ``text.formal.dear`` by resolving

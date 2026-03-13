@@ -160,7 +160,8 @@ class MyTestCase(unittest.TestCase):
 
     def test_callable_arg_opts_receives_empty_dict_when_no_params(self):
         def options(params):
-            assert isinstance(params, dict)
+            if not isinstance(params, dict):
+                raise TypeError("params must be a dict")
             return ["default"]
 
         command = models.Command(

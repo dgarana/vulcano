@@ -1,15 +1,26 @@
 """Autocomplete logic for Vulcano REPL commands and arguments."""
 
 # System imports
+from collections.abc import Iterator
+
 # Third-party imports
-from prompt_toolkit.completion import Completer, Completion
+from prompt_toolkit.completion import CompleteEvent, Completer, Completion
+from prompt_toolkit.document import Document
 
 # Local imports
 from vulcano.exceptions import CommandNotFound
 
+from .classes import Magma
+from .models import Command
+
 
 class CommandCompleter(Completer):
-    def __init__(self, manager, ignore_case=True, flat_commands=None):
+    def __init__(
+        self,
+        manager: Magma,
+        ignore_case: bool = True,
+        flat_commands: dict[str, Command] | None = None,
+    ) -> None:
         """Initialize command completion behavior.
 
         Args:
@@ -21,11 +32,13 @@ class CommandCompleter(Completer):
                 provided, these are offered as additional completions and
                 used for argument / arg-value lookup.
         """
-        self.manager = manager
-        self.ignore_case = ignore_case
-        self.flat_commands = flat_commands or {}
+        self.manager: Magma = manager
+        self.ignore_case: bool = ignore_case
+        self.flat_commands: dict[str, Command] = flat_commands or {}
 
-    def get_completions(self, document, complete_event):
+    def get_completions(
+        self, document: Document, complete_event: CompleteEvent
+    ) -> Iterator[Completion]:
         """Yield completion candidates for the current cursor context."""
         original_text = str(document.text_before_cursor)
         text_before_cursor = original_text
@@ -59,7 +72,9 @@ class CommandCompleter(Completer):
                         completion, -len(last_words), display_meta=meta or ""
                     )
 
-    def __get_arg_value_completions(self, text_arr, original_text_arr=None):
+    def __get_arg_value_completions(
+        self, text_arr: list[str], original_text_arr: list[str] | None = None
+    ) -> list[tuple[str, str]]:
         """Return value completion candidates for an arg=value context.
 
         Args:
@@ -103,7 +118,7 @@ class CommandCompleter(Completer):
             if (opt.lower() if self.ignore_case else opt).startswith(partial_value)
         ]
 
-    def __get_current_completions(self, text_arr):
+    def __get_current_completions(self, text_arr: list[str]) -> list[tuple[str, str]]:
         """Return command or argument completion items for current tokens."""
         if len(text_arr) >= 1:
             command = text_arr[0]

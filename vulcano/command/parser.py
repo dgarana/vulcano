@@ -2,6 +2,8 @@
 
 # System imports
 import re
+from collections.abc import Callable
+from typing import Any
 
 # Third-party imports
 import pyparsing as pp
@@ -15,22 +17,22 @@ __all__ = ["inline_parser", "split_list_by_arg"]
 allowed_symbols_in_string = r"-_/#@£$€%*+~|<>?.:"
 
 
-def _no_transform(x):
+def _no_transform(x: Any) -> Any:
     """Return input unchanged."""
     return x
 
 
-def _bool_transform(x):
+def _bool_transform(x: str) -> bool:
     """Parse booleans from textual values."""
     return x in ["True", "true"]
 
 
-def _str_transform(x):
+def _str_transform(x: str) -> str:
     """Strip surrounding quotes from string values."""
     return x.strip("\"'")
 
 
-_TRANSFORMS = {
+_TRANSFORMS: dict[str, Callable[..., Any]] = {
     "bool": _bool_transform,
     "str": _str_transform,
     "int": int,
@@ -39,11 +41,11 @@ _TRANSFORMS = {
 }
 
 
-def _parse_type(datatype):
+def _parse_type(datatype: str) -> Callable[[str, int, pp.ParseResults], list[Any]]:
     """Create a pyparsing parse action for a target datatype."""
     transform = _TRANSFORMS.get(datatype, _no_transform)
 
-    def _parse(s, loc, toks):
+    def _parse(s: str, loc: int, toks: pp.ParseResults) -> list[Any]:
         return list(map(transform, toks))
 
     return _parse
@@ -102,7 +104,7 @@ subcommand = identifier.set_results_name("__subcommand__")
 command = positionals + key_value
 
 
-def inline_parser(text):
+def inline_parser(text: str) -> tuple[list[Any], dict[str, Any]]:
     """Parse inline command text into positional and keyword arguments.
 
     Args:
@@ -135,7 +137,7 @@ def inline_parser(text):
 _SPLIT_TOKEN_ = "___SPLIT_TOKEN___"  # nosec B105
 
 
-def split_list_by_arg(lst, separator):
+def split_list_by_arg(lst: list[str], separator: str) -> list[str]:
     """Split a token list into command chunks by separator word.
 
     Args:
@@ -146,7 +148,7 @@ def split_list_by_arg(lst, separator):
         list[str]: Command chunks preserving quoted separator usage.
     """
 
-    def _what_to_return(match):
+    def _what_to_return(match: re.Match[str]) -> str:
         if match.group(1):
             return match.group(1)
         if match.group(2):

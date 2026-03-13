@@ -14,7 +14,9 @@ from docstring_parser import parse as _parse_docstring
 __all__ = ["multi_doc_parser"]
 
 
-def multi_doc_parser(docstring):
+def multi_doc_parser(
+    docstring: str | None,
+) -> tuple[str | None, str | None, dict[str, dict[str, str | None]], str | None]:
     """Parse a docstring written in any common convention.
 
     Supports Google, NumPy, Sphinx/reStructuredText, and Epytext styles.
