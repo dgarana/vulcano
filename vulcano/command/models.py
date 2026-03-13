@@ -27,7 +27,9 @@ class Command(object):
         description (str | None): Optional short description override.
         show_if (bool | callable): Visibility rule for help/completion.
         arg_opts (dict | None): Mapping of argument name to a list of
-            predefined values offered as autocomplete options.
+            predefined values offered as autocomplete options, or a
+            callable that receives a dict of already-filled parameter
+            values and returns a list of options dynamically.
     """
 
     def __init__(self, func, name=None, description=None, show_if=True, arg_opts=None):
@@ -135,16 +137,28 @@ class Command(object):
         """Return tuple used by prompt_toolkit for command completion."""
         return ("{}".format(self.name), "{}".format(self.short_description or ""))
 
-    def get_arg_value_completions(self, arg_name):
-        """Return predefined value options for the given argument name.
+    def get_arg_value_completions(self, arg_name, filled_params=None):
+        """Return value options for the given argument name.
+
+        When the registered option is a callable, it is invoked with a
+        dictionary of already-filled parameter values so that the
+        available choices can depend on prior user input.
 
         Args:
             arg_name (str): Name of the argument to look up.
+            filled_params (dict | None): Already-filled argument values
+                from the current input line.  Passed to callable options.
 
         Returns:
-            list: Predefined option values, or an empty list if none defined.
+            list: Option values, or an empty list if none defined.
         """
-        return self.arg_opts.get(arg_name, [])
+        opts = self.arg_opts.get(arg_name, [])
+        if callable(opts):
+            try:
+                return opts(filled_params or {})
+            except Exception:
+                return []
+        return opts
 
     @cached_property
     def args_completion(self):
@@ -153,7 +167,9 @@ class Command(object):
         for arg in self.args:
             description = "{}".format(arg.description)
             options = self.arg_opts.get(arg.name, [])
-            if options:
+            if callable(options):
+                description = "{} [dynamic options]".format(description)
+            elif options:
                 opts_hint = "options: {}".format(", ".join(str(o) for o in options))
                 description = "{} [{}]".format(description, opts_hint)
             result.append(("{}".format(arg.name), description))

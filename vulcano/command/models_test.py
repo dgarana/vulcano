@@ -141,6 +141,51 @@ class MyTestCase(unittest.TestCase):
         self.assertIn("admin", completions["role"])
         self.assertIn("user", completions["role"])
 
+    def test_callable_arg_opts_returns_dynamic_values(self):
+        def title_options(params):
+            if params.get("name") == "David":
+                return ["Sir", "Lord"]
+            return ["Mr."]
+
+        command = models.Command(
+            lambda name, title="Mr.": None,
+            "greet",
+            arg_opts={"title": title_options},
+        )
+        self.assertEqual(command.get_arg_value_completions("title", {}), ["Mr."])
+        self.assertEqual(
+            command.get_arg_value_completions("title", {"name": "David"}),
+            ["Sir", "Lord"],
+        )
+
+    def test_callable_arg_opts_receives_empty_dict_when_no_params(self):
+        def options(params):
+            assert isinstance(params, dict)
+            return ["default"]
+
+        command = models.Command(
+            lambda role="user": None, "cmd", arg_opts={"role": options}
+        )
+        self.assertEqual(command.get_arg_value_completions("role"), ["default"])
+
+    def test_callable_arg_opts_returns_empty_on_exception(self):
+        def bad_options(params):
+            raise ValueError("boom")
+
+        command = models.Command(
+            lambda role="user": None, "cmd", arg_opts={"role": bad_options}
+        )
+        self.assertEqual(command.get_arg_value_completions("role"), [])
+
+    def test_args_completion_shows_dynamic_hint_for_callable(self):
+        command = models.Command(
+            lambda name, title="Mr.": None,
+            "greet",
+            arg_opts={"title": lambda params: ["Mr."]},
+        )
+        completions = dict(command.args_completion)
+        self.assertIn("dynamic options", completions["title"])
+
 
 if __name__ == "__main__":  # pragma: no cover
     unittest.main()

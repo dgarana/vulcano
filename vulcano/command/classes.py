@@ -60,7 +60,9 @@ class Magma(object):
             description (str | None): Optional command description.
             show_if (bool | callable): Visibility rule.
             arg_opts (dict | None): Mapping of argument name to a list of
-                predefined values offered as autocomplete options.
+                predefined values or a callable that receives a dict of
+                already-filled parameter values and returns a list of
+                options dynamically.
 
         Returns:
             callable: Decorator or wrapped function.
@@ -99,7 +101,9 @@ class Magma(object):
             description (str | None): Optional command description.
             show_if (bool | callable): Visibility rule.
             arg_opts (dict | None): Mapping of argument name to a list of
-                predefined values offered as autocomplete options.
+                predefined values or a callable that receives a dict of
+                already-filled parameter values and returns a list of
+                options dynamically.
 
         Raises:
             NameError: If a command with the same name already exists.

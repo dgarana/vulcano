@@ -79,7 +79,17 @@ def random_upper_word(word):
     return "".join(random.choice([letter.upper(), letter]) for letter in word)
 
 
-@text.command("greet", "Greet someone by role", arg_opts={"role": ["power admin", "user", "guest"]})
+def greet_admin(params):
+    """ Returns the arg options based on previous parameters
+
+    :param dict params: Parameters passed to the command
+    """
+    if params.get("name", "").lower() == "admin":
+        return ["SuperUser"]
+    return ["user", "guest"]
+
+
+@text.command("greet", "Greet someone by role", arg_opts={"role": greet_admin})
 def greet_by_role(name, role="user"):
     """Greet someone and mention their role.
 

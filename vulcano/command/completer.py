@@ -27,15 +27,19 @@ class CommandCompleter(Completer):
 
     def get_completions(self, document, complete_event):
         """Yield completion candidates for the current cursor context."""
-        text_before_cursor = str(document.text_before_cursor)
+        original_text = str(document.text_before_cursor)
+        text_before_cursor = original_text
         if self.ignore_case:
             text_before_cursor = text_before_cursor.lower()
         text_arr = text_before_cursor.split(" ")
+        original_text_arr = original_text.split(" ")
         last_words = text_arr[-1]
 
         if "=" in last_words:
             partial_value = last_words.split("=", 1)[1]
-            for value, meta in self.__get_arg_value_completions(text_arr):
+            for value, meta in self.__get_arg_value_completions(
+                text_arr, original_text_arr
+            ):
                 yield Completion(value, -len(partial_value), display_meta=meta or "")
         elif "." in last_words:
             # User is typing a dot-path command (e.g. "text." or "text.hi").
@@ -55,13 +59,16 @@ class CommandCompleter(Completer):
                         completion, -len(last_words), display_meta=meta or ""
                     )
 
-    def __get_arg_value_completions(self, text_arr):
+    def __get_arg_value_completions(self, text_arr, original_text_arr=None):
         """Return value completion candidates for an arg=value context.
 
         Args:
             text_arr (list[str]): Lowercased tokens from the current input,
                 where ``text_arr[0]`` is the command name and
                 ``text_arr[-1]`` is the ``arg=partial_value`` token.
+            original_text_arr (list[str] | None): Original-case tokens.
+                Used to build the *filled_params* dict passed to callable
+                ``arg_opts`` so that user-supplied values preserve casing.
 
         Returns:
             list[tuple[str, str]]: ``(value, meta)`` pairs for matching options.
@@ -77,7 +84,19 @@ class CommandCompleter(Completer):
             command_obj = self.flat_commands.get(command_name)
         if not command_obj:
             return []
-        options = command_obj.get_arg_value_completions(arg_name)
+
+        # Build a dict of already-filled params from tokens preceding the
+        # current one.  Use the original (non-lowercased) tokens when
+        # available so that values preserve their casing.
+        filled_params = {}
+        source_arr = original_text_arr or text_arr
+        for token in source_arr[1:-1]:  # skip command name and current token
+            if "=" in token:
+                key, _, value = token.partition("=")
+                if value:
+                    filled_params[key] = value.strip("\"'")
+
+        options = command_obj.get_arg_value_completions(arg_name, filled_params)
         return [
             ('"{}"'.format(opt) if " " in opt else opt, "")
             for opt in options
