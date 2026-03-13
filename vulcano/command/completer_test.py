@@ -204,3 +204,57 @@ class TestCommandCompleter(unittest.TestCase):
         complete_event = MagicMock()
         results = list(completer.get_completions(document_mock, complete_event))
         self.assertListSameItems(["admin", "guest"], [r.text for r in results])
+
+    def test_callable_arg_opts_are_invoked_during_completion(self):
+        """A callable arg_opt should be called and its return value used."""
+
+        def title_options(params):
+            if params.get("name") == "David":
+                return ["Sir", "Lord"]
+            return ["Mr."]
+
+        self.manager.register_command(
+            lambda name, title="Mr.": None,
+            "dynamic_greet",
+            arg_opts={"title": title_options},
+        )
+        document_mock = MagicMock()
+        document_mock.text_before_cursor = "dynamic_greet name=David title="
+        results = list(self.completer.get_completions(document_mock, MagicMock()))
+        self.assertListSameItems(["Sir", "Lord"], [r.text for r in results])
+
+    def test_callable_arg_opts_without_prior_params(self):
+        """When no params are filled yet, callable receives empty dict."""
+
+        def title_options(params):
+            if params.get("name") == "David":
+                return ["Sir", "Lord"]
+            return ["Mr."]
+
+        self.manager.register_command(
+            lambda name, title="Mr.": None,
+            "dynamic_greet2",
+            arg_opts={"title": title_options},
+        )
+        document_mock = MagicMock()
+        document_mock.text_before_cursor = "dynamic_greet2 title="
+        results = list(self.completer.get_completions(document_mock, MagicMock()))
+        self.assertListSameItems(["Mr."], [r.text for r in results])
+
+    def test_callable_arg_opts_preserves_original_case_in_params(self):
+        """filled_params should contain original-case values, not lowercased."""
+        received = {}
+
+        def spy_options(params):
+            received.update(params)
+            return ["ok"]
+
+        self.manager.register_command(
+            lambda name, tag="x": None,
+            "case_cmd",
+            arg_opts={"tag": spy_options},
+        )
+        document_mock = MagicMock()
+        document_mock.text_before_cursor = "case_cmd name=Alice tag="
+        list(self.completer.get_completions(document_mock, MagicMock()))
+        self.assertEqual(received.get("name"), "Alice")
