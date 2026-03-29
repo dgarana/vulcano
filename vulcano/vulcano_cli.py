@@ -53,5 +53,5 @@ __   ___   _| | ___ __ _ _ __   ___
     APP.run()
 
 
-if __name__ == "__name__":
+if __name__ == "__main__":
     main()

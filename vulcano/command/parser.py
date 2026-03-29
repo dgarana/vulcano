@@ -134,7 +134,7 @@ def inline_parser(text: str) -> tuple[list[Any], dict[str, Any]]:
         raise exception
 
 
-_SPLIT_TOKEN_ = "___SPLIT_TOKEN___"  # nosec B105
+_SPLIT_TOKEN_ = "___VULCANO_SPLIT_TOKEN___"
 
 
 def split_list_by_arg(lst: list[str], separator: str) -> list[str]:
