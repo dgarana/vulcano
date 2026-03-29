@@ -77,6 +77,10 @@ class _VulcanoApp(object):
         self.theme: Any = None
         self.suggestions: Callable[[str, list[str]], str | None] | None = None
         self.prompt: str = prompt
+        # Disabled by default to avoid surprising interpolation effects when
+        # user input contains braces or when context values should not be
+        # expanded implicitly.
+        self.enable_context_formatting: bool = False
         # Flat registry of all CommandGroup objects keyed by their full
         # dot-path (e.g. {"text": grp, "text.formal": formal_grp}).
         self._groups: dict[str, Any] = {}
@@ -214,15 +218,16 @@ class _VulcanoApp(object):
             command_list = command.split()
             command_name = command_list[0]
             arguments = " ".join(command_list[1:])
-            try:
-                # Quote context values that contain spaces so that a substituted
-                # multi-word result is still treated as a single argument.
-                safe_context = {
-                    k: self._quote_if_spaced(v) for k, v in self.context.items()
-                }
-                arguments = arguments.format(**safe_context)
-            except KeyError:
-                pass
+            if self.enable_context_formatting:
+                try:
+                    # Quote context values that contain spaces so that a substituted
+                    # multi-word result is still treated as a single argument.
+                    safe_context = {
+                        k: self._quote_if_spaced(v) for k, v in self.context.items()
+                    }
+                    arguments = arguments.format(**safe_context)
+                except KeyError:
+                    pass
             try:
                 args, kwargs = inline_parser(arguments)
             except CommandParseError as error:
@@ -283,10 +288,11 @@ class _VulcanoApp(object):
                     command_parts = command_str.split()
                     command = command_parts[0]
                     arguments = " ".join(command_parts[1:])
-                    try:
-                        arguments = arguments.format(**self.context)
-                    except KeyError:
-                        pass
+                    if self.enable_context_formatting:
+                        try:
+                            arguments = arguments.format(**self.context)
+                        except KeyError:
+                            pass
                     args, kwargs = inline_parser(arguments)
                     self._execute_command(command, *args, **kwargs)
             except CommandNotFound:
