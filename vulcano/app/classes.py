@@ -77,10 +77,9 @@ class _VulcanoApp(object):
         self.theme: Any = None
         self.suggestions: Callable[[str, list[str]], str | None] | None = None
         self.prompt: str = prompt
-        # Disabled by default to avoid surprising interpolation effects when
-        # user input contains braces or when context values should not be
-        # expanded implicitly.
-        self.enable_context_formatting: bool = False
+        # Enabled by default for backward compatibility with existing
+        # command chaining/context-substitution behavior.
+        self.enable_context_formatting: bool = True
         # Flat registry of all CommandGroup objects keyed by their full
         # dot-path (e.g. {"text": grp, "text.formal": formal_grp}).
         self._groups: dict[str, Any] = {}
