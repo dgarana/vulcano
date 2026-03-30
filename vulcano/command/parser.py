@@ -64,9 +64,9 @@ bool_value = (
 # may have spaces
 quoted_string = pp.quotedString.copy().set_parse_action(_parse_type("str"))
 # cannot have spaces
-unquoted_string = pp.Word(pp.alphanums + allowed_symbols_in_string).set_parse_action(
-    _parse_type("str")
-)
+unquoted_string = pp.Word(
+    pp.alphanums + allowed_symbols_in_string + "{}"
+).set_parse_action(_parse_type("str"))
 
 string_value = quoted_string | unquoted_string
 
@@ -134,7 +134,7 @@ def inline_parser(text: str) -> tuple[list[Any], dict[str, Any]]:
         raise exception
 
 
-_SPLIT_TOKEN_ = "___VULCANO_SPLIT_TOKEN___"
+_SPLIT_MARKER_ = "___VULCANO_SPLIT_MARKER___"  # nosec B105
 
 
 def split_list_by_arg(lst: list[str], separator: str) -> list[str]:
@@ -153,9 +153,9 @@ def split_list_by_arg(lst: list[str], separator: str) -> list[str]:
             return match.group(1)
         if match.group(2):
             return match.group(2)
-        return _SPLIT_TOKEN_
+        return _SPLIT_MARKER_
 
     commands = " ".join(lst)
     rx = r"(\"[^\"\\]*(?:\\.[^'\\]*)*\")|('[^'\\]*(?:\\.[^'\\]*)*')|\b{0}\b"
     res = re.sub(rx.format(separator), _what_to_return, commands)
-    return [command.strip() for command in res.split(_SPLIT_TOKEN_)]
+    return [command.strip() for command in res.split(_SPLIT_MARKER_)]
