@@ -28,6 +28,8 @@ jobs:
           # GITHUB_TOKEN pushes are intentionally blocked from triggering
           # other workflows (GitHub security restriction).
           token: ${{ secrets.RELEASE_PAT }}
+          # Fetch full history so changelog generation has access to all tags and commits
+          fetch-depth: 0
 
       - name: Bump version
         id: bump
