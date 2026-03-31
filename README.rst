@@ -546,6 +546,23 @@ Run ``make help`` (or just ``make``) to see the full list of targets:
     make all        # Format, check, and test in one step
 
 
+Project workflow
+----------------
+
+Vulcano is maintained as a community-driven project, but its day-to-day
+implementation work can be significantly accelerated by AI-assisted
+automation. In practice, community members propose ideas, fixes, and
+improvements through GitHub issues, and an automated AI workflow can
+review those requests, prepare changes, and open pull requests for
+human review.
+
+This does not change the core purpose of the repository: Vulcano remains
+a framework for building Python command-line utilities by reusing
+existing Python functions and exposing them through a simpler command
+interface. AI-assisted contributions should remain aligned with that
+goal and operate within the repository rules documented in `AGENTS.md`
+when present.
+
 Contributing
 ------------
 
