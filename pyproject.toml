@@ -55,6 +55,41 @@ version = {attr = "vulcano.__version__"}
 [tool.setuptools.packages.find]
 exclude = ["contrib*", "docs*", "tests*", "examples*"]
 
+[tool.git-cliff.changelog]
+header = "# CHANGELOG\n\n_Generated from repository tags and commit history._\n"
+body = """
+{% if version %}\
+## {{ version }}
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group | upper_first }}
+{% for commit in commits %}
+- {{ commit.message | upper_first }} ([{{ commit.id | truncate(length=7, end="") }}](https://github.com/dgarana/vulcano/commit/{{ commit.id }})){% endfor %}
+{% endfor %}
+{% endif %}\
+"""
+footer = ""
+trim = true
+
+[tool.git-cliff.git]
+conventional_commits = true
+filter_unconventional = false
+commit_parsers = [
+  { message = "^feat", group = "Features" },
+  { message = "^fix", group = "Bug Fixes" },
+  { message = "^doc", group = "Documentation" },
+  { message = "^perf", group = "Performance" },
+  { message = "^refactor", group = "Refactor" },
+  { message = "^test", group = "Testing" },
+  { message = "^chore\\(release\\)", skip = true },
+  { message = "^chore", group = "Miscellaneous" },
+  { message = ".*", group = "Other", default_scope = "other" },
+]
+sort_commits = "oldest"
+
+[tool.git-cliff.remote.github]
+owner = "dgarana"
+repo = "vulcano"
+
 [dependency-groups]
 test = [
     "pytest",
