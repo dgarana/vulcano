@@ -189,10 +189,11 @@ class CommandGroup:
                     command_parts = command_str.split()
                     command = command_parts[0]
                     arguments = " ".join(command_parts[1:])
-                    try:
-                        arguments = arguments.format(**self._app.context)
-                    except KeyError:
-                        pass
+                    if self._app.enable_context_formatting:
+                        try:
+                            arguments = arguments.format(**self._app.context)
+                        except KeyError:
+                            pass
                     args_list, kwargs = inline_parser(arguments)
                     base_cmd = command.rstrip("?")
                     if "." in base_cmd:

@@ -511,10 +511,13 @@ For example:
 This works because inline command parsing accepts placeholder braces and Vulcano
 formats arguments with the current context before execution.
 
-If you want to disable this behavior and treat placeholders literally, set:
+If you want to disable this behavior and treat placeholders literally, you can
+set it either at construction time or afterwards:
 
 .. code:: python
 
+    app = VulcanoApp(enable_context_formatting=False)
+    # or later:
     app.enable_context_formatting = False
 
 When disabled, values such as ``{last_result}`` are passed through as plain text
