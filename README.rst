@@ -495,6 +495,31 @@ A few behaviors are especially useful when you start building non-trivial apps:
 - ``arg_opts`` can be static lists or dynamic callables, which makes it possible
   to offer context-aware suggestions.
 
+Context templating
+~~~~~~~~~~~~~~~~~~
+
+Vulcano stores command results in ``context["last_result"]``. By default, inline
+commands can reference context values using Python-style placeholders such as
+``{last_result}``.
+
+For example:
+
+.. code:: bash
+
+    python simple_example.py reverse_word word=vulcano and random_upper_word word="{last_result}"
+
+This works because inline command parsing accepts placeholder braces and Vulcano
+formats arguments with the current context before execution.
+
+If you want to disable this behavior and treat placeholders literally, set:
+
+.. code:: python
+
+    app.enable_context_formatting = False
+
+When disabled, values such as ``{last_result}`` are passed through as plain text
+instead of being substituted from the context.
+
 For a more realistic reference app, prefer ``examples/simple_example.py`` over
 minimal one-function snippets.
 
