@@ -28,12 +28,3 @@ Before considering a task complete, contributors and AI agents should ensure:
 - there is specific test coverage for the modified or newly introduced behavior
 
 The intent is to avoid changes that work only superficially while leaving documentation, tests, or repository conventions behind.
-
-## Repository workflow
-
-The project is community-maintained, but implementation may be carried
-out by automated AI agents that review GitHub issues, prepare code
-changes, and open pull requests for review. The community defines the
-direction through issues and review, while AI acts as an execution
-layer that accelerates delivery.
-
