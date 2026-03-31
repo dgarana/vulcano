@@ -23,20 +23,20 @@ def commits_for(rev_range: str):
 
 def main():
     tags = [t for t in sh("git", "tag", "--sort=creatordate").splitlines() if t]
+    tags_desc = list(reversed(tags))
     lines = ["# CHANGELOG", "", "_Generated from repository tags and commit history._", ""]
-    if not tags:
+    if not tags_desc:
         lines += ["## Unreleased", "", "- No tags found yet."]
     else:
-        previous = None
-        for tag in tags:
+        for idx, tag in enumerate(tags_desc):
             lines += [f"## {tag}", ""]
-            if previous is None:
+            if idx == len(tags_desc) - 1:
                 commits = commits_for(tag)
             else:
-                commits = commits_for(f"{previous}..{tag}")
+                older_tag = tags_desc[idx + 1]
+                commits = commits_for(f"{older_tag}..{tag}")
             lines += commits or ["- No commit summary available."]
             lines.append("")
-            previous = tag
     Path("CHANGELOG.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 

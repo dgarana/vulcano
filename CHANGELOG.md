@@ -2,240 +2,108 @@
 
 _Generated from repository tags and commit history._
 
-## 0.0.3
+## v2.1.1
 
-- Release version 0.0.3 ([47e2e76](https://github.com/dgarana/vulcano/commit/47e2e76aeadc7c0a40a7b166303c3dcc04d856cf))
-- Add missing VulcanoApp test coverage ([e330ff5](https://github.com/dgarana/vulcano/commit/e330ff57d045e65c80c49947f14c0dde35d76f02))
-- Improve tests argv names ([b1e4bb6](https://github.com/dgarana/vulcano/commit/b1e4bb648672e84492061c2aa92eb1b6ba4988dc))
-- Implement property to define execution request ([11c07e2](https://github.com/dgarana/vulcano/commit/11c07e2edc5fb9bbb5de93eac21dbf8c3eb57ff9))
-- Improve command classes tests ([8fe3b3b](https://github.com/dgarana/vulcano/commit/8fe3b3babbed0d9fd2e81c31cb92564d897846ee))
-- Add pylint support ([331bbcf](https://github.com/dgarana/vulcano/commit/331bbcfdbddeb432a35e48bfac6b59428a96826a))
-- Improve README documentation ([4806228](https://github.com/dgarana/vulcano/commit/48062287d06ab106c8e7ce48198dcd6313e881d6))
-- Implement support for CNTRL+C/D ([0d6e681](https://github.com/dgarana/vulcano/commit/0d6e6817c0ed9f0c447368ee74140a60cb71f504))
-- Enable command history ([5f59b16](https://github.com/dgarana/vulcano/commit/5f59b16e12412d287f81601cdb9c6a368d306ba5))
-- Upgrade to prompt_toolkit 2 ([eb4fbe4](https://github.com/dgarana/vulcano/commit/eb4fbe4e717a7fda8a5a4977edc01e21ec6da803))
-- Remove deprecation warnings ([f130ce5](https://github.com/dgarana/vulcano/commit/f130ce5f3982a36878e773a39e8e782dba255647))
-- Merge pull request #15 from dgarana/refactor/create_builtins ([2bddea3](https://github.com/dgarana/vulcano/commit/2bddea33697ba8c1dff76a9dc23f64bea30e2c0c))
-- Enable REPL and builtin commands ([d1c440e](https://github.com/dgarana/vulcano/commit/d1c440e00aaad2277e4bd6ecf11a96b88e009be7))
-- Update README.md ([062af4d](https://github.com/dgarana/vulcano/commit/062af4d5be7f2a91441a796b3137eea9bca3e70f))
-- Update README.md ([e8e3d95](https://github.com/dgarana/vulcano/commit/e8e3d9536ff4a99fd78d6496d5045726eb8ce53a))
-- Merge pull request #13 from dgarana/refactor/create_app ([c532ca4](https://github.com/dgarana/vulcano/commit/c532ca483ed334dc7248c245ded42fbe2ecc7b89))
-- Add requirements on install setup ([97b3ff2](https://github.com/dgarana/vulcano/commit/97b3ff2a8a3fd4150db5da046dd4be2b93d6c42c))
-- Add parser to parse inline commands ([687ec6c](https://github.com/dgarana/vulcano/commit/687ec6cac1fb04fbd38c97126f367a72f2e7e1b6))
-- Create some examples ([4fe4eb1](https://github.com/dgarana/vulcano/commit/4fe4eb160520b43cdf1c8447acf40b5b88365df7))
-- Move and create app ([7b8bdfd](https://github.com/dgarana/vulcano/commit/7b8bdfd3f7fccf744fb3c7bcf04a1449347ad24c))
-- Fix encoding issues on setup.py ([2b4ba13](https://github.com/dgarana/vulcano/commit/2b4ba1376474f24b906d17fd780eabae41833abe))
-- Remove unused import ([a2b3a05](https://github.com/dgarana/vulcano/commit/a2b3a0577fb5657486bfefa5edb9de0c80c8d26b))
-- Fill information from setup.py ([00b222b](https://github.com/dgarana/vulcano/commit/00b222bc90ba94c2827120e32413ef306b918634))
-- Add more completed gitignore ([0271dfb](https://github.com/dgarana/vulcano/commit/0271dfbc3a6ca71ab9e6e019eef4416dabb8f488))
-- Merge pull request #12 from dgarana/feature/improved_commands ([ff11042](https://github.com/dgarana/vulcano/commit/ff1104286537157d1df7829e068489fa4225e38b))
-- Improve documentation with example ([6d75404](https://github.com/dgarana/vulcano/commit/6d75404c445cb4e7ca125d4b46cf591cf7a96d1c))
-- Merge pull request #11 from dgarana/feature/improved_commands ([a90aa02](https://github.com/dgarana/vulcano/commit/a90aa02a7fa9f2749fcb9e7ca633d85c36eb1f28))
-- Add register decorator ([ff7067c](https://github.com/dgarana/vulcano/commit/ff7067c236b46326997c29ff867a6d15c06e1104))
-- Update README.md ([a9b4e2a](https://github.com/dgarana/vulcano/commit/a9b4e2ac49c0db2693b85dc815390ca43de370c6))
-- Make CI pass again ([42e56d9](https://github.com/dgarana/vulcano/commit/42e56d960736972bf623c05bf385633f8f5aaa66))
-- Update README.md ([c3331c5](https://github.com/dgarana/vulcano/commit/c3331c55786b40c34e8a3d349f8485edd819700a))
-- Make CI Fail ([24d2a84](https://github.com/dgarana/vulcano/commit/24d2a84bfff534ef2dcf79dc58d4da32e34ca17d))
-- Update README.md ([290c682](https://github.com/dgarana/vulcano/commit/290c68250760320489d3755d60bdc371e282714a))
-- Merge pull request #10 from dgarana/enable_autodoc ([030e9c0](https://github.com/dgarana/vulcano/commit/030e9c04acc0920b66e0ff81fa4d3e0c4aac929d))
-- Add sphinx doc build step ([b66d9a5](https://github.com/dgarana/vulcano/commit/b66d9a59418bfbef6a1c1825930653972d8b8316))
-- Merge pull request #9 from dgarana/feature/add-travis-ci-build-name ([a834d61](https://github.com/dgarana/vulcano/commit/a834d6161913b1f54e8786021b7eac20352fff37))
-- Add travis-ci names to builds ([c1a4f84](https://github.com/dgarana/vulcano/commit/c1a4f847af014abc70fd098207f2c2dcd5cadba2))
-- Update README.md ([b793d16](https://github.com/dgarana/vulcano/commit/b793d16253d451e676a562962fb7bdfb79efa22d))
-- Merge pull request #8 from dgarana/feature/add-codecov-support ([0998d08](https://github.com/dgarana/vulcano/commit/0998d08c18a71614703a09d82a279785a72702c7))
-- Add support for codecov ([882b31c](https://github.com/dgarana/vulcano/commit/882b31c1facc17593e3738afbfbcad341505d732))
-- Merge pull request #7 from dgarana/feature/#6-add-pytest-cov ([2d716f7](https://github.com/dgarana/vulcano/commit/2d716f7a9f5d51cff884a38cc1fb55198bc41bca))
-- Add pytest coverage ([013d149](https://github.com/dgarana/vulcano/commit/013d14960b059b6579c1304db5afaeaa37c7e9f7))
-- Add support for other python versions ([1b60085](https://github.com/dgarana/vulcano/commit/1b6008552e356d9290f51648533e77ea5ce4a389))
-- Update README.md ([2abb36f](https://github.com/dgarana/vulcano/commit/2abb36f43d85bd3438f9c7cc2771f1daa6a2affe))
-- Merge pull request #2 from dgarana/feature/#1-Vulcano-App ([db02fd2](https://github.com/dgarana/vulcano/commit/db02fd2cd3b1229c04524ce05d99085972947406))
-- Add readme file to package ([d201abf](https://github.com/dgarana/vulcano/commit/d201abf8600f982576d17e5496ea1ed8a77222a9))
-- Enable travis-ci ([35fbe65](https://github.com/dgarana/vulcano/commit/35fbe653d66499d6a44ae25fbb4b5fef226c1465))
-- Create Vulcano App ([68ca72c](https://github.com/dgarana/vulcano/commit/68ca72c853e9468f63eba42bc92169da0899d446))
-- Itialize vulcano project ([7f4855c](https://github.com/dgarana/vulcano/commit/7f4855c29fbee5516e345ef045fdb7b97acfe87f))
+- chore: release v2.1.1 ([27b17b2](https://github.com/dgarana/vulcano/commit/27b17b2e987fb09925a22a71d48fdca665c4e563))
+- Bump requests from 2.32.5 to 2.33.0 ([690b287](https://github.com/dgarana/vulcano/commit/690b2872bc5c0f4efefa8e0b060e423010963f60))
 
-## 0.0.4
+## v2.1.0
 
-- Release 0.0.4 ([a70eebf](https://github.com/dgarana/vulcano/commit/a70eebf9ee1b23d1e841b7f12d972a00d330107e))
-- Add auto-deploy from travis ([bc18bcf](https://github.com/dgarana/vulcano/commit/bc18bcf44dbb1aa6afbca7a686b1410db23c3f80))
-- Add support for black code style ([7e9df68](https://github.com/dgarana/vulcano/commit/7e9df683facb43b996023d0d382caa8885fcf4d4))
-- Create upload script ([5407273](https://github.com/dgarana/vulcano/commit/54072739a84e724a5a867df7a681047318d1f455))
-- Release version 0.0.3 ([9cd7138](https://github.com/dgarana/vulcano/commit/9cd7138b717d1bbde482b7e52ca3540c5cbad299))
+- chore: release v2.1.0 ([25104c3](https://github.com/dgarana/vulcano/commit/25104c3421773af3422099a94e1ffa9c1c7356be))
+- Update black ([97a7e21](https://github.com/dgarana/vulcano/commit/97a7e21b8a34aa2fc138e1c89911c9ae49b06c1a))
+- minor fixes ([9de0c15](https://github.com/dgarana/vulcano/commit/9de0c15813124d05b90ba1254a84512d3eeba430))
+- Add typing and minor bugfixing ([8c55695](https://github.com/dgarana/vulcano/commit/8c55695495be5b41e390059ac34f11ca96ba3aa5))
+- Add arg_opts as a function for dynamic options ([6ed43a5](https://github.com/dgarana/vulcano/commit/6ed43a5aec4cc519efc04d074f3702e20cf81df3))
 
-## 0.1.0
+## v2.0.1
 
-- Release version 0.1.0 ([bea6625](https://github.com/dgarana/vulcano/commit/bea6625abcb126dcb568cf3b81749cdd0a0c6254))
-- Apply black formatter ([8832a2a](https://github.com/dgarana/vulcano/commit/8832a2aedc8ea60be458bc89df593a11ea92c34d))
-- Fix bug on unicode for python3 ([bebfdcc](https://github.com/dgarana/vulcano/commit/bebfdcc3bf72c6b82243b97a9769b7878147399d))
-- Add context support ([8ad658a](https://github.com/dgarana/vulcano/commit/8ad658aef4e6c1bdc518c54f3e8d639cbb5292de))
-- Fix bug when autocompleting on python2.7 ([a9f4e74](https://github.com/dgarana/vulcano/commit/a9f4e74255668407985db5957e1d1ae8c580abdf))
-- Update requirements to use codecov locally ([91439ab](https://github.com/dgarana/vulcano/commit/91439abc949cde2de9153f2c15124e9af78a39db))
-- Rename function from register to command ([4a32856](https://github.com/dgarana/vulcano/commit/4a328565fd31c7284072678dcbf83b9bb86ede10))
-- Improve docstrings for VulcanoApp ([2ef1330](https://github.com/dgarana/vulcano/commit/2ef133011a19f446d435585a88b479a8264c8bdb))
-- Merge pull request #18 from dgarana/dgarana-patch-1 ([1317115](https://github.com/dgarana/vulcano/commit/13171157027b6e5b9b012bfa0cdf2b83a1058970))
-- Merge pull request #19 from dgarana/dgarana-patch-2 ([fc3a31d](https://github.com/dgarana/vulcano/commit/fc3a31d3504783bee1156ade224a93273ca03a0f))
-- Fix typo in travis job name ([819cf4f](https://github.com/dgarana/vulcano/commit/819cf4fba3d31237f8699933e6346ddfac402130))
-- Fix typo in "Python 3.6 Unit Test" job name ([2ec445b](https://github.com/dgarana/vulcano/commit/2ec445bcb91e665eed1c849aba152b943a660aa0))
-- Fix flake8 issues and configure black ([bd61727](https://github.com/dgarana/vulcano/commit/bd6172723f4f10d1ed929e359abd2477ffcccaef))
-- Add new demo gif with autocomplete ([73c5360](https://github.com/dgarana/vulcano/commit/73c5360a4cacb8f6b72d2a2354dbaf6a1a86ef3d))
-- Add very basic completer ([03f648b](https://github.com/dgarana/vulcano/commit/03f648bdcd6a98cdc8f661cd9ef1fc4c2a1ff2ef))
-- Remove upload script in favour of CI ([1c6d3bc](https://github.com/dgarana/vulcano/commit/1c6d3bce6407bcfd2e8c0818553acfed26160002))
-- Avoid forked proyects to run deploy ([1b7275e](https://github.com/dgarana/vulcano/commit/1b7275e6ac049f2d721f5d2db4a29b0284924d79))
-- Skip deploy when already distributed ([79c5bc5](https://github.com/dgarana/vulcano/commit/79c5bc51689fdbc546eb36c00f737e8b5d06133c))
+- chore: release v2.0.1 ([8df81f8](https://github.com/dgarana/vulcano/commit/8df81f86ea357f40603254481d39c4be7a28c691))
+- Fix coverage report and increase it ([2f7ac96](https://github.com/dgarana/vulcano/commit/2f7ac966ffb452c1f782b7488f7d95b8b65095c7))
+- Fix updating coverage ([3b28798](https://github.com/dgarana/vulcano/commit/3b28798797d7062834d4c7a1c4aa8a6f630bff51))
 
-## 0.1.1
+## v2.0.0
 
-- Release version 0.1.1 ([23cd2b7](https://github.com/dgarana/vulcano/commit/23cd2b78192b42dbb954dc5d9523225e8162293b))
-- Apply black formatter ([50b75bd](https://github.com/dgarana/vulcano/commit/50b75bd0c48d0429fd8fd7a5f809d97873dad7ca))
-- Merge pull request #24 from dgarana/feature/implement_lexer ([c7bb5c5](https://github.com/dgarana/vulcano/commit/c7bb5c5c0295dd82657f878ff8685683c3840bc8))
-- Fix issue with python2/3 support on example ([f8b797a](https://github.com/dgarana/vulcano/commit/f8b797a4b053751287c2acd378760b86ac1999d9))
-- First version of lexer ([39539a1](https://github.com/dgarana/vulcano/commit/39539a109d0a0431af31bf75c2b39bf427404925))
-- Improve help description ([fb2fe8c](https://github.com/dgarana/vulcano/commit/fb2fe8c0f595cb037ee5f5271e841dfcb051c453))
-- Add support for inspecting arguments ([0ff926b](https://github.com/dgarana/vulcano/commit/0ff926bb9644e53ab14cca3e7932cdeaf4195f7a))
+- chore: release v2.0.0 ([d769e94](https://github.com/dgarana/vulcano/commit/d769e94ed8e27d460dcc3224ed51ea2cc9236c6b))
+- Fix black issues ([2b7a28a](https://github.com/dgarana/vulcano/commit/2b7a28a4b6fd441c3395e8e7b369540830892a6a))
+- Implement grouping ([48025db](https://github.com/dgarana/vulcano/commit/48025db0e3019afa27d8ac49116c6c398cb99f8a))
+- Fix black issues ([b39fa4d](https://github.com/dgarana/vulcano/commit/b39fa4db20b021eb30a630bbadc10565bb5d1c21))
+- Add args_opt as a parameter ([8784134](https://github.com/dgarana/vulcano/commit/8784134753a7839442c41ff8ab8bf3c51be41b61))
+- Add themes ([f210128](https://github.com/dgarana/vulcano/commit/f21012873dd6454bfc987c2a6219ba56742235eb))
+- Improve UI ([7d4b281](https://github.com/dgarana/vulcano/commit/7d4b28131a5dcd59f985f87a904fb36fa684d6f7))
+- Add makefile and update README ([28776fa](https://github.com/dgarana/vulcano/commit/28776fafc52c741812e8407ad91bd07739f72c2a))
+- Fix executing command without "" ([9528512](https://github.com/dgarana/vulcano/commit/952851235871052f9a58e2d728ce90ca5cac1952))
+- Improve docstrings and README file ([0a41a85](https://github.com/dgarana/vulcano/commit/0a41a853fa4c6671f7d31ef113ad8dd87456813d))
 
-## 0.1.2
+## v1.0.1
 
-- Release version 0.1.2 ([597d84e](https://github.com/dgarana/vulcano/commit/597d84e15dd2532daaa58b675f98a58aaa8b0f82))
-- Merge pull request #27 from dgarana/feature/multicommand ([3b789fd](https://github.com/dgarana/vulcano/commit/3b789fd57f46730dac10c16a07e931728c664785))
-- Implement multicommand ([7f2888b](https://github.com/dgarana/vulcano/commit/7f2888b50038c4ba1b27905ddb1671772b8170f4))
-- Implement same parser as REPL on Args mode ([b6c9491](https://github.com/dgarana/vulcano/commit/b6c9491b5615f7e9209baa5e5e76091e0a2f5f62))
-- Fix missing pygments on setup ([a3e58eb](https://github.com/dgarana/vulcano/commit/a3e58eb036f45032a4aeab8e46b8877de2e1c8fa))
-- Apply black formatter ([0bbb815](https://github.com/dgarana/vulcano/commit/0bbb815654776bd0c01b88f9a5a459eadb0c1efe))
-- Merge pull request #26 from dgarana/feature/fuzzy_finder ([6f2c570](https://github.com/dgarana/vulcano/commit/6f2c57035a165ce2bcc61ce0478106a9f21a64ef))
-- Implement fuzzy finder ([1a63e37](https://github.com/dgarana/vulcano/commit/1a63e372b0e7dc68cbe021723b8dc19bb5272383))
-- Add __all__ to keep scope as clean as possible ([5fee342](https://github.com/dgarana/vulcano/commit/5fee342a692ece574685b13cc3adb04e8d3ff0f5))
-- Make register_command a public function ([c101df5](https://github.com/dgarana/vulcano/commit/c101df568b28d6e6be32a427d1343f3574277ae0))
+- chore: release v1.0.1 ([41d7219](https://github.com/dgarana/vulcano/commit/41d7219b995c0e70b8c0fa2e4665cbc106eacd3a))
+- Fix deployment missing token ([eadd88a](https://github.com/dgarana/vulcano/commit/eadd88aaf7ded458ecd1b557a540b97cd84ab18e))
 
-## 0.1.3
+## v1.0.0
 
-- Release version 0.1.3 ([23d49c2](https://github.com/dgarana/vulcano/commit/23d49c27db8526efd0e78b68633597ab609cca11))
-- Update README file with new updates ([46bcbe3](https://github.com/dgarana/vulcano/commit/46bcbe30a4afa8423a413dce4bd9d27bd0d75f21))
-- Increase coverage percentage ([795d01a](https://github.com/dgarana/vulcano/commit/795d01a64c1a0437cc9593d3f39f5414acde5222))
-- Promote manager to be public ([10839f3](https://github.com/dgarana/vulcano/commit/10839f33e2aee94cf78f6eba0d27e1a6619cc7b5))
-- Add six to requirements ([c88f34f](https://github.com/dgarana/vulcano/commit/c88f34f95d411e575e68ff0bb285680eb0b26d26))
-- Improve examples ([b206337](https://github.com/dgarana/vulcano/commit/b2063373998b3a7bfc416d9a5c038cb68d40bfa5))
-- Rename parameter docstrings ([f4a0a3b](https://github.com/dgarana/vulcano/commit/f4a0a3bfe03fc965b9fc931d8a6ba50c2cc39afd))
-- Use isfunction instead of callable ([086c3c2](https://github.com/dgarana/vulcano/commit/086c3c28d50fce1d9da6ec92ed81675fb60b4f85))
-- Use generator instead of comprehension list ([8256e55](https://github.com/dgarana/vulcano/commit/8256e55ffee92b7d4f8e48ea790190e9109eed33))
-- Add support for register without parentheses ([905a13b](https://github.com/dgarana/vulcano/commit/905a13b5307b5c718eb6e78de584daddd81c6875))
-- Implement printing last result if enabled ([2c96b63](https://github.com/dgarana/vulcano/commit/2c96b63923ca08bcc35b4ba46c0631879c50db09))
-- Improve README file with some key features ([002f368](https://github.com/dgarana/vulcano/commit/002f368633c46d246743068b429bb9d318a65982))
-- Rename CommandManager to Magma ([8767b8a](https://github.com/dgarana/vulcano/commit/8767b8afb240d130503b007bcd0de286e6d6b770))
-- Add register module option ([2489b7d](https://github.com/dgarana/vulcano/commit/2489b7d30ee1eff9b670e50389788bb9171dc16c))
-- Update README.md ([688afd6](https://github.com/dgarana/vulcano/commit/688afd66faa26265920904d680a9e7ed145078e0))
-- Add some comments to modules ([6373fcf](https://github.com/dgarana/vulcano/commit/6373fcf403edc8b8ebdf636650921a6d2457e79e))
-- Fix deprecation warning for assertEquals ([6471672](https://github.com/dgarana/vulcano/commit/6471672292869b19a5655c8a382e1e480eb84aca))
-- Merge pull request #36 from dgarana/feature/implement_last_result ([8a70f4f](https://github.com/dgarana/vulcano/commit/8a70f4fb37c1d0fba7bd8ef70fc705521459dc84))
-- Add last command result inside the context ([6149cf7](https://github.com/dgarana/vulcano/commit/6149cf782fdaf98683751071342b12844b0a1804))
-- Apply black formatter ([bb49e0c](https://github.com/dgarana/vulcano/commit/bb49e0ceb6e5cc32535bbfdc85d3622b4694415c))
-- First version of fancy help ([407fe92](https://github.com/dgarana/vulcano/commit/407fe92dda00a862fa4bc8960344315ec08ffd72))
-- Merge pull request #33 from dgarana/feature/improve_completion ([58f20e4](https://github.com/dgarana/vulcano/commit/58f20e47d1e1937d8ddbd9ae9de613f8861e3023))
-- Apply black formatter ([8ffabb2](https://github.com/dgarana/vulcano/commit/8ffabb251c3b3cdaba28cf2ffcf2465894020c83))
-- Add support for auto complete commands and args ([78d049a](https://github.com/dgarana/vulcano/commit/78d049a0abd6e63733868e939beaa5cf1c622979))
-- Merge pull request #30 from dgarana/fix/unicode_issues ([9184bbf](https://github.com/dgarana/vulcano/commit/9184bbfed6b113410f3880ff946e57595702ed81))
-- Improve unicode conversion ([4ebb506](https://github.com/dgarana/vulcano/commit/4ebb506e68de55ac7f8ac92b30ede74cc3830300))
+- chore: release v1.0.0 ([142c0a3](https://github.com/dgarana/vulcano/commit/142c0a3b1723240d384d5d9d9f4bd5241f7494fe))
+- Implement bandit check ([1e09887](https://github.com/dgarana/vulcano/commit/1e098877cd2d30fd5d660234fc118d8e6b6b1fab))
+- Implement linters ([04de493](https://github.com/dgarana/vulcano/commit/04de49380f7665458d56457b923569dbeacd9967))
+- Migrate to github actions/workflow ([d4001e8](https://github.com/dgarana/vulcano/commit/d4001e880674d7cfb39263f0ce3ab9ad00994cc0))
+- Drop support for deprecated python versions ([48379e6](https://github.com/dgarana/vulcano/commit/48379e6dc981cf3efe41570d3d283883f86ef34a))
+- Update LICENSE.md ([dd28550](https://github.com/dgarana/vulcano/commit/dd2855005a9277add9fdce6672409e3d4bbcecd2))
+- Create LICENSE.md ([815844f](https://github.com/dgarana/vulcano/commit/815844f48196131954f32e7ae02f75b078fe5623))
+- Create FUNDING.yml ([aabe4b0](https://github.com/dgarana/vulcano/commit/aabe4b0a891f5b1d6bfa80cec8789cb62114418a))
+- Changes based on feedback ([b45e0a0](https://github.com/dgarana/vulcano/commit/b45e0a03d75055506589f808b8b872ce1a378c56))
+- Make prompt string object property ([1d2620d](https://github.com/dgarana/vulcano/commit/1d2620d5e91058e4dd0ac1344de1c57c567069f8))
 
-## 0.1.4
+## 0.5.3
 
-- Release version 0.1.4 ([61c4887](https://github.com/dgarana/vulcano/commit/61c488791591cabbe424ec1914f88d38e9a3b154))
-- Add support for formatting commands ([58ed045](https://github.com/dgarana/vulcano/commit/58ed0454a245795c40837e59c9958d8fd5e55c25))
-- Apply black formatter ([3afc0c0](https://github.com/dgarana/vulcano/commit/3afc0c09c9b874c7d58e6a5cda8272ba22d71c42))
-- Add return example on README ([5c2a073](https://github.com/dgarana/vulcano/commit/5c2a07396d9075ad0e79162d17d333debe8099fe))
+- Release v0.5.3 ([330d6db](https://github.com/dgarana/vulcano/commit/330d6db97eb6d4a5b0d21f9d488864e9a4fabf52))
+- Fix completer fails if command not found ([9a36b58](https://github.com/dgarana/vulcano/commit/9a36b58785a2597746cbde35c4a424a699fb42db))
 
-## 0.2.0
+## 0.5.2
 
-- Improve README file ([8213c52](https://github.com/dgarana/vulcano/commit/8213c521c7f0037e25641e521888ba7fa930f17a))
-- Apply black formatter ([cb73b88](https://github.com/dgarana/vulcano/commit/cb73b886c90073b1bbd02f943a2cb93b4e80c18f))
-- Implement printing source code with themes ([5651c51](https://github.com/dgarana/vulcano/commit/5651c517b2103ef6ca4d8b3dd5a2148a1e5577ee))
+- Release v0.5.2 ([7d728a1](https://github.com/dgarana/vulcano/commit/7d728a1accc5af7d9385e145a8b2e6501589b14f))
+- Adds : as supported character in strings ([8e25f48](https://github.com/dgarana/vulcano/commit/8e25f48ea462ff108f8067684159a0f0fe43a6a4))
+- Modify exit function to not sys.exit ([56c74f7](https://github.com/dgarana/vulcano/commit/56c74f722c212652889ec220aaf6a30f2c957b13))
+- Improve README with REPL at top ([2f915b1](https://github.com/dgarana/vulcano/commit/2f915b1188fa354200d8585da89ae737e2ebd877))
+- Fix README format ([6abba2f](https://github.com/dgarana/vulcano/commit/6abba2fd0409026720229c5ff57b1be38719138e))
+- Document autosuggestion method ([f9dde45](https://github.com/dgarana/vulcano/commit/f9dde45836233fdf0659890bfcb280a6576fdc2c))
 
-## 0.2.1
+## 0.5.1
 
-- Omit vulcano_cli from coverage ([3a45d79](https://github.com/dgarana/vulcano/commit/3a45d7994a18278e231ccda028b614f6ccdd4c22))
-- Release version 0.2.1 ([1fdbbb6](https://github.com/dgarana/vulcano/commit/1fdbbb6a163129b9af8a58c665a7e738a09bef0c))
-- Enable vulcano cli ([90debe2](https://github.com/dgarana/vulcano/commit/90debe2eb9ff9f892f0494846dd6d48921739d42))
-- Fix issue on VulcanoApp manager instance ([0f994bc](https://github.com/dgarana/vulcano/commit/0f994bcfc53df045f2848fb010f2e6494b6d2fea))
-- Fix parsing error when passing separator as arg ([61549f1](https://github.com/dgarana/vulcano/commit/61549f13c40a623653180e201df6424530c61ed3))
-- Release version 0.2.0 ([637c118](https://github.com/dgarana/vulcano/commit/637c1184ce059db5b9d611eb5726d47c4124d9c6))
-- Move from MD to RST (for sphinx) ([099cf50](https://github.com/dgarana/vulcano/commit/099cf504fb69dd1ddd576a34ca54a935955c9e94))
-- Update README with nice REPL gif ([5d2191d](https://github.com/dgarana/vulcano/commit/5d2191dc4cac99710f2aca649dec812dca1b0d41))
-- Fix escaped quoteds inside String lexer ([7574b88](https://github.com/dgarana/vulcano/commit/7574b88736b4fbd887798465fd7c7feee57ec772))
-- Update README.md ([51b2184](https://github.com/dgarana/vulcano/commit/51b2184f5dad1713e791651ea11752dea2430604))
+- Release v0.5.1 ([ccf5563](https://github.com/dgarana/vulcano/commit/ccf55633aad7e17543959f8f14915c5f80603724))
+- Fix issue on cli when printing version ([b5ce04f](https://github.com/dgarana/vulcano/commit/b5ce04fe8db1e12b967aa922a795588a1c4d5bd2))
 
-## 0.2.2
+## 0.5.0
 
-- Release verion 0.2.2 ([399b092](https://github.com/dgarana/vulcano/commit/399b0926e3bb96fcd1133a2970b2ae630cb8aeb6))
-- Rename the split token of default arg split ([c7fe9b5](https://github.com/dgarana/vulcano/commit/c7fe9b5de3569416d6935d5bb1bb4d0ad8c99be1))
-- Pin prompt_toolkit requirement version to 2.0 ([e737d16](https://github.com/dgarana/vulcano/commit/e737d16ad3dc0b79a23101c47974a5118f910c4a))
-- Vulcano needs pyparsing 2.3.1 ([10aefab](https://github.com/dgarana/vulcano/commit/10aefab7f70ed46bd17a899a5a2db4d19e967efb))
-- Fix handling of empty user input ([2bed121](https://github.com/dgarana/vulcano/commit/2bed12181a8c3e520106b31e5edf3b7c98896775))
-- TDD For fixing issue 65 ([2ad96f1](https://github.com/dgarana/vulcano/commit/2ad96f145f2ae2bfc4940fe1b7e230e77cf9658b))
-- Improve builtin commands docstrings ([03e75a7](https://github.com/dgarana/vulcano/commit/03e75a75426c485e16a76d138f7f61ce8d295704))
-- Apply black formatter ([44109d4](https://github.com/dgarana/vulcano/commit/44109d47923cbeb29dcabb3d072f2fc0905e3cda))
+- Release v0.5.0 ([1246cf6](https://github.com/dgarana/vulcano/commit/1246cf68446b5f1fd613e2d6d3c295e0aee35526))
+- Enable disable autosuggestion ([434a5ae](https://github.com/dgarana/vulcano/commit/434a5aee191042ad8600c18c28533c4f271a3dc2))
+- Fix issue with default show_if ([b78a8a3](https://github.com/dgarana/vulcano/commit/b78a8a3e30d2ca43e970e5a67197823154bc7481))
+- Reorganize parser module ([e25d1e0](https://github.com/dgarana/vulcano/commit/e25d1e05d0fb1ec84708f71bf83ae33a9b3bee25))
+- Reorganize exceptions class names ([739ab20](https://github.com/dgarana/vulcano/commit/739ab20f34da67b3ca94d190821de8c03f169bca))
+- Increase test coverage for models ([4dfc295](https://github.com/dgarana/vulcano/commit/4dfc295c0e0f618e37d1594c0dfa15628f22d7bf))
+- Remwove unused import ([c95fda7](https://github.com/dgarana/vulcano/commit/c95fda751d5297252d7f6e921dd375ec6ccbf3f1))
+- Increase coverage of classes test ([d64ff51](https://github.com/dgarana/vulcano/commit/d64ff51fe240397550365101cee6c95692bad088))
+- Increase builtin module coverage ([9398fc7](https://github.com/dgarana/vulcano/commit/9398fc723aacb84df9ddfd50437bc7f09b795998))
+- Increase to 100% testing of app module ([ef7304e](https://github.com/dgarana/vulcano/commit/ef7304e66194dd7a5da7d331f5b3852367aaf20a))
+- Increase completer test coverage ([b42b390](https://github.com/dgarana/vulcano/commit/b42b3902fadc8cdeeb49c898f9b53a7abbe90827))
+- Fix some tests from classes ([9004d8f](https://github.com/dgarana/vulcano/commit/9004d8f29cd428e4d11c206cfc79126870e29381))
 
-## 0.2.3
+## 0.4.5
 
-- Release version 0.2.3 ([7b31aec](https://github.com/dgarana/vulcano/commit/7b31aec54c0cfd91b11157830db0d3f39a418b6a))
-- Display custom error when command not found ([b624cd2](https://github.com/dgarana/vulcano/commit/b624cd2993e8a2bdc733852f35468aa8f2f8c979))
-- Get help for just a command ([e2cc359](https://github.com/dgarana/vulcano/commit/e2cc35965102d1cf78906406e2e7d293a63da648))
-- Release verion 0.2.2 ([85c46e4](https://github.com/dgarana/vulcano/commit/85c46e4e3df7e1a47acf60abeeee3ff26654bcf9))
-- Rename the split token of default arg split ([8f70e7b](https://github.com/dgarana/vulcano/commit/8f70e7b1a92f35b1506cc95f774372f3bc6791b3))
-- Pin prompt_toolkit requirement version to 2.0 ([b6b002b](https://github.com/dgarana/vulcano/commit/b6b002b12376900287e91a6eb48fa19ca1dc0421))
-- Vulcano needs pyparsing 2.3.1 ([8a69174](https://github.com/dgarana/vulcano/commit/8a69174ed0ebab5dee91ede96bcef789c87ec878))
-- Fix handling of empty user input ([d47a135](https://github.com/dgarana/vulcano/commit/d47a1350c6cdfaf992d82dd4a44468d59e1c5f06))
-- TDD For fixing issue 65 ([102168d](https://github.com/dgarana/vulcano/commit/102168db0352f0fa8b4b89f9218f9ac6dcd02f3e))
-- Improve builtin commands docstrings ([9f9367e](https://github.com/dgarana/vulcano/commit/9f9367e8090126aa5327d8e99fee86a414ecda35))
-- Apply black formatter ([9be2a59](https://github.com/dgarana/vulcano/commit/9be2a59b53ec9dbaa1ef1f2de39b58372b1efa74))
+- Release v0.4.5 ([6cdd9f1](https://github.com/dgarana/vulcano/commit/6cdd9f19706cf57136abf700c4a42b70994af8f0))
+- Enable importing VulcanoApp from vulcano.app ([10aaeb9](https://github.com/dgarana/vulcano/commit/10aaeb9acfbaa63b11196001625ff3d0fc36f910))
+- Rename tests files to module_test.py ([897563b](https://github.com/dgarana/vulcano/commit/897563b52e149660d6860a6c3fce9409e2f5bb7a))
+- Improve builtins tests coverage ([ac3ecff](https://github.com/dgarana/vulcano/commit/ac3ecff6059216f1dfc3572408c07adf08f90711))
+- Increase app.classes coverage ([ef9ab4b](https://github.com/dgarana/vulcano/commit/ef9ab4b93f7776b4b78b677c0f2b31df5374118b))
+- Move magma commands to ordereddict ([54079c5](https://github.com/dgarana/vulcano/commit/54079c5fe80ada56c578c6924391c60073cfa873))
+- Update README.rst ([0361527](https://github.com/dgarana/vulcano/commit/036152711abdc92c466dc8473039f7c75e4b5b22))
+- Release v0.4.4 ([65d42d8](https://github.com/dgarana/vulcano/commit/65d42d82f8fe2501442b83e92f295cd72a57b0b7))
 
-## 0.2.4
+## 0.4.4
 
-- Release v0.2.4 ([e0ee1aa](https://github.com/dgarana/vulcano/commit/e0ee1aa0ce0b802303a6022449c54311e533379d))
-- Fix pined version ([2fb2bfe](https://github.com/dgarana/vulcano/commit/2fb2bfe39f3ad6ec51ccba87cfdd0799d0d14a76))
-- Implement file history ([f90ee7a](https://github.com/dgarana/vulcano/commit/f90ee7a878b2a8b7cc814dd43d0692435fd6ec19))
-- Release version 0.2.3 ([13e8171](https://github.com/dgarana/vulcano/commit/13e817150968dd5037bdaf8d5f6b4869cd340bf8))
-- Display custom error when command not found ([3771cae](https://github.com/dgarana/vulcano/commit/3771cae461d804c12d88d09c1eabd84bffa94ecc))
-- Get help for just a command ([4de12ab](https://github.com/dgarana/vulcano/commit/4de12abdc841258577c7a70554e410d53387e790))
-- Release verion 0.2.2 ([399b092](https://github.com/dgarana/vulcano/commit/399b0926e3bb96fcd1133a2970b2ae630cb8aeb6))
-- Rename the split token of default arg split ([c7fe9b5](https://github.com/dgarana/vulcano/commit/c7fe9b5de3569416d6935d5bb1bb4d0ad8c99be1))
-- Pin prompt_toolkit requirement version to 2.0 ([e737d16](https://github.com/dgarana/vulcano/commit/e737d16ad3dc0b79a23101c47974a5118f910c4a))
-- Vulcano needs pyparsing 2.3.1 ([10aefab](https://github.com/dgarana/vulcano/commit/10aefab7f70ed46bd17a899a5a2db4d19e967efb))
-- Fix handling of empty user input ([2bed121](https://github.com/dgarana/vulcano/commit/2bed12181a8c3e520106b31e5edf3b7c98896775))
-- TDD For fixing issue 65 ([2ad96f1](https://github.com/dgarana/vulcano/commit/2ad96f145f2ae2bfc4940fe1b7e230e77cf9658b))
-- Improve builtin commands docstrings ([03e75a7](https://github.com/dgarana/vulcano/commit/03e75a75426c485e16a76d138f7f61ce8d295704))
-- Apply black formatter ([44109d4](https://github.com/dgarana/vulcano/commit/44109d47923cbeb29dcabb3d072f2fc0905e3cda))
-
-## 0.2.5
-
-- Release v0.2.5 ([de86181](https://github.com/dgarana/vulcano/commit/de861810a4f21042b2a8e848a8a0d18077a365ad))
-- Implement custom prompt ([1ceedca](https://github.com/dgarana/vulcano/commit/1ceedca0f8109359adbc05a6f2e39bb12cf31641))
-- Fix error related with filehistory ([88eea65](https://github.com/dgarana/vulcano/commit/88eea655feddaf2ac6f13e0ae6721cf9a79a6fd0))
-
-## 0.3.0
-
-- Release v0.3.0 ([bf9298f](https://github.com/dgarana/vulcano/commit/bf9298fa8de0b9b82a61a9f01b36cdb47ce4246e))
-- Implement inspecting into docstrings ([ab1f78d](https://github.com/dgarana/vulcano/commit/ab1f78d928c18afb936a69b1867ed070ce53422f))
-- Release v0.2.5 ([1ab843e](https://github.com/dgarana/vulcano/commit/1ab843edb76a64b3e18e64ea267e932925d56f99))
-
-## 0.3.1
-
-- Release v0.3.1 ([667ef22](https://github.com/dgarana/vulcano/commit/667ef227891e36e7f28f0301e7a683f6b56b5ef4))
-- Fix requirement with previous prompt versions ([e5164ee](https://github.com/dgarana/vulcano/commit/e5164ee837556f9358aedfb8415eeadbe3d5d4e9))
-
-## 0.4.0
-
-- Release v0.4.0 ([2db1855](https://github.com/dgarana/vulcano/commit/2db185556c8f1e9f7b5a759da88570c8145853d6))
-- Add meta description to completions ([6ce1cbb](https://github.com/dgarana/vulcano/commit/6ce1cbbf66553ec05d3ce726210acd0657d67288))
-- Add description to help command ([17140ba](https://github.com/dgarana/vulcano/commit/17140ba505bf3f1288a35fd2c2d4e23073845906))
-
-## 0.4.1
-
-- Release v0.4.1 ([6c56a09](https://github.com/dgarana/vulcano/commit/6c56a09898a0510069075c54afe68b18ed9e8bf9))
-- Update examples with latest feature ([5df371f](https://github.com/dgarana/vulcano/commit/5df371f4f18ca443b6580dec820934beae67706f))
-- Add support for hidding commands ([cd85414](https://github.com/dgarana/vulcano/commit/cd854145aa9444e6c9981ad42db91057f2bb43b0))
-
-## 0.4.2
-
-- Release v0.4.2 ([7a2c02f](https://github.com/dgarana/vulcano/commit/7a2c02f2ec49e94131f2d9c44e5103756dea9a63))
-- Add default arguments ([8bdee0d](https://github.com/dgarana/vulcano/commit/8bdee0d267d3f41b64a0279c1af8fa2ff46e6b66))
+- Add cached-property for managing properties ([4246cb3](https://github.com/dgarana/vulcano/commit/4246cb39735668496f61b6b9bc95868aa906ddc4))
+- Implement pynspector for inspecting functions ([518a1b0](https://github.com/dgarana/vulcano/commit/518a1b0f1574db86cceafdaa7404a08ef5223aab))
+- Update README.rst ([b943fc9](https://github.com/dgarana/vulcano/commit/b943fc9757392e26591c02a758d05b00e82d8339))
+- Update demo with all features ([c7fcf74](https://github.com/dgarana/vulcano/commit/c7fcf74ae789bc73e95af0f9a9da40c92c291b2a))
+- Enable feature to have more than one VulcanoApp ([40a4938](https://github.com/dgarana/vulcano/commit/40a493897e829608b4c7e33d8d1d57b386578b02))
 
 ## 0.4.3
 
@@ -398,106 +266,238 @@ _Generated from repository tags and commit history._
 - Update README.md ([39f4a0c](https://github.com/dgarana/vulcano/commit/39f4a0c0296f6ec8aa0a0dcc63be8cc2cf161b8a))
 - Merge pull request #2 from dgarana/feature/#1-Vulcano-App ([90a6a0d](https://github.com/dgarana/vulcano/commit/90a6a0d4c5f29f8e83b85be002f34d8ee7dbf49f))
 
-## 0.4.4
+## 0.4.2
 
-- Add cached-property for managing properties ([4246cb3](https://github.com/dgarana/vulcano/commit/4246cb39735668496f61b6b9bc95868aa906ddc4))
-- Implement pynspector for inspecting functions ([518a1b0](https://github.com/dgarana/vulcano/commit/518a1b0f1574db86cceafdaa7404a08ef5223aab))
-- Update README.rst ([b943fc9](https://github.com/dgarana/vulcano/commit/b943fc9757392e26591c02a758d05b00e82d8339))
-- Update demo with all features ([c7fcf74](https://github.com/dgarana/vulcano/commit/c7fcf74ae789bc73e95af0f9a9da40c92c291b2a))
-- Enable feature to have more than one VulcanoApp ([40a4938](https://github.com/dgarana/vulcano/commit/40a493897e829608b4c7e33d8d1d57b386578b02))
+- Release v0.4.2 ([7a2c02f](https://github.com/dgarana/vulcano/commit/7a2c02f2ec49e94131f2d9c44e5103756dea9a63))
+- Add default arguments ([8bdee0d](https://github.com/dgarana/vulcano/commit/8bdee0d267d3f41b64a0279c1af8fa2ff46e6b66))
 
-## 0.4.5
+## 0.4.1
 
-- Release v0.4.5 ([6cdd9f1](https://github.com/dgarana/vulcano/commit/6cdd9f19706cf57136abf700c4a42b70994af8f0))
-- Enable importing VulcanoApp from vulcano.app ([10aaeb9](https://github.com/dgarana/vulcano/commit/10aaeb9acfbaa63b11196001625ff3d0fc36f910))
-- Rename tests files to module_test.py ([897563b](https://github.com/dgarana/vulcano/commit/897563b52e149660d6860a6c3fce9409e2f5bb7a))
-- Improve builtins tests coverage ([ac3ecff](https://github.com/dgarana/vulcano/commit/ac3ecff6059216f1dfc3572408c07adf08f90711))
-- Increase app.classes coverage ([ef9ab4b](https://github.com/dgarana/vulcano/commit/ef9ab4b93f7776b4b78b677c0f2b31df5374118b))
-- Move magma commands to ordereddict ([54079c5](https://github.com/dgarana/vulcano/commit/54079c5fe80ada56c578c6924391c60073cfa873))
-- Update README.rst ([0361527](https://github.com/dgarana/vulcano/commit/036152711abdc92c466dc8473039f7c75e4b5b22))
-- Release v0.4.4 ([65d42d8](https://github.com/dgarana/vulcano/commit/65d42d82f8fe2501442b83e92f295cd72a57b0b7))
+- Release v0.4.1 ([6c56a09](https://github.com/dgarana/vulcano/commit/6c56a09898a0510069075c54afe68b18ed9e8bf9))
+- Update examples with latest feature ([5df371f](https://github.com/dgarana/vulcano/commit/5df371f4f18ca443b6580dec820934beae67706f))
+- Add support for hidding commands ([cd85414](https://github.com/dgarana/vulcano/commit/cd854145aa9444e6c9981ad42db91057f2bb43b0))
 
-## 0.5.0
+## 0.4.0
 
-- Release v0.5.0 ([1246cf6](https://github.com/dgarana/vulcano/commit/1246cf68446b5f1fd613e2d6d3c295e0aee35526))
-- Enable disable autosuggestion ([434a5ae](https://github.com/dgarana/vulcano/commit/434a5aee191042ad8600c18c28533c4f271a3dc2))
-- Fix issue with default show_if ([b78a8a3](https://github.com/dgarana/vulcano/commit/b78a8a3e30d2ca43e970e5a67197823154bc7481))
-- Reorganize parser module ([e25d1e0](https://github.com/dgarana/vulcano/commit/e25d1e05d0fb1ec84708f71bf83ae33a9b3bee25))
-- Reorganize exceptions class names ([739ab20](https://github.com/dgarana/vulcano/commit/739ab20f34da67b3ca94d190821de8c03f169bca))
-- Increase test coverage for models ([4dfc295](https://github.com/dgarana/vulcano/commit/4dfc295c0e0f618e37d1594c0dfa15628f22d7bf))
-- Remwove unused import ([c95fda7](https://github.com/dgarana/vulcano/commit/c95fda751d5297252d7f6e921dd375ec6ccbf3f1))
-- Increase coverage of classes test ([d64ff51](https://github.com/dgarana/vulcano/commit/d64ff51fe240397550365101cee6c95692bad088))
-- Increase builtin module coverage ([9398fc7](https://github.com/dgarana/vulcano/commit/9398fc723aacb84df9ddfd50437bc7f09b795998))
-- Increase to 100% testing of app module ([ef7304e](https://github.com/dgarana/vulcano/commit/ef7304e66194dd7a5da7d331f5b3852367aaf20a))
-- Increase completer test coverage ([b42b390](https://github.com/dgarana/vulcano/commit/b42b3902fadc8cdeeb49c898f9b53a7abbe90827))
-- Fix some tests from classes ([9004d8f](https://github.com/dgarana/vulcano/commit/9004d8f29cd428e4d11c206cfc79126870e29381))
+- Release v0.4.0 ([2db1855](https://github.com/dgarana/vulcano/commit/2db185556c8f1e9f7b5a759da88570c8145853d6))
+- Add meta description to completions ([6ce1cbb](https://github.com/dgarana/vulcano/commit/6ce1cbbf66553ec05d3ce726210acd0657d67288))
+- Add description to help command ([17140ba](https://github.com/dgarana/vulcano/commit/17140ba505bf3f1288a35fd2c2d4e23073845906))
 
-## 0.5.1
+## 0.3.1
 
-- Release v0.5.1 ([ccf5563](https://github.com/dgarana/vulcano/commit/ccf55633aad7e17543959f8f14915c5f80603724))
-- Fix issue on cli when printing version ([b5ce04f](https://github.com/dgarana/vulcano/commit/b5ce04fe8db1e12b967aa922a795588a1c4d5bd2))
+- Release v0.3.1 ([667ef22](https://github.com/dgarana/vulcano/commit/667ef227891e36e7f28f0301e7a683f6b56b5ef4))
+- Fix requirement with previous prompt versions ([e5164ee](https://github.com/dgarana/vulcano/commit/e5164ee837556f9358aedfb8415eeadbe3d5d4e9))
 
-## 0.5.2
+## 0.3.0
 
-- Release v0.5.2 ([7d728a1](https://github.com/dgarana/vulcano/commit/7d728a1accc5af7d9385e145a8b2e6501589b14f))
-- Adds : as supported character in strings ([8e25f48](https://github.com/dgarana/vulcano/commit/8e25f48ea462ff108f8067684159a0f0fe43a6a4))
-- Modify exit function to not sys.exit ([56c74f7](https://github.com/dgarana/vulcano/commit/56c74f722c212652889ec220aaf6a30f2c957b13))
-- Improve README with REPL at top ([2f915b1](https://github.com/dgarana/vulcano/commit/2f915b1188fa354200d8585da89ae737e2ebd877))
-- Fix README format ([6abba2f](https://github.com/dgarana/vulcano/commit/6abba2fd0409026720229c5ff57b1be38719138e))
-- Document autosuggestion method ([f9dde45](https://github.com/dgarana/vulcano/commit/f9dde45836233fdf0659890bfcb280a6576fdc2c))
+- Release v0.3.0 ([bf9298f](https://github.com/dgarana/vulcano/commit/bf9298fa8de0b9b82a61a9f01b36cdb47ce4246e))
+- Implement inspecting into docstrings ([ab1f78d](https://github.com/dgarana/vulcano/commit/ab1f78d928c18afb936a69b1867ed070ce53422f))
+- Release v0.2.5 ([1ab843e](https://github.com/dgarana/vulcano/commit/1ab843edb76a64b3e18e64ea267e932925d56f99))
 
-## 0.5.3
+## 0.2.5
 
-- Release v0.5.3 ([330d6db](https://github.com/dgarana/vulcano/commit/330d6db97eb6d4a5b0d21f9d488864e9a4fabf52))
-- Fix completer fails if command not found ([9a36b58](https://github.com/dgarana/vulcano/commit/9a36b58785a2597746cbde35c4a424a699fb42db))
+- Release v0.2.5 ([de86181](https://github.com/dgarana/vulcano/commit/de861810a4f21042b2a8e848a8a0d18077a365ad))
+- Implement custom prompt ([1ceedca](https://github.com/dgarana/vulcano/commit/1ceedca0f8109359adbc05a6f2e39bb12cf31641))
+- Fix error related with filehistory ([88eea65](https://github.com/dgarana/vulcano/commit/88eea655feddaf2ac6f13e0ae6721cf9a79a6fd0))
 
-## v1.0.0
+## 0.2.4
 
-- chore: release v1.0.0 ([142c0a3](https://github.com/dgarana/vulcano/commit/142c0a3b1723240d384d5d9d9f4bd5241f7494fe))
-- Implement bandit check ([1e09887](https://github.com/dgarana/vulcano/commit/1e098877cd2d30fd5d660234fc118d8e6b6b1fab))
-- Implement linters ([04de493](https://github.com/dgarana/vulcano/commit/04de49380f7665458d56457b923569dbeacd9967))
-- Migrate to github actions/workflow ([d4001e8](https://github.com/dgarana/vulcano/commit/d4001e880674d7cfb39263f0ce3ab9ad00994cc0))
-- Drop support for deprecated python versions ([48379e6](https://github.com/dgarana/vulcano/commit/48379e6dc981cf3efe41570d3d283883f86ef34a))
-- Update LICENSE.md ([dd28550](https://github.com/dgarana/vulcano/commit/dd2855005a9277add9fdce6672409e3d4bbcecd2))
-- Create LICENSE.md ([815844f](https://github.com/dgarana/vulcano/commit/815844f48196131954f32e7ae02f75b078fe5623))
-- Create FUNDING.yml ([aabe4b0](https://github.com/dgarana/vulcano/commit/aabe4b0a891f5b1d6bfa80cec8789cb62114418a))
-- Changes based on feedback ([b45e0a0](https://github.com/dgarana/vulcano/commit/b45e0a03d75055506589f808b8b872ce1a378c56))
-- Make prompt string object property ([1d2620d](https://github.com/dgarana/vulcano/commit/1d2620d5e91058e4dd0ac1344de1c57c567069f8))
+- Release v0.2.4 ([e0ee1aa](https://github.com/dgarana/vulcano/commit/e0ee1aa0ce0b802303a6022449c54311e533379d))
+- Fix pined version ([2fb2bfe](https://github.com/dgarana/vulcano/commit/2fb2bfe39f3ad6ec51ccba87cfdd0799d0d14a76))
+- Implement file history ([f90ee7a](https://github.com/dgarana/vulcano/commit/f90ee7a878b2a8b7cc814dd43d0692435fd6ec19))
+- Release version 0.2.3 ([13e8171](https://github.com/dgarana/vulcano/commit/13e817150968dd5037bdaf8d5f6b4869cd340bf8))
+- Display custom error when command not found ([3771cae](https://github.com/dgarana/vulcano/commit/3771cae461d804c12d88d09c1eabd84bffa94ecc))
+- Get help for just a command ([4de12ab](https://github.com/dgarana/vulcano/commit/4de12abdc841258577c7a70554e410d53387e790))
+- Release verion 0.2.2 ([399b092](https://github.com/dgarana/vulcano/commit/399b0926e3bb96fcd1133a2970b2ae630cb8aeb6))
+- Rename the split token of default arg split ([c7fe9b5](https://github.com/dgarana/vulcano/commit/c7fe9b5de3569416d6935d5bb1bb4d0ad8c99be1))
+- Pin prompt_toolkit requirement version to 2.0 ([e737d16](https://github.com/dgarana/vulcano/commit/e737d16ad3dc0b79a23101c47974a5118f910c4a))
+- Vulcano needs pyparsing 2.3.1 ([10aefab](https://github.com/dgarana/vulcano/commit/10aefab7f70ed46bd17a899a5a2db4d19e967efb))
+- Fix handling of empty user input ([2bed121](https://github.com/dgarana/vulcano/commit/2bed12181a8c3e520106b31e5edf3b7c98896775))
+- TDD For fixing issue 65 ([2ad96f1](https://github.com/dgarana/vulcano/commit/2ad96f145f2ae2bfc4940fe1b7e230e77cf9658b))
+- Improve builtin commands docstrings ([03e75a7](https://github.com/dgarana/vulcano/commit/03e75a75426c485e16a76d138f7f61ce8d295704))
+- Apply black formatter ([44109d4](https://github.com/dgarana/vulcano/commit/44109d47923cbeb29dcabb3d072f2fc0905e3cda))
 
-## v1.0.1
+## 0.2.3
 
-- chore: release v1.0.1 ([41d7219](https://github.com/dgarana/vulcano/commit/41d7219b995c0e70b8c0fa2e4665cbc106eacd3a))
-- Fix deployment missing token ([eadd88a](https://github.com/dgarana/vulcano/commit/eadd88aaf7ded458ecd1b557a540b97cd84ab18e))
+- Release version 0.2.3 ([7b31aec](https://github.com/dgarana/vulcano/commit/7b31aec54c0cfd91b11157830db0d3f39a418b6a))
+- Display custom error when command not found ([b624cd2](https://github.com/dgarana/vulcano/commit/b624cd2993e8a2bdc733852f35468aa8f2f8c979))
+- Get help for just a command ([e2cc359](https://github.com/dgarana/vulcano/commit/e2cc35965102d1cf78906406e2e7d293a63da648))
+- Release verion 0.2.2 ([85c46e4](https://github.com/dgarana/vulcano/commit/85c46e4e3df7e1a47acf60abeeee3ff26654bcf9))
+- Rename the split token of default arg split ([8f70e7b](https://github.com/dgarana/vulcano/commit/8f70e7b1a92f35b1506cc95f774372f3bc6791b3))
+- Pin prompt_toolkit requirement version to 2.0 ([b6b002b](https://github.com/dgarana/vulcano/commit/b6b002b12376900287e91a6eb48fa19ca1dc0421))
+- Vulcano needs pyparsing 2.3.1 ([8a69174](https://github.com/dgarana/vulcano/commit/8a69174ed0ebab5dee91ede96bcef789c87ec878))
+- Fix handling of empty user input ([d47a135](https://github.com/dgarana/vulcano/commit/d47a1350c6cdfaf992d82dd4a44468d59e1c5f06))
+- TDD For fixing issue 65 ([102168d](https://github.com/dgarana/vulcano/commit/102168db0352f0fa8b4b89f9218f9ac6dcd02f3e))
+- Improve builtin commands docstrings ([9f9367e](https://github.com/dgarana/vulcano/commit/9f9367e8090126aa5327d8e99fee86a414ecda35))
+- Apply black formatter ([9be2a59](https://github.com/dgarana/vulcano/commit/9be2a59b53ec9dbaa1ef1f2de39b58372b1efa74))
 
-## v2.0.0
+## 0.2.2
 
-- chore: release v2.0.0 ([d769e94](https://github.com/dgarana/vulcano/commit/d769e94ed8e27d460dcc3224ed51ea2cc9236c6b))
-- Fix black issues ([2b7a28a](https://github.com/dgarana/vulcano/commit/2b7a28a4b6fd441c3395e8e7b369540830892a6a))
-- Implement grouping ([48025db](https://github.com/dgarana/vulcano/commit/48025db0e3019afa27d8ac49116c6c398cb99f8a))
-- Fix black issues ([b39fa4d](https://github.com/dgarana/vulcano/commit/b39fa4db20b021eb30a630bbadc10565bb5d1c21))
-- Add args_opt as a parameter ([8784134](https://github.com/dgarana/vulcano/commit/8784134753a7839442c41ff8ab8bf3c51be41b61))
-- Add themes ([f210128](https://github.com/dgarana/vulcano/commit/f21012873dd6454bfc987c2a6219ba56742235eb))
-- Improve UI ([7d4b281](https://github.com/dgarana/vulcano/commit/7d4b28131a5dcd59f985f87a904fb36fa684d6f7))
-- Add makefile and update README ([28776fa](https://github.com/dgarana/vulcano/commit/28776fafc52c741812e8407ad91bd07739f72c2a))
-- Fix executing command without "" ([9528512](https://github.com/dgarana/vulcano/commit/952851235871052f9a58e2d728ce90ca5cac1952))
-- Improve docstrings and README file ([0a41a85](https://github.com/dgarana/vulcano/commit/0a41a853fa4c6671f7d31ef113ad8dd87456813d))
+- Release verion 0.2.2 ([399b092](https://github.com/dgarana/vulcano/commit/399b0926e3bb96fcd1133a2970b2ae630cb8aeb6))
+- Rename the split token of default arg split ([c7fe9b5](https://github.com/dgarana/vulcano/commit/c7fe9b5de3569416d6935d5bb1bb4d0ad8c99be1))
+- Pin prompt_toolkit requirement version to 2.0 ([e737d16](https://github.com/dgarana/vulcano/commit/e737d16ad3dc0b79a23101c47974a5118f910c4a))
+- Vulcano needs pyparsing 2.3.1 ([10aefab](https://github.com/dgarana/vulcano/commit/10aefab7f70ed46bd17a899a5a2db4d19e967efb))
+- Fix handling of empty user input ([2bed121](https://github.com/dgarana/vulcano/commit/2bed12181a8c3e520106b31e5edf3b7c98896775))
+- TDD For fixing issue 65 ([2ad96f1](https://github.com/dgarana/vulcano/commit/2ad96f145f2ae2bfc4940fe1b7e230e77cf9658b))
+- Improve builtin commands docstrings ([03e75a7](https://github.com/dgarana/vulcano/commit/03e75a75426c485e16a76d138f7f61ce8d295704))
+- Apply black formatter ([44109d4](https://github.com/dgarana/vulcano/commit/44109d47923cbeb29dcabb3d072f2fc0905e3cda))
 
-## v2.0.1
+## 0.2.1
 
-- chore: release v2.0.1 ([8df81f8](https://github.com/dgarana/vulcano/commit/8df81f86ea357f40603254481d39c4be7a28c691))
-- Fix coverage report and increase it ([2f7ac96](https://github.com/dgarana/vulcano/commit/2f7ac966ffb452c1f782b7488f7d95b8b65095c7))
-- Fix updating coverage ([3b28798](https://github.com/dgarana/vulcano/commit/3b28798797d7062834d4c7a1c4aa8a6f630bff51))
+- Omit vulcano_cli from coverage ([3a45d79](https://github.com/dgarana/vulcano/commit/3a45d7994a18278e231ccda028b614f6ccdd4c22))
+- Release version 0.2.1 ([1fdbbb6](https://github.com/dgarana/vulcano/commit/1fdbbb6a163129b9af8a58c665a7e738a09bef0c))
+- Enable vulcano cli ([90debe2](https://github.com/dgarana/vulcano/commit/90debe2eb9ff9f892f0494846dd6d48921739d42))
+- Fix issue on VulcanoApp manager instance ([0f994bc](https://github.com/dgarana/vulcano/commit/0f994bcfc53df045f2848fb010f2e6494b6d2fea))
+- Fix parsing error when passing separator as arg ([61549f1](https://github.com/dgarana/vulcano/commit/61549f13c40a623653180e201df6424530c61ed3))
+- Release version 0.2.0 ([637c118](https://github.com/dgarana/vulcano/commit/637c1184ce059db5b9d611eb5726d47c4124d9c6))
+- Move from MD to RST (for sphinx) ([099cf50](https://github.com/dgarana/vulcano/commit/099cf504fb69dd1ddd576a34ca54a935955c9e94))
+- Update README with nice REPL gif ([5d2191d](https://github.com/dgarana/vulcano/commit/5d2191dc4cac99710f2aca649dec812dca1b0d41))
+- Fix escaped quoteds inside String lexer ([7574b88](https://github.com/dgarana/vulcano/commit/7574b88736b4fbd887798465fd7c7feee57ec772))
+- Update README.md ([51b2184](https://github.com/dgarana/vulcano/commit/51b2184f5dad1713e791651ea11752dea2430604))
 
-## v2.1.0
+## 0.2.0
 
-- chore: release v2.1.0 ([25104c3](https://github.com/dgarana/vulcano/commit/25104c3421773af3422099a94e1ffa9c1c7356be))
-- Update black ([97a7e21](https://github.com/dgarana/vulcano/commit/97a7e21b8a34aa2fc138e1c89911c9ae49b06c1a))
-- minor fixes ([9de0c15](https://github.com/dgarana/vulcano/commit/9de0c15813124d05b90ba1254a84512d3eeba430))
-- Add typing and minor bugfixing ([8c55695](https://github.com/dgarana/vulcano/commit/8c55695495be5b41e390059ac34f11ca96ba3aa5))
-- Add arg_opts as a function for dynamic options ([6ed43a5](https://github.com/dgarana/vulcano/commit/6ed43a5aec4cc519efc04d074f3702e20cf81df3))
+- Improve README file ([8213c52](https://github.com/dgarana/vulcano/commit/8213c521c7f0037e25641e521888ba7fa930f17a))
+- Apply black formatter ([cb73b88](https://github.com/dgarana/vulcano/commit/cb73b886c90073b1bbd02f943a2cb93b4e80c18f))
+- Implement printing source code with themes ([5651c51](https://github.com/dgarana/vulcano/commit/5651c517b2103ef6ca4d8b3dd5a2148a1e5577ee))
 
-## v2.1.1
+## 0.1.4
 
-- chore: release v2.1.1 ([27b17b2](https://github.com/dgarana/vulcano/commit/27b17b2e987fb09925a22a71d48fdca665c4e563))
-- Bump requests from 2.32.5 to 2.33.0 ([690b287](https://github.com/dgarana/vulcano/commit/690b2872bc5c0f4efefa8e0b060e423010963f60))
+- Release version 0.1.4 ([61c4887](https://github.com/dgarana/vulcano/commit/61c488791591cabbe424ec1914f88d38e9a3b154))
+- Add support for formatting commands ([58ed045](https://github.com/dgarana/vulcano/commit/58ed0454a245795c40837e59c9958d8fd5e55c25))
+- Apply black formatter ([3afc0c0](https://github.com/dgarana/vulcano/commit/3afc0c09c9b874c7d58e6a5cda8272ba22d71c42))
+- Add return example on README ([5c2a073](https://github.com/dgarana/vulcano/commit/5c2a07396d9075ad0e79162d17d333debe8099fe))
+
+## 0.1.3
+
+- Release version 0.1.3 ([23d49c2](https://github.com/dgarana/vulcano/commit/23d49c27db8526efd0e78b68633597ab609cca11))
+- Update README file with new updates ([46bcbe3](https://github.com/dgarana/vulcano/commit/46bcbe30a4afa8423a413dce4bd9d27bd0d75f21))
+- Increase coverage percentage ([795d01a](https://github.com/dgarana/vulcano/commit/795d01a64c1a0437cc9593d3f39f5414acde5222))
+- Promote manager to be public ([10839f3](https://github.com/dgarana/vulcano/commit/10839f33e2aee94cf78f6eba0d27e1a6619cc7b5))
+- Add six to requirements ([c88f34f](https://github.com/dgarana/vulcano/commit/c88f34f95d411e575e68ff0bb285680eb0b26d26))
+- Improve examples ([b206337](https://github.com/dgarana/vulcano/commit/b2063373998b3a7bfc416d9a5c038cb68d40bfa5))
+- Rename parameter docstrings ([f4a0a3b](https://github.com/dgarana/vulcano/commit/f4a0a3bfe03fc965b9fc931d8a6ba50c2cc39afd))
+- Use isfunction instead of callable ([086c3c2](https://github.com/dgarana/vulcano/commit/086c3c28d50fce1d9da6ec92ed81675fb60b4f85))
+- Use generator instead of comprehension list ([8256e55](https://github.com/dgarana/vulcano/commit/8256e55ffee92b7d4f8e48ea790190e9109eed33))
+- Add support for register without parentheses ([905a13b](https://github.com/dgarana/vulcano/commit/905a13b5307b5c718eb6e78de584daddd81c6875))
+- Implement printing last result if enabled ([2c96b63](https://github.com/dgarana/vulcano/commit/2c96b63923ca08bcc35b4ba46c0631879c50db09))
+- Improve README file with some key features ([002f368](https://github.com/dgarana/vulcano/commit/002f368633c46d246743068b429bb9d318a65982))
+- Rename CommandManager to Magma ([8767b8a](https://github.com/dgarana/vulcano/commit/8767b8afb240d130503b007bcd0de286e6d6b770))
+- Add register module option ([2489b7d](https://github.com/dgarana/vulcano/commit/2489b7d30ee1eff9b670e50389788bb9171dc16c))
+- Update README.md ([688afd6](https://github.com/dgarana/vulcano/commit/688afd66faa26265920904d680a9e7ed145078e0))
+- Add some comments to modules ([6373fcf](https://github.com/dgarana/vulcano/commit/6373fcf403edc8b8ebdf636650921a6d2457e79e))
+- Fix deprecation warning for assertEquals ([6471672](https://github.com/dgarana/vulcano/commit/6471672292869b19a5655c8a382e1e480eb84aca))
+- Merge pull request #36 from dgarana/feature/implement_last_result ([8a70f4f](https://github.com/dgarana/vulcano/commit/8a70f4fb37c1d0fba7bd8ef70fc705521459dc84))
+- Add last command result inside the context ([6149cf7](https://github.com/dgarana/vulcano/commit/6149cf782fdaf98683751071342b12844b0a1804))
+- Apply black formatter ([bb49e0c](https://github.com/dgarana/vulcano/commit/bb49e0ceb6e5cc32535bbfdc85d3622b4694415c))
+- First version of fancy help ([407fe92](https://github.com/dgarana/vulcano/commit/407fe92dda00a862fa4bc8960344315ec08ffd72))
+- Merge pull request #33 from dgarana/feature/improve_completion ([58f20e4](https://github.com/dgarana/vulcano/commit/58f20e47d1e1937d8ddbd9ae9de613f8861e3023))
+- Apply black formatter ([8ffabb2](https://github.com/dgarana/vulcano/commit/8ffabb251c3b3cdaba28cf2ffcf2465894020c83))
+- Add support for auto complete commands and args ([78d049a](https://github.com/dgarana/vulcano/commit/78d049a0abd6e63733868e939beaa5cf1c622979))
+- Merge pull request #30 from dgarana/fix/unicode_issues ([9184bbf](https://github.com/dgarana/vulcano/commit/9184bbfed6b113410f3880ff946e57595702ed81))
+- Improve unicode conversion ([4ebb506](https://github.com/dgarana/vulcano/commit/4ebb506e68de55ac7f8ac92b30ede74cc3830300))
+
+## 0.1.2
+
+- Release version 0.1.2 ([597d84e](https://github.com/dgarana/vulcano/commit/597d84e15dd2532daaa58b675f98a58aaa8b0f82))
+- Merge pull request #27 from dgarana/feature/multicommand ([3b789fd](https://github.com/dgarana/vulcano/commit/3b789fd57f46730dac10c16a07e931728c664785))
+- Implement multicommand ([7f2888b](https://github.com/dgarana/vulcano/commit/7f2888b50038c4ba1b27905ddb1671772b8170f4))
+- Implement same parser as REPL on Args mode ([b6c9491](https://github.com/dgarana/vulcano/commit/b6c9491b5615f7e9209baa5e5e76091e0a2f5f62))
+- Fix missing pygments on setup ([a3e58eb](https://github.com/dgarana/vulcano/commit/a3e58eb036f45032a4aeab8e46b8877de2e1c8fa))
+- Apply black formatter ([0bbb815](https://github.com/dgarana/vulcano/commit/0bbb815654776bd0c01b88f9a5a459eadb0c1efe))
+- Merge pull request #26 from dgarana/feature/fuzzy_finder ([6f2c570](https://github.com/dgarana/vulcano/commit/6f2c57035a165ce2bcc61ce0478106a9f21a64ef))
+- Implement fuzzy finder ([1a63e37](https://github.com/dgarana/vulcano/commit/1a63e372b0e7dc68cbe021723b8dc19bb5272383))
+- Add __all__ to keep scope as clean as possible ([5fee342](https://github.com/dgarana/vulcano/commit/5fee342a692ece574685b13cc3adb04e8d3ff0f5))
+- Make register_command a public function ([c101df5](https://github.com/dgarana/vulcano/commit/c101df568b28d6e6be32a427d1343f3574277ae0))
+
+## 0.1.1
+
+- Release version 0.1.1 ([23cd2b7](https://github.com/dgarana/vulcano/commit/23cd2b78192b42dbb954dc5d9523225e8162293b))
+- Apply black formatter ([50b75bd](https://github.com/dgarana/vulcano/commit/50b75bd0c48d0429fd8fd7a5f809d97873dad7ca))
+- Merge pull request #24 from dgarana/feature/implement_lexer ([c7bb5c5](https://github.com/dgarana/vulcano/commit/c7bb5c5c0295dd82657f878ff8685683c3840bc8))
+- Fix issue with python2/3 support on example ([f8b797a](https://github.com/dgarana/vulcano/commit/f8b797a4b053751287c2acd378760b86ac1999d9))
+- First version of lexer ([39539a1](https://github.com/dgarana/vulcano/commit/39539a109d0a0431af31bf75c2b39bf427404925))
+- Improve help description ([fb2fe8c](https://github.com/dgarana/vulcano/commit/fb2fe8c0f595cb037ee5f5271e841dfcb051c453))
+- Add support for inspecting arguments ([0ff926b](https://github.com/dgarana/vulcano/commit/0ff926bb9644e53ab14cca3e7932cdeaf4195f7a))
+
+## 0.1.0
+
+- Release version 0.1.0 ([bea6625](https://github.com/dgarana/vulcano/commit/bea6625abcb126dcb568cf3b81749cdd0a0c6254))
+- Apply black formatter ([8832a2a](https://github.com/dgarana/vulcano/commit/8832a2aedc8ea60be458bc89df593a11ea92c34d))
+- Fix bug on unicode for python3 ([bebfdcc](https://github.com/dgarana/vulcano/commit/bebfdcc3bf72c6b82243b97a9769b7878147399d))
+- Add context support ([8ad658a](https://github.com/dgarana/vulcano/commit/8ad658aef4e6c1bdc518c54f3e8d639cbb5292de))
+- Fix bug when autocompleting on python2.7 ([a9f4e74](https://github.com/dgarana/vulcano/commit/a9f4e74255668407985db5957e1d1ae8c580abdf))
+- Update requirements to use codecov locally ([91439ab](https://github.com/dgarana/vulcano/commit/91439abc949cde2de9153f2c15124e9af78a39db))
+- Rename function from register to command ([4a32856](https://github.com/dgarana/vulcano/commit/4a328565fd31c7284072678dcbf83b9bb86ede10))
+- Improve docstrings for VulcanoApp ([2ef1330](https://github.com/dgarana/vulcano/commit/2ef133011a19f446d435585a88b479a8264c8bdb))
+- Merge pull request #18 from dgarana/dgarana-patch-1 ([1317115](https://github.com/dgarana/vulcano/commit/13171157027b6e5b9b012bfa0cdf2b83a1058970))
+- Merge pull request #19 from dgarana/dgarana-patch-2 ([fc3a31d](https://github.com/dgarana/vulcano/commit/fc3a31d3504783bee1156ade224a93273ca03a0f))
+- Fix typo in travis job name ([819cf4f](https://github.com/dgarana/vulcano/commit/819cf4fba3d31237f8699933e6346ddfac402130))
+- Fix typo in "Python 3.6 Unit Test" job name ([2ec445b](https://github.com/dgarana/vulcano/commit/2ec445bcb91e665eed1c849aba152b943a660aa0))
+- Fix flake8 issues and configure black ([bd61727](https://github.com/dgarana/vulcano/commit/bd6172723f4f10d1ed929e359abd2477ffcccaef))
+- Add new demo gif with autocomplete ([73c5360](https://github.com/dgarana/vulcano/commit/73c5360a4cacb8f6b72d2a2354dbaf6a1a86ef3d))
+- Add very basic completer ([03f648b](https://github.com/dgarana/vulcano/commit/03f648bdcd6a98cdc8f661cd9ef1fc4c2a1ff2ef))
+- Remove upload script in favour of CI ([1c6d3bc](https://github.com/dgarana/vulcano/commit/1c6d3bce6407bcfd2e8c0818553acfed26160002))
+- Avoid forked proyects to run deploy ([1b7275e](https://github.com/dgarana/vulcano/commit/1b7275e6ac049f2d721f5d2db4a29b0284924d79))
+- Skip deploy when already distributed ([79c5bc5](https://github.com/dgarana/vulcano/commit/79c5bc51689fdbc546eb36c00f737e8b5d06133c))
+
+## 0.0.4
+
+- Release 0.0.4 ([a70eebf](https://github.com/dgarana/vulcano/commit/a70eebf9ee1b23d1e841b7f12d972a00d330107e))
+- Add auto-deploy from travis ([bc18bcf](https://github.com/dgarana/vulcano/commit/bc18bcf44dbb1aa6afbca7a686b1410db23c3f80))
+- Add support for black code style ([7e9df68](https://github.com/dgarana/vulcano/commit/7e9df683facb43b996023d0d382caa8885fcf4d4))
+- Create upload script ([5407273](https://github.com/dgarana/vulcano/commit/54072739a84e724a5a867df7a681047318d1f455))
+- Release version 0.0.3 ([9cd7138](https://github.com/dgarana/vulcano/commit/9cd7138b717d1bbde482b7e52ca3540c5cbad299))
+
+## 0.0.3
+
+- Release version 0.0.3 ([47e2e76](https://github.com/dgarana/vulcano/commit/47e2e76aeadc7c0a40a7b166303c3dcc04d856cf))
+- Add missing VulcanoApp test coverage ([e330ff5](https://github.com/dgarana/vulcano/commit/e330ff57d045e65c80c49947f14c0dde35d76f02))
+- Improve tests argv names ([b1e4bb6](https://github.com/dgarana/vulcano/commit/b1e4bb648672e84492061c2aa92eb1b6ba4988dc))
+- Implement property to define execution request ([11c07e2](https://github.com/dgarana/vulcano/commit/11c07e2edc5fb9bbb5de93eac21dbf8c3eb57ff9))
+- Improve command classes tests ([8fe3b3b](https://github.com/dgarana/vulcano/commit/8fe3b3babbed0d9fd2e81c31cb92564d897846ee))
+- Add pylint support ([331bbcf](https://github.com/dgarana/vulcano/commit/331bbcfdbddeb432a35e48bfac6b59428a96826a))
+- Improve README documentation ([4806228](https://github.com/dgarana/vulcano/commit/48062287d06ab106c8e7ce48198dcd6313e881d6))
+- Implement support for CNTRL+C/D ([0d6e681](https://github.com/dgarana/vulcano/commit/0d6e6817c0ed9f0c447368ee74140a60cb71f504))
+- Enable command history ([5f59b16](https://github.com/dgarana/vulcano/commit/5f59b16e12412d287f81601cdb9c6a368d306ba5))
+- Upgrade to prompt_toolkit 2 ([eb4fbe4](https://github.com/dgarana/vulcano/commit/eb4fbe4e717a7fda8a5a4977edc01e21ec6da803))
+- Remove deprecation warnings ([f130ce5](https://github.com/dgarana/vulcano/commit/f130ce5f3982a36878e773a39e8e782dba255647))
+- Merge pull request #15 from dgarana/refactor/create_builtins ([2bddea3](https://github.com/dgarana/vulcano/commit/2bddea33697ba8c1dff76a9dc23f64bea30e2c0c))
+- Enable REPL and builtin commands ([d1c440e](https://github.com/dgarana/vulcano/commit/d1c440e00aaad2277e4bd6ecf11a96b88e009be7))
+- Update README.md ([062af4d](https://github.com/dgarana/vulcano/commit/062af4d5be7f2a91441a796b3137eea9bca3e70f))
+- Update README.md ([e8e3d95](https://github.com/dgarana/vulcano/commit/e8e3d9536ff4a99fd78d6496d5045726eb8ce53a))
+- Merge pull request #13 from dgarana/refactor/create_app ([c532ca4](https://github.com/dgarana/vulcano/commit/c532ca483ed334dc7248c245ded42fbe2ecc7b89))
+- Add requirements on install setup ([97b3ff2](https://github.com/dgarana/vulcano/commit/97b3ff2a8a3fd4150db5da046dd4be2b93d6c42c))
+- Add parser to parse inline commands ([687ec6c](https://github.com/dgarana/vulcano/commit/687ec6cac1fb04fbd38c97126f367a72f2e7e1b6))
+- Create some examples ([4fe4eb1](https://github.com/dgarana/vulcano/commit/4fe4eb160520b43cdf1c8447acf40b5b88365df7))
+- Move and create app ([7b8bdfd](https://github.com/dgarana/vulcano/commit/7b8bdfd3f7fccf744fb3c7bcf04a1449347ad24c))
+- Fix encoding issues on setup.py ([2b4ba13](https://github.com/dgarana/vulcano/commit/2b4ba1376474f24b906d17fd780eabae41833abe))
+- Remove unused import ([a2b3a05](https://github.com/dgarana/vulcano/commit/a2b3a0577fb5657486bfefa5edb9de0c80c8d26b))
+- Fill information from setup.py ([00b222b](https://github.com/dgarana/vulcano/commit/00b222bc90ba94c2827120e32413ef306b918634))
+- Add more completed gitignore ([0271dfb](https://github.com/dgarana/vulcano/commit/0271dfbc3a6ca71ab9e6e019eef4416dabb8f488))
+- Merge pull request #12 from dgarana/feature/improved_commands ([ff11042](https://github.com/dgarana/vulcano/commit/ff1104286537157d1df7829e068489fa4225e38b))
+- Improve documentation with example ([6d75404](https://github.com/dgarana/vulcano/commit/6d75404c445cb4e7ca125d4b46cf591cf7a96d1c))
+- Merge pull request #11 from dgarana/feature/improved_commands ([a90aa02](https://github.com/dgarana/vulcano/commit/a90aa02a7fa9f2749fcb9e7ca633d85c36eb1f28))
+- Add register decorator ([ff7067c](https://github.com/dgarana/vulcano/commit/ff7067c236b46326997c29ff867a6d15c06e1104))
+- Update README.md ([a9b4e2a](https://github.com/dgarana/vulcano/commit/a9b4e2ac49c0db2693b85dc815390ca43de370c6))
+- Make CI pass again ([42e56d9](https://github.com/dgarana/vulcano/commit/42e56d960736972bf623c05bf385633f8f5aaa66))
+- Update README.md ([c3331c5](https://github.com/dgarana/vulcano/commit/c3331c55786b40c34e8a3d349f8485edd819700a))
+- Make CI Fail ([24d2a84](https://github.com/dgarana/vulcano/commit/24d2a84bfff534ef2dcf79dc58d4da32e34ca17d))
+- Update README.md ([290c682](https://github.com/dgarana/vulcano/commit/290c68250760320489d3755d60bdc371e282714a))
+- Merge pull request #10 from dgarana/enable_autodoc ([030e9c0](https://github.com/dgarana/vulcano/commit/030e9c04acc0920b66e0ff81fa4d3e0c4aac929d))
+- Add sphinx doc build step ([b66d9a5](https://github.com/dgarana/vulcano/commit/b66d9a59418bfbef6a1c1825930653972d8b8316))
+- Merge pull request #9 from dgarana/feature/add-travis-ci-build-name ([a834d61](https://github.com/dgarana/vulcano/commit/a834d6161913b1f54e8786021b7eac20352fff37))
+- Add travis-ci names to builds ([c1a4f84](https://github.com/dgarana/vulcano/commit/c1a4f847af014abc70fd098207f2c2dcd5cadba2))
+- Update README.md ([b793d16](https://github.com/dgarana/vulcano/commit/b793d16253d451e676a562962fb7bdfb79efa22d))
+- Merge pull request #8 from dgarana/feature/add-codecov-support ([0998d08](https://github.com/dgarana/vulcano/commit/0998d08c18a71614703a09d82a279785a72702c7))
+- Add support for codecov ([882b31c](https://github.com/dgarana/vulcano/commit/882b31c1facc17593e3738afbfbcad341505d732))
+- Merge pull request #7 from dgarana/feature/#6-add-pytest-cov ([2d716f7](https://github.com/dgarana/vulcano/commit/2d716f7a9f5d51cff884a38cc1fb55198bc41bca))
+- Add pytest coverage ([013d149](https://github.com/dgarana/vulcano/commit/013d14960b059b6579c1304db5afaeaa37c7e9f7))
+- Add support for other python versions ([1b60085](https://github.com/dgarana/vulcano/commit/1b6008552e356d9290f51648533e77ea5ce4a389))
+- Update README.md ([2abb36f](https://github.com/dgarana/vulcano/commit/2abb36f43d85bd3438f9c7cc2771f1daa6a2affe))
+- Merge pull request #2 from dgarana/feature/#1-Vulcano-App ([db02fd2](https://github.com/dgarana/vulcano/commit/db02fd2cd3b1229c04524ce05d99085972947406))
+- Add readme file to package ([d201abf](https://github.com/dgarana/vulcano/commit/d201abf8600f982576d17e5496ea1ed8a77222a9))
+- Enable travis-ci ([35fbe65](https://github.com/dgarana/vulcano/commit/35fbe653d66499d6a44ae25fbb4b5fef226c1465))
+- Create Vulcano App ([68ca72c](https://github.com/dgarana/vulcano/commit/68ca72c853e9468f63eba42bc92169da0899d446))
+- Itialize vulcano project ([7f4855c](https://github.com/dgarana/vulcano/commit/7f4855c29fbee5516e345ef045fdb7b97acfe87f))
 
