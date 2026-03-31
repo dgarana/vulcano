@@ -263,6 +263,29 @@ class TestVulcanoApp(TestCase):
         app.run(print_result=False)
         rendered_with_context.parameter_is.assert_called_with("{non_existent}")
 
+    @patch("vulcano.app.classes.sys")
+    def test_it_should_not_format_command_from_args_when_disabled(self, sys_mock):
+        sys_mock.argv = [
+            "ensure_no_repl",
+            "first_function",
+            "and",
+            "executed",
+            "{last_result}",
+        ]
+        app = VulcanoApp(enable_context_formatting=False)
+        rendered_with_context = MagicMock()
+
+        @app.command
+        def first_function():
+            return 10
+
+        @app.command
+        def executed(param):
+            rendered_with_context.parameter_is(param)
+
+        app.run(print_result=False)
+        rendered_with_context.parameter_is.assert_called_with("{last_result}")
+
     @patch("vulcano.app.classes.PromptSession")
     @patch("vulcano.app.classes.sys")
     def test_continue_if_there_is_no_command_input(self, sys_mock, prompt_session_mock):
@@ -456,6 +479,10 @@ class TestVulcanoApp(TestCase):
         app_one_copy = VulcanoApp("app_one")
         self.assertNotEqual(app_one, app_two)
         self.assertEqual(app_one, app_one_copy)
+
+    def test_constructor_accepts_enable_context_formatting(self):
+        app = VulcanoApp("cfg_app", enable_context_formatting=False)
+        self.assertFalse(app.enable_context_formatting)
 
     @patch("vulcano.app.classes.sys")
     def test_dot_path_executes_command_in_group_from_args(self, sys_mock):

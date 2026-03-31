@@ -57,11 +57,14 @@ class VulcanoApp(object):
     __instances__ = {}
 
     def __new__(
-        cls, app_name: str = "vulcano_default", prompt: str = "🌋  "
+        cls,
+        app_name: str = "vulcano_default",
+        prompt: str = "🌋  ",
+        enable_context_formatting: bool = True,
     ) -> _VulcanoApp:
         if app_name in cls.__instances__:
             return cls.__instances__.get(app_name)
-        new_app = _VulcanoApp(app_name, prompt)
+        new_app = _VulcanoApp(app_name, prompt, enable_context_formatting)
         cls.__instances__[app_name] = new_app
         return new_app
 
@@ -69,7 +72,9 @@ class VulcanoApp(object):
 class _VulcanoApp(object):
     """Concrete app implementation with registration and execution state."""
 
-    def __init__(self, app_name: str, prompt: str) -> None:
+    def __init__(
+        self, app_name: str, prompt: str, enable_context_formatting: bool = True
+    ) -> None:
         self.app_name: str = app_name
         self.manager: Magma = Magma()
         self.context: dict[str, Any] = {}
@@ -79,7 +84,7 @@ class _VulcanoApp(object):
         self.prompt: str = prompt
         # Enabled by default for backward compatibility with existing
         # command chaining/context-substitution behavior.
-        self.enable_context_formatting: bool = True
+        self.enable_context_formatting: bool = enable_context_formatting
         # Flat registry of all CommandGroup objects keyed by their full
         # dot-path (e.g. {"text": grp, "text.formal": formal_grp}).
         self._groups: dict[str, Any] = {}

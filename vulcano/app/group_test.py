@@ -196,6 +196,22 @@ class TestCommandGroup(unittest.TestCase):
         received.assert_called_once_with("world")
 
     @patch("vulcano.app.group.PromptSession")
+    def test_call_context_templating_can_be_disabled(self, PromptSessionMock):
+        """Context placeholders remain literal when formatting is disabled."""
+        self.app.enable_context_formatting = False
+        self.app.context["item"] = "world"
+        PromptSessionMock.return_value.prompt.side_effect = ("greet '{item}'", EOFError)
+        grp = self.app.group("grp")
+        received = MagicMock()
+
+        @grp.command("greet")
+        def greet(item):
+            received(item)
+
+        grp()
+        received.assert_called_once_with("{item}")
+
+    @patch("vulcano.app.group.PromptSession")
     def test_call_enters_nested_child_group(self, PromptSessionMock):
         """Typing a child-group name inside the parent group enters it."""
         # Sequence: parent gets "child" → child gets EOFError (exits child) →
