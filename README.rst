@@ -148,7 +148,50 @@ Getting Started
 ---------------
 
 The repository includes a complete example in ``examples/simple_example.py``.
-The snippet below covers the most common features:
+If you just want to see Vulcano working quickly, start there.
+
+Quick start
+~~~~~~~~~~~\n
+1. Install the package:
+
+.. code:: bash
+
+    pip install vulcano
+
+2. Save the example app below as ``simple_example.py`` (or use the version in
+   ``examples/simple_example.py``).
+
+3. Run it in interactive mode:
+
+.. code:: bash
+
+    python simple_example.py
+
+4. Try a few realistic commands:
+
+.. code:: text
+
+    🌋   hi name=Alice title=Dr.
+    Hi! Dr. Alice — glad to see you.
+    🌋   i_am name=Alice
+    🌋   whoami
+    Alice
+    🌋   greet name=Alice role=admin
+    Hello, Admin Alice!
+    🌋   multiply number1=6 number2=7
+    42
+    🌋   text.formal.dear name=Alice title="Prof."
+    Dear Prof. Alice, I trust this finds you well.
+
+5. Or run one-shot commands directly from the shell:
+
+.. code:: bash
+
+    python simple_example.py multiply number1=6 number2=7
+    python simple_example.py text.formal.dear name=Alice title="Prof."
+    python simple_example.py multiply number1=6 number2=7 and reverse_word word=vulcano
+
+The longer snippet below covers the most common features:
 
 .. code:: python
 
@@ -436,6 +479,24 @@ subsequent commands via templating.
     emosewa si sihT !ybaB olleH
     eMOsEwa SI SIHT !YbaB OLlEH
 
+
+Practical usage notes
+---------------------
+
+A few behaviors are especially useful when you start building non-trivial apps:
+
+- Commands that ``return`` a value have that value printed automatically.
+- Returned values are also stored in ``context["last_result"]`` and can be reused
+  in later commands.
+- ``print(...)`` is useful for side-effect-style commands, while ``return`` works
+  better for commands whose output should be reused.
+- Group commands can be executed either by entering the group in the REPL or by
+  using dot-path syntax directly.
+- ``arg_opts`` can be static lists or dynamic callables, which makes it possible
+  to offer context-aware suggestions.
+
+For a more realistic reference app, prefer ``examples/simple_example.py`` over
+minimal one-function snippets.
 
 Development
 -----------
