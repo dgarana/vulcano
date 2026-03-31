@@ -8,6 +8,8 @@ applications with minimal boilerplate.
 
 `Support the project on Patreon <https://www.patreon.com/dgarana>`__
 
+`Read the changelog <./CHANGELOG.md>`__
+
 
 What is Vulcano?
 ----------------
