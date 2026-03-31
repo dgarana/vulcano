@@ -59,9 +59,13 @@ jobs:
         uses: astral-sh/setup-uv@v5
 
       - name: Refresh changelog
-        run: |
-          git fetch --tags origin
-          python3 scripts/generate_changelog.py
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: pyproject.toml
+          args: --verbose
+        env:
+          OUTPUT: CHANGELOG.md
+          GITHUB_REPO: ${{ github.repository }}
 
       - name: Commit and tag
         run: |
