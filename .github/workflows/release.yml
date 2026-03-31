@@ -58,6 +58,19 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
 
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add vulcano/__init__.py
+          git commit -m "chore: release v${{ steps.bump.outputs.new_version }}"
+
+      - name: Create and push tag
+        run: |
+          git tag "v${{ steps.bump.outputs.new_version }}"
+          git push origin HEAD
+          git push origin "v${{ steps.bump.outputs.new_version }}"
+
       - name: Refresh changelog
         uses: orhun/git-cliff-action@v4
         with:
@@ -67,12 +80,8 @@ jobs:
           OUTPUT: CHANGELOG.md
           GITHUB_REPO: ${{ github.repository }}
 
-      - name: Commit and tag
+      - name: Amend commit with changelog
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add vulcano/__init__.py CHANGELOG.md
-          git commit -m "chore: release v${{ steps.bump.outputs.new_version }}"
-          git tag "v${{ steps.bump.outputs.new_version }}"
-          git push origin HEAD
-          git push origin "v${{ steps.bump.outputs.new_version }}"
+          git add CHANGELOG.md
+          git commit --amend --no-edit
+          git push origin HEAD --force-with-lease
