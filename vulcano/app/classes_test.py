@@ -541,9 +541,6 @@ class TestVulcanoApp(TestCase):
         session_instance.prompt.side_effect = ("test_function", EOFError)
         sys_mock.argv = ["ensure_repl"]
 
-        # Mock patch_stdout to return a context manager
-        patch_stdout_context = patch_stdout_mock.return_value.__enter__.return_value
-
         app = VulcanoApp()
         mock_execution = MagicMock()
 
@@ -587,7 +584,4 @@ class TestVulcanoApp(TestCase):
 
         app.run()
 
-        # Background task should have executed
-        # Check if background output was printed
-        printed_calls = [str(call) for call in print_mock.call_args_list]
-        background_printed = any("background" in call for call in printed_calls)
+        # Background task should have executed without breaking the REPL flow.
