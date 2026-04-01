@@ -532,26 +532,78 @@ instead of being substituted from the context.
 For a more realistic reference app, prefer ``examples/simple_example.py`` over
 minimal one-function snippets.
 
-Background output example
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Background tasks
+~~~~~~~~~~~~~~~~
 
-If you want to start a background task that keeps writing to stdout while the
-REPL remains active, take a look at ``examples/async_output_example.py``.
-It demonstrates a command that starts a daemon thread and emits periodic output
-without corrupting the interactive prompt.
+Vulcano supports structured background tasks with clean REPL rendering and
+status tracking.  Background tasks can run concurrently with the REPL,
+and their output is queued to avoid corrupting the interactive prompt.
 
-Example session:
+The ``VulcanoApp`` includes a ``background_tasks`` manager that:
+
+- Tracks N concurrent background tasks with unique IDs
+- Queues background output to prevent prompt corruption
+- Displays task status in a bottom toolbar (REPL mode)
+- Waits for all tasks to complete in CLI mode before exiting
+
+Example background task command:
+
+.. code:: python
+
+    import threading
+    import time
+
+    @app.command
+    def start_background(interval=1, ticks=5):
+        """Start a background task with structured output."""
+
+        def worker(task_id):
+            try:
+                for i in range(ticks):
+                    time.sleep(interval)
+                    app.background_tasks.enqueue_output(task_id, "tick {}".format(i))
+                app.background_tasks.mark_completed(task_id)
+            except Exception as e:
+                app.background_tasks.mark_failed(task_id, e)
+
+        thread = threading.Thread(target=worker, args=(None,), daemon=True)
+        task_id = app.background_tasks.register_task(
+            "background_{}".format(ticks), thread
+        )
+        # Update thread with actual task_id
+        thread = threading.Thread(target=worker, args=(task_id,), daemon=True)
+        app.background_tasks._tasks[task_id].thread = thread
+        thread.start()
+        return "Background task started ({})".format(task_id)
+
+See ``examples/async_output_example.py`` for a complete working example.
+
+Example REPL session with background tasks:
 
 .. code:: text
 
     🌋   start_background interval=1 ticks=3
-    Background task started
+    Background task started (task_0)
     🌋   hello name=Alice
     Hello Alice!
-    [background] tick 0
-    [background] tick 1
-    [background] tick 2
+    [task_0] tick 0
+    [task_0] tick 1
+    [task_0] tick 2
     🌋
+
+The bottom toolbar shows active task counts (e.g., ``[2 tasks running]``)
+when background work is in progress.
+
+**CLI mode behavior** — When running commands directly from the shell,
+Vulcano waits for all background tasks to complete before the process exits:
+
+.. code:: bash
+
+    $ python your_app.py start_background interval=1 ticks=3
+    Background task started (task_0)
+    [task_0] tick 0
+    [task_0] tick 1
+    [task_0] tick 2
 
 Development
 -----------
