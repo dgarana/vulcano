@@ -6,14 +6,18 @@ import os
 
 # System imports
 import sys
+import threading
+import time
 from collections.abc import Callable
 from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any
 
 # Third-party imports
-from prompt_toolkit import PromptSession
+from prompt_toolkit import PromptSession, print_formatted_text
+from prompt_toolkit.application import get_app
 from prompt_toolkit.completion import FuzzyCompleter
+from prompt_toolkit.formatted_text import HTML
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.lexers import PygmentsLexer
 from prompt_toolkit.patch_stdout import patch_stdout
@@ -26,6 +30,7 @@ from vulcano.command.parser import inline_parser, split_list_by_arg
 # Local imports
 from vulcano.exceptions import CommandNotFound, CommandParseError
 
+from .background import BackgroundTaskManager
 from .lexer import MonokaiTheme, create_lexer
 
 __all__ = ["VulcanoApp"]
@@ -89,6 +94,8 @@ class _VulcanoApp(object):
         # Flat registry of all CommandGroup objects keyed by their full
         # dot-path (e.g. {"text": grp, "text.formal": formal_grp}).
         self._groups: dict[str, Any] = {}
+        # Background task manager for structured async work.
+        self.background_tasks: BackgroundTaskManager = BackgroundTaskManager()
 
     @property
     def request_is_for_args(self) -> bool:
@@ -211,45 +218,91 @@ class _VulcanoApp(object):
             return '"{}"'.format(str(value).replace('"', '\\"'))
         return value
 
+    def _display_background_output(self, use_prompt_toolkit: bool = False) -> None:
+        """Display any queued background task output.
+
+        Args:
+            use_prompt_toolkit: Use prompt_toolkit's print function for clean
+                output above the prompt line.
+        """
+        messages = self.background_tasks.get_queued_output()
+        for task_id, message in messages:
+            output = "[{}] {}".format(task_id, message)
+            if use_prompt_toolkit:
+                try:
+                    # Use prompt_toolkit printing to render above the prompt
+                    print_formatted_text(output)
+                except Exception:
+                    # Fallback to regular print if not in prompt context
+                    print(output)
+            else:
+                print(output)
+
     def _exec_from_args(self) -> None:
         """Execute one or more commands provided in CLI argument mode."""
-        # Re-quote argv tokens that contain spaces so that multi-word shell
-        # arguments (e.g. "Hello world") survive the join→split round-trip.
-        quoted_args = [self._quote_if_spaced(a) for a in sys.argv[1:]]
-        commands = split_list_by_arg(lst=quoted_args, separator="and")
-        flat_cmds = self._flat_commands
-        all_names = self.manager.command_names + list(flat_cmds.keys())
-        for command in commands:
-            command_list = command.split()
-            command_name = command_list[0]
-            arguments = " ".join(command_list[1:])
-            if self.enable_context_formatting:
+        # Start background output renderer for live streaming during CLI execution
+        output_active = threading.Event()
+        output_active.set()
+
+        def cli_output_renderer():
+            """Continuously display background task output during CLI execution."""
+            while output_active.is_set():
+                # Poll for queued output every 50ms for responsive streaming
+                time.sleep(0.05)
+                if not self.background_tasks._output_queue.empty():
+                    self._display_background_output(use_prompt_toolkit=False)
+
+        output_thread = threading.Thread(target=cli_output_renderer, daemon=True)
+        output_thread.start()
+
+        try:
+            # Re-quote argv tokens that contain spaces so that multi-word shell
+            # arguments (e.g. "Hello world") survive the join→split round-trip.
+            quoted_args = [self._quote_if_spaced(a) for a in sys.argv[1:]]
+            commands = split_list_by_arg(lst=quoted_args, separator="and")
+            flat_cmds = self._flat_commands
+            all_names = self.manager.command_names + list(flat_cmds.keys())
+            for command in commands:
+                command_list = command.split()
+                command_name = command_list[0]
+                arguments = " ".join(command_list[1:])
+                if self.enable_context_formatting:
+                    try:
+                        # Quote context values that contain spaces so that a substituted
+                        # multi-word result is still treated as a single argument.
+                        safe_context = {
+                            k: self._quote_if_spaced(v) for k, v in self.context.items()
+                        }
+                        arguments = arguments.format(**safe_context)
+                    except KeyError:
+                        pass
                 try:
-                    # Quote context values that contain spaces so that a substituted
-                    # multi-word result is still treated as a single argument.
-                    safe_context = {
-                        k: self._quote_if_spaced(v) for k, v in self.context.items()
-                    }
-                    arguments = arguments.format(**safe_context)
-                except KeyError:
-                    pass
-            try:
-                args, kwargs = inline_parser(arguments)
-            except CommandParseError as error:
-                print(
-                    "🚨  Error parsing arguments for '{}': {}".format(
-                        command_name, error
+                    args, kwargs = inline_parser(arguments)
+                except CommandParseError as error:
+                    print(
+                        "🚨  Error parsing arguments for '{}': {}".format(
+                            command_name, error
+                        )
                     )
-                )
-                raise
-            try:
-                self._execute_command(command_name, *args, **kwargs)
-            except CommandNotFound:
-                print("🤔  Command '{}' not found".format(command_name))
-                if self.suggestions:
-                    possible_command = self.suggestions(command_name, all_names)
-                    if possible_command:
-                        print('💡  Did you mean: "{}"?'.format(possible_command))
+                    raise
+                try:
+                    self._execute_command(command_name, *args, **kwargs)
+                except CommandNotFound:
+                    print("🤔  Command '{}' not found".format(command_name))
+                    if self.suggestions:
+                        possible_command = self.suggestions(command_name, all_names)
+                        if possible_command:
+                            print('💡  Did you mean: "{}"?'.format(possible_command))
+
+            # Wait for all background tasks to complete before exiting
+            if self.background_tasks.has_active_tasks():
+                self.background_tasks.wait_for_all_tasks()
+        finally:
+            # Stop the output renderer thread
+            output_active.clear()
+            output_thread.join(timeout=1.0)
+            # Display any final queued output after stopping the renderer
+            self._display_background_output(use_prompt_toolkit=False)
 
     def _exec_from_repl(
         self, theme: Any = MonokaiTheme, history_file: str | Path | None = None
@@ -267,48 +320,97 @@ class _VulcanoApp(object):
             CommandCompleter(self.manager, ignore_case=True, flat_commands=flat_cmds)
         )
         lexer = create_lexer(commands=all_names)
+
+        def bottom_toolbar():
+            """Display background task status in the bottom toolbar."""
+            status = self.background_tasks.get_status_summary(include_names=True)
+            if status:
+                return HTML("<b>[{}]</b>".format(status))
+            return ""
+
+        def invalidate_ui():
+            """Trigger UI redraw from background threads."""
+            app = get_app()
+            if app.is_running:
+                # Schedule invalidate on event loop to be thread-safe.
+                app.invalidate()
+
+        # Register the UI invalidation callback with the background task manager
+        self.background_tasks.set_ui_invalidate_callback(invalidate_ui)
+
+        # Background thread to continuously display queued output
+        refresh_active = threading.Event()
+        refresh_active.set()
+
+        def background_output_renderer():
+            """Continuously display background task output during REPL session."""
+            while refresh_active.is_set():
+                # Check for queued output every 100ms
+                time.sleep(0.1)
+                if not self.background_tasks._output_queue.empty():
+                    self._display_background_output(use_prompt_toolkit=True)
+                    # Trigger UI refresh to update toolbar status
+                    invalidate_ui()
+
+        refresh_thread = threading.Thread(
+            target=background_output_renderer, daemon=True
+        )
+        refresh_thread.start()
+
         session = PromptSession(
             completer=manager_completer,
             lexer=PygmentsLexer(lexer),
             style=theme.pygments_style(),
+            bottom_toolbar=bottom_toolbar,
             **session_extra_options,
         )
-        while self.do_repl:
-            try:
-                with patch_stdout():
-                    user_input = "{}".format(session.prompt(self.prompt))
-            except KeyboardInterrupt:
-                continue  # Control-C pressed. Try again.
-            except EOFError:
-                break  # Control-D Pressed. Finish
+        try:
+            while self.do_repl:
+                # Display any queued background output before prompting
+                self._display_background_output()
 
-            if not user_input.strip():
-                continue
-            command = ""
-            try:
-                commands = split_list_by_arg(lst=[user_input], separator="and")
-                for command_str in commands:
-                    command_str = command_str.strip()
-                    if not command_str:
-                        continue
-                    command_parts = command_str.split()
-                    command = command_parts[0]
-                    arguments = " ".join(command_parts[1:])
-                    if self.enable_context_formatting:
-                        try:
-                            arguments = arguments.format(**self.context)
-                        except KeyError:
-                            pass
-                    args, kwargs = inline_parser(arguments)
-                    self._execute_command(command, *args, **kwargs)
-            except CommandNotFound:
-                print("🤔  Command '{}' not found".format(command))
-                if self.suggestions:
-                    possible_command = self.suggestions(command, all_names)
-                    if possible_command:
-                        print('💡  Did you mean: "{}"?'.format(possible_command))
-            except Exception as error:
-                print("💥  Error executing '{}': {}".format(command, error))
+                try:
+                    with patch_stdout():
+                        user_input = "{}".format(session.prompt(self.prompt))
+                except KeyboardInterrupt:
+                    continue  # Control-C pressed. Try again.
+                except EOFError:
+                    break  # Control-D Pressed. Finish
+
+                if not user_input.strip():
+                    continue
+                command = ""
+                try:
+                    commands = split_list_by_arg(lst=[user_input], separator="and")
+                    for command_str in commands:
+                        command_str = command_str.strip()
+                        if not command_str:
+                            continue
+                        command_parts = command_str.split()
+                        command = command_parts[0]
+                        arguments = " ".join(command_parts[1:])
+                        if self.enable_context_formatting:
+                            try:
+                                arguments = arguments.format(**self.context)
+                            except KeyError:
+                                pass
+                        args, kwargs = inline_parser(arguments)
+                        self._execute_command(command, *args, **kwargs)
+                except CommandNotFound:
+                    print("🤔  Command '{}' not found".format(command))
+                    if self.suggestions:
+                        possible_command = self.suggestions(command, all_names)
+                        if possible_command:
+                            print('💡  Did you mean: "{}"?'.format(possible_command))
+                except Exception as error:
+                    print("💥  Error executing '{}': {}".format(command, error))
+        finally:
+            # Stop the background refresh thread
+            refresh_active.clear()
+            refresh_thread.join(timeout=1.0)
+
+        # Display any remaining background output before exiting
+        self._display_background_output()
 
     def _execute_command(self, command_name: str, *args: Any, **kwargs: Any) -> Any:
         """Execute a command and persist result in shared context.
