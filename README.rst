@@ -152,6 +152,10 @@ Getting Started
 The repository includes a complete example in ``examples/simple_example.py``.
 If you just want to see Vulcano working quickly, start there.
 
+There is also an async/background-output example in
+``examples/async_output_example.py`` showing how Vulcano behaves when a
+background task prints while the REPL prompt is still active.
+
 Quick start
 ~~~~~~~~~~~\n
 1. Install the package:
@@ -527,6 +531,27 @@ instead of being substituted from the context.
 
 For a more realistic reference app, prefer ``examples/simple_example.py`` over
 minimal one-function snippets.
+
+Background output example
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to start a background task that keeps writing to stdout while the
+REPL remains active, take a look at ``examples/async_output_example.py``.
+It demonstrates a command that starts a daemon thread and emits periodic output
+without corrupting the interactive prompt.
+
+Example session:
+
+.. code:: text
+
+    🌋   start_background interval=1 ticks=3
+    Background task started
+    🌋   hello name=Alice
+    Hello Alice!
+    [background] tick 0
+    [background] tick 1
+    [background] tick 2
+    🌋
 
 Development
 -----------
