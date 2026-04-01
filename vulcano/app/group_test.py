@@ -287,7 +287,9 @@ class TestCommandGroup(unittest.TestCase):
 
     @patch("vulcano.app.group.patch_stdout")
     @patch("vulcano.app.group.PromptSession")
-    def test_call_uses_patch_stdout_for_background_output(self, PromptSessionMock, patch_stdout_mock):
+    def test_call_uses_patch_stdout_for_background_output(
+        self, PromptSessionMock, patch_stdout_mock
+    ):
         """Verify patch_stdout is used in group sub-REPL for background output."""
         PromptSessionMock.return_value.prompt.side_effect = ("my_cmd", EOFError)
         grp = self.app.group("grp")
@@ -298,7 +300,7 @@ class TestCommandGroup(unittest.TestCase):
             executed()
 
         grp()
-        
+
         # Verify patch_stdout was called
         patch_stdout_mock.assert_called()
         executed.assert_called_once()
