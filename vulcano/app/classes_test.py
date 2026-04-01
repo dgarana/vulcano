@@ -540,10 +540,10 @@ class TestVulcanoApp(TestCase):
         session_instance = prompt_session_mock.return_value
         session_instance.prompt.side_effect = ("test_function", EOFError)
         sys_mock.argv = ["ensure_repl"]
-        
+
         # Mock patch_stdout to return a context manager
         patch_stdout_context = patch_stdout_mock.return_value.__enter__.return_value
-        
+
         app = VulcanoApp()
         mock_execution = MagicMock()
 
@@ -552,7 +552,7 @@ class TestVulcanoApp(TestCase):
             mock_execution.test_function_called()
 
         app.run()
-        
+
         # Verify patch_stdout was called
         patch_stdout_mock.assert_called()
         mock_execution.test_function_called.assert_called_once()
@@ -566,27 +566,27 @@ class TestVulcanoApp(TestCase):
         """Verify background threads can print without corrupting the prompt."""
         import threading
         import time
-        
+
         # Simulate background output during prompt
         def background_task():
             time.sleep(0.01)
             print("[background] output")
-        
+
         session_instance = prompt_session_mock.return_value
         # Start background task, then exit
         session_instance.prompt.side_effect = ("start_bg", EOFError)
         sys_mock.argv = ["ensure_repl"]
-        
+
         app = VulcanoApp()
-        
+
         @app.command()
         def start_bg():
             thread = threading.Thread(target=background_task, daemon=True)
             thread.start()
             return "Background started"
-        
+
         app.run()
-        
+
         # Background task should have executed
         # Check if background output was printed
         printed_calls = [str(call) for call in print_mock.call_args_list]
