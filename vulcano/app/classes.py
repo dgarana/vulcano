@@ -16,6 +16,7 @@ from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import FuzzyCompleter
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.lexers import PygmentsLexer
+from prompt_toolkit.patch_stdout import patch_stdout
 
 from vulcano.command import builtin
 from vulcano.command.classes import Magma
@@ -274,7 +275,8 @@ class _VulcanoApp(object):
         )
         while self.do_repl:
             try:
-                user_input = "{}".format(session.prompt(self.prompt))
+                with patch_stdout():
+                    user_input = "{}".format(session.prompt(self.prompt))
             except KeyboardInterrupt:
                 continue  # Control-C pressed. Try again.
             except EOFError:
