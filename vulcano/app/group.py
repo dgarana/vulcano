@@ -10,6 +10,7 @@ from typing import Any
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import FuzzyCompleter
 from prompt_toolkit.lexers import PygmentsLexer
+from prompt_toolkit.patch_stdout import patch_stdout
 
 from vulcano.command import builtin
 from vulcano.command.classes import Magma
@@ -170,7 +171,8 @@ class CommandGroup:
 
         while self.do_repl:
             try:
-                user_input = "{}".format(session.prompt(group_prompt))
+                with patch_stdout():
+                    user_input = "{}".format(session.prompt(group_prompt))
             except KeyboardInterrupt:
                 continue  # Ctrl-C — stay in group
             except EOFError:

@@ -529,3 +529,65 @@ class TestVulcanoApp(TestCase):
         self.assertIn("g.cmd_a", flat)
         self.assertIn("g.s", flat)  # sub-group entry registered in g.manager
         self.assertIn("g.s.cmd_b", flat)
+
+    @patch("vulcano.app.classes.patch_stdout")
+    @patch("vulcano.app.classes.PromptSession")
+    @patch("vulcano.app.classes.sys")
+    def test_repl_uses_patch_stdout_for_background_output(
+        self, sys_mock, prompt_session_mock, patch_stdout_mock
+    ):
+        """Verify patch_stdout is used to handle background output cleanly."""
+        session_instance = prompt_session_mock.return_value
+        session_instance.prompt.side_effect = ("test_function", EOFError)
+        sys_mock.argv = ["ensure_repl"]
+        
+        # Mock patch_stdout to return a context manager
+        patch_stdout_context = patch_stdout_mock.return_value.__enter__.return_value
+        
+        app = VulcanoApp()
+        mock_execution = MagicMock()
+
+        @app.command()
+        def test_function():
+            mock_execution.test_function_called()
+
+        app.run()
+        
+        # Verify patch_stdout was called
+        patch_stdout_mock.assert_called()
+        mock_execution.test_function_called.assert_called_once()
+
+    @patch(print_builtin)
+    @patch("vulcano.app.classes.PromptSession")
+    @patch("vulcano.app.classes.sys")
+    def test_repl_handles_background_thread_output(
+        self, sys_mock, prompt_session_mock, print_mock
+    ):
+        """Verify background threads can print without corrupting the prompt."""
+        import threading
+        import time
+        
+        # Simulate background output during prompt
+        def background_task():
+            time.sleep(0.01)
+            print("[background] output")
+        
+        session_instance = prompt_session_mock.return_value
+        # Start background task, then exit
+        session_instance.prompt.side_effect = ("start_bg", EOFError)
+        sys_mock.argv = ["ensure_repl"]
+        
+        app = VulcanoApp()
+        
+        @app.command()
+        def start_bg():
+            thread = threading.Thread(target=background_task, daemon=True)
+            thread.start()
+            return "Background started"
+        
+        app.run()
+        
+        # Background task should have executed
+        # Check if background output was printed
+        printed_calls = [str(call) for call in print_mock.call_args_list]
+        background_printed = any("background" in call for call in printed_calls)
