@@ -150,13 +150,24 @@ class TestThemeStyles(TestCase):
         self.assertTrue(len(OneDarkTheme.styles) > 0)
 
     def test_all_themes_are_subclasses_of_vulcano_style(self):
-        for theme in [MonokaiTheme, DraculaTheme, NordTheme, SolarizedDarkTheme, OneDarkTheme]:
-            self.assertTrue(issubclass(theme, VulcanoStyle), f"{theme.__name__} not a VulcanoStyle")
+        themes = [
+            MonokaiTheme, DraculaTheme, NordTheme, SolarizedDarkTheme, OneDarkTheme
+        ]
+        for theme in themes:
+            self.assertTrue(
+                issubclass(theme, VulcanoStyle),
+                "{} not a VulcanoStyle".format(theme.__name__),
+            )
 
     def test_pygments_style_returns_callable(self):
         style = DraculaTheme.pygments_style()
         self.assertIsNotNone(style)
 
     def test_keyword_style_defined_in_color_themes(self):
-        for theme in [DraculaTheme, NordTheme, SolarizedDarkTheme, OneDarkTheme]:
-            self.assertIn(Keyword, theme.styles, f"{theme.__name__} missing Keyword style")
+        themes = [DraculaTheme, NordTheme, SolarizedDarkTheme, OneDarkTheme]
+        for theme in themes:
+            self.assertIn(
+                Keyword,
+                theme.styles,
+                "{} missing Keyword style".format(theme.__name__),
+            )
