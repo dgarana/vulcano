@@ -57,3 +57,48 @@ class TestBuiltin(unittest.TestCase):
         help_func = builtin.help(app)
         help_func()
         console_mock.print.assert_called_once()
+
+    @patch(console_path)
+    def test_help_hides_invisible_commands(self, console_mock):
+        from rich.table import Table
+
+        app = MagicMock()
+        visible_cmd = MagicMock()
+        visible_cmd.name = "visible"
+        visible_cmd.short_description = "I am visible"
+        visible_cmd.visible = True
+        hidden_cmd = MagicMock()
+        hidden_cmd.name = "hidden"
+        hidden_cmd.short_description = "I am hidden"
+        hidden_cmd.visible = False
+        app.manager._commands = {"visible": visible_cmd, "hidden": hidden_cmd}
+        help_func = builtin.help(app)
+        help_func()
+        console_mock.print.assert_called_once()
+        table_arg = console_mock.print.call_args[0][0]
+        self.assertIsInstance(table_arg, Table)
+        # Only the visible command should be added; row count must be 1.
+        self.assertEqual(table_arg.row_count, 1)
+
+    @patch(console_path)
+    def test_help_empty_command_list(self, console_mock):
+        from rich.table import Table
+
+        app = MagicMock()
+        app.manager._commands = {}
+        help_func = builtin.help(app)
+        help_func()
+        console_mock.print.assert_called_once()
+        table_arg = console_mock.print.call_args[0][0]
+        self.assertIsInstance(table_arg, Table)
+        self.assertEqual(table_arg.row_count, 0)
+
+    @patch(console_path)
+    def test_exit_prints_goodbye_message(self, console_mock):
+        app = MagicMock()
+        app.do_repl = True
+        exit_func = builtin.exit(app)
+        exit_func()
+        console_mock.print.assert_called_once()
+        printed_text = str(console_mock.print.call_args)
+        self.assertTrue(len(printed_text) > 0)
