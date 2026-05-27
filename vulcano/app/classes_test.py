@@ -1,5 +1,6 @@
 # -* coding: utf-8 *-
 # System imports
+import threading
 from unittest import TestCase
 
 # Third-party imports
@@ -585,3 +586,274 @@ class TestVulcanoApp(TestCase):
         app.run()
 
         # Background task should have executed without breaking the REPL flow.
+
+    @patch("vulcano.app.classes.sys")
+    def test_background_task_manager_initialized(self, sys_mock):
+        """VulcanoApp instances have a background task manager."""
+        sys_mock.argv = ["ensure_no_repl", "test"]
+        app = VulcanoApp()
+        self.assertIsNotNone(app.background_tasks)
+        self.assertFalse(app.background_tasks.has_active_tasks())
+
+    @patch("vulcano.app.classes.sys")
+    def test_cli_mode_waits_for_background_tasks(self, sys_mock):
+        """CLI mode waits for all background tasks to complete."""
+        import threading
+        import time
+
+        sys_mock.argv = ["ensure_no_repl", "start_task"]
+        app = VulcanoApp()
+        execution_order = []
+
+        def background_worker(task_id):
+            time.sleep(0.05)
+            execution_order.append("background_done")
+            app.background_tasks.mark_completed(task_id)
+
+        @app.command()
+        def start_task():
+            thread = threading.Thread(
+                target=background_worker, args=(None,), daemon=True
+            )
+            task_id = app.background_tasks.register_task("test_task", thread)
+            thread = threading.Thread(
+                target=background_worker, args=(task_id,), daemon=True
+            )
+            app.background_tasks._tasks[task_id].thread = thread
+            thread.start()
+            execution_order.append("command_done")
+            return "Task started"
+
+        app.run(print_result=False)
+
+        # Command should finish first, then background task
+        self.assertEqual(execution_order[0], "command_done")
+        self.assertEqual(execution_order[1], "background_done")
+
+    @patch(print_builtin)
+    @patch("vulcano.app.classes.PromptSession")
+    @patch("vulcano.app.classes.sys")
+    def test_repl_displays_queued_background_output(
+        self, sys_mock, prompt_session_mock, print_mock
+    ):
+        """REPL displays queued background output before each prompt."""
+        session_instance = prompt_session_mock.return_value
+        session_instance.prompt.side_effect = ("queue_output", EOFError)
+        sys_mock.argv = ["ensure_repl"]
+
+        app = VulcanoApp()
+
+        @app.command()
+        def queue_output():
+            app.background_tasks.enqueue_output("task_0", "test message")
+            return "Output queued"
+
+        app.run()
+
+        # Check that the background output was printed
+        print_calls = [str(call) for call in print_mock.call_args_list]
+        found_message = any(
+            "task_0" in call and "test message" in call for call in print_calls
+        )
+        self.assertTrue(found_message)
+
+    @patch(print_builtin)
+    @patch("vulcano.app.classes.print_formatted_text")
+    @patch("vulcano.app.classes.sys")
+    def test_display_background_output_falls_back_to_print(
+        self, sys_mock, prompt_print_mock, print_mock
+    ):
+        """Prompt-toolkit print failures fall back to plain print."""
+        sys_mock.argv = ["ensure_no_repl", "noop"]
+        app = VulcanoApp()
+        app.background_tasks.enqueue_output("task_0", "hello")
+        prompt_print_mock.side_effect = RuntimeError("not in prompt")
+
+        app._display_background_output(use_prompt_toolkit=True)
+
+        print_mock.assert_called_with("[task_0] hello")
+
+    @patch("vulcano.app.classes.threading.Thread")
+    @patch("vulcano.app.classes.sys")
+    def test_cli_mode_skips_wait_when_no_background_tasks(self, sys_mock, thread_mock):
+        """CLI mode does not wait when there are no active background tasks."""
+        sys_mock.argv = ["ensure_no_repl", "noop"]
+        app = VulcanoApp()
+        app.background_tasks.wait_for_all_tasks = MagicMock()
+
+        @app.command()
+        def noop():
+            return "ok"
+
+        app.run(print_result=False)
+
+        app.background_tasks.wait_for_all_tasks.assert_not_called()
+        thread_mock.return_value.start.assert_called_once()
+        thread_mock.return_value.join.assert_called_once_with(timeout=1.0)
+
+    @patch(print_builtin)
+    @patch("vulcano.app.classes.threading.Thread")
+    @patch("vulcano.app.classes.sys")
+    def test_cli_mode_shows_suggestion_for_unknown_command(
+        self, sys_mock, thread_mock, print_mock
+    ):
+        """CLI mode shows suggestions for unknown commands."""
+        sys_mock.argv = ["ensure_no_repl", "helo"]
+        app = VulcanoApp()
+        app.suggestions = MagicMock(return_value="hello")
+
+        @app.command()
+        def hello():
+            return "hi"
+
+        app.run(print_result=False)
+
+        print_calls = [str(call) for call in print_mock.call_args_list]
+        self.assertTrue(any("Command 'helo' not found" in call for call in print_calls))
+        self.assertTrue(any('Did you mean: "hello"?' in call for call in print_calls))
+        thread_mock.return_value.join.assert_called_once_with(timeout=1.0)
+
+    @patch(print_builtin)
+    @patch("vulcano.app.classes.patch_stdout")
+    @patch("vulcano.app.classes.PromptSession")
+    @patch("vulcano.app.classes.get_app")
+    @patch("vulcano.app.classes.threading.Thread")
+    @patch("vulcano.app.classes.time.sleep")
+    @patch("vulcano.app.classes.sys")
+    def test_repl_invalidation_for_active_tasks(
+        self,
+        sys_mock,
+        sleep_mock,
+        thread_mock,
+        get_app_mock,
+        prompt_session_mock,
+        patch_stdout_mock,
+        print_mock,
+    ):
+        """REPL invalidates the UI when background output arrives."""
+        session_instance = prompt_session_mock.return_value
+        session_instance.prompt.side_effect = ("queue_output", EOFError)
+        sys_mock.argv = ["ensure_repl"]
+        fake_app = MagicMock()
+        fake_app.is_running = True
+        get_app_mock.return_value = fake_app
+
+        class ImmediateThread(object):
+            def __init__(self, target=None, daemon=None):
+                self._target = target
+
+            def start(self):
+                if self._target:
+                    self._target()
+
+            def join(self, timeout=None):
+                return None
+
+        thread_mock.side_effect = lambda target=None, daemon=None: ImmediateThread(
+            target=target, daemon=daemon
+        )
+
+        app = VulcanoApp()
+        app._display_background_output = MagicMock()
+
+        def stop_refresh(_seconds):
+            app.do_repl = False
+            # Make the queue appear empty after the first renderer loop.
+            app.background_tasks._output_queue.empty = MagicMock(return_value=False)
+
+        sleep_mock.side_effect = stop_refresh
+
+        @app.command()
+        def queue_output():
+            app.background_tasks.enqueue_output("task_0", "hello")
+            worker = threading.Thread(target=lambda: None, daemon=True)
+            app.background_tasks.register_task("demo", worker)
+            return "queued"
+
+        app.run()
+
+        fake_app.invalidate.assert_called()
+        app._display_background_output.assert_any_call(use_prompt_toolkit=True)
+
+    @patch("vulcano.app.classes.PromptSession")
+    @patch("vulcano.app.classes.sys")
+    def test_repl_bottom_toolbar_reflects_background_status(
+        self, sys_mock, prompt_session_mock
+    ):
+        """The REPL bottom toolbar exposes the background task summary."""
+        session_instance = prompt_session_mock.return_value
+        session_instance.prompt.side_effect = EOFError
+        sys_mock.argv = ["ensure_repl"]
+
+        app = VulcanoApp()
+        worker = threading.Thread(target=lambda: None, daemon=True)
+        app.background_tasks.register_task("demo", worker)
+
+        app.run()
+
+        toolbar = prompt_session_mock.call_args.kwargs["bottom_toolbar"]
+        rendered = toolbar()
+        self.assertIn("task running", str(rendered))
+        self.assertIn("demo", str(rendered))
+
+    @patch("vulcano.app.classes.threading.Thread")
+    @patch("vulcano.app.classes.sys")
+    def test_cli_mode_waits_for_active_background_tasks(self, sys_mock, thread_mock):
+        """CLI mode waits for active tasks when present."""
+        sys_mock.argv = ["ensure_no_repl", "noop"]
+        app = VulcanoApp()
+        app.background_tasks.wait_for_all_tasks = MagicMock()
+        app.background_tasks.has_active_tasks = MagicMock(return_value=True)
+
+        @app.command()
+        def noop():
+            return "ok"
+
+        app.run(print_result=False)
+
+        app.background_tasks.wait_for_all_tasks.assert_called_once()
+        thread_mock.return_value.join.assert_called_once_with(timeout=1.0)
+
+    @patch("vulcano.app.classes.threading.Thread")
+    @patch("vulcano.app.classes.time.sleep")
+    @patch("vulcano.app.classes.sys")
+    def test_cli_output_renderer_streams_queued_output(
+        self, sys_mock, sleep_mock, thread_mock
+    ):
+        """CLI output renderer flushes queued output while running."""
+        sys_mock.argv = ["ensure_no_repl", "noop"]
+        app = VulcanoApp()
+        app._display_background_output = MagicMock()
+        app.background_tasks._output_queue.empty = MagicMock(side_effect=[False, True])
+        app.background_tasks.has_active_tasks = MagicMock(return_value=False)
+
+        class ImmediateThread(object):
+            def __init__(self, target=None, daemon=None):
+                self._target = target
+
+            def start(self):
+                if self._target:
+                    try:
+                        self._target()
+                    except StopIteration:
+                        pass
+
+            def join(self, timeout=None):
+                return None
+
+        thread_mock.side_effect = lambda target=None, daemon=None: ImmediateThread(
+            target=target, daemon=daemon
+        )
+
+        def stop_loop(_seconds):
+            raise StopIteration()
+
+        sleep_mock.side_effect = stop_loop
+
+        @app.command()
+        def noop():
+            return "ok"
+
+        app.run(print_result=False)
+
+        app._display_background_output.assert_any_call(use_prompt_toolkit=False)
